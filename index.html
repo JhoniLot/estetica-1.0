@@ -851,18 +851,20 @@
 
                     <div class="card">
                         <h3 style="margin-bottom: 20px;">Serviços Oferecidos</h3>
-                        <div class="data-list">
+                        <div class="data-list" id="servicos-lista-config">
                             ${state.servicos.map(s => `
                                 <div class="data-item">
                                     <div class="item-info">
                                         <div class="item-title">${s.nome}</div>
                                         <div class="item-subtitle">${s.duracao} min • R$ ${s.preco.toFixed(2)}</div>
                                     </div>
-                                    <i data-lucide="edit-2" class="stat-icon" style="cursor:pointer; width: 18px;"></i>
+                                    <div style="display: flex; gap: 8px;">
+                                        <i data-lucide="trash-2" onclick="excluirServico('${s.id}')" class="stat-icon" style="cursor:pointer; width: 18px; color: var(--danger)"></i>
+                                    </div>
                                 </div>
                             `).join('')}
                         </div>
-                        <button class="btn btn-outline" style="width: 100%; margin-top: 20px;">+ Adicionar Serviço</button>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 20px;" onclick="openModal('novo-servico')">+ Adicionar Serviço</button>
                     </div>
                 </div>
 
@@ -875,7 +877,7 @@
                         <label>Webhook URL</label>
                         <input type="text" class="form-control" placeholder="https://sua-api.com/webhook" value="${state.config.apiWebhook}">
                     </div>
-                    <button class="btn btn-primary">Testar Conexão</button>
+                    <button class="btn btn-primary" onclick="toast('Integração em desenvolvimento...')">Testar Conexão</button>
                 </div>
             `;
         }
@@ -900,6 +902,30 @@
                     <div style="display: flex; gap: 12px; margin-top: 32px;">
                         <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
                         <button class="btn btn-primary" onclick="saveNovoCliente()" style="flex: 2">Salvar Cadastro</button>
+                    </div>
+                `;
+            }
+
+            if (type === 'novo-servico') {
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Adicionar Serviço</h2>
+                    <div class="form-group">
+                        <label>Nome do Serviço *</label>
+                        <input type="text" id="new-srv-nome" class="form-control" placeholder="Ex: Microagulhamento">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Duração (minutos) *</label>
+                            <input type="number" id="new-srv-dur" class="form-control" placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label>Preço (R$) *</label>
+                            <input type="number" id="new-srv-preco" class="form-control" placeholder="150">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 12px;">
+                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
+                        <button class="btn btn-primary" onclick="saveNovoServico()" style="flex: 2">Salvar Serviço</button>
                     </div>
                 `;
             }
@@ -1015,6 +1041,34 @@
             closeModal();
             showView('clientes');
             toast('Cliente cadastrado!');
+        }
+
+        function saveNovoServico() {
+            const nome = document.getElementById('new-srv-nome').value;
+            const dur = document.getElementById('new-srv-dur').value;
+            const preco = document.getElementById('new-srv-preco').value;
+
+            if (!nome || !dur || !preco) return alert('Preencha todos os campos!');
+
+            const novo = {
+                id: 's' + Date.now(),
+                nome: nome,
+                duracao: parseInt(dur),
+                preco: parseFloat(preco)
+            };
+            state.servicos.push(novo);
+            save();
+            closeModal();
+            showView('config');
+            toast('Serviço adicionado!');
+        }
+
+        function excluirServico(id) {
+            if (!confirm('Tem certeza que deseja excluir este serviço?')) return;
+            state.servicos = state.servicos.filter(s => s.id !== id);
+            save();
+            showView('config');
+            toast('Serviço removido!');
         }
 
         function saveNovoAgendamento() {
