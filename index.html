@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeautyFlow — Gestão de Estética</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #D4748A;
+            --primary-light: #E8AAB8;
+            --secondary: #C9A84C;
+            --bg: #F7F7F7;
+            --surface: #FFFFFF;
+            --text: #4A4A4A;
+            --text-light: #8E8E8E;
+            --success: #67B17E;
+            --danger: #E57373;
+            --warning: #FFB74D;
+            --info: #64B5F6;
+            --radius: 16px;
+            --shadow: 0 8px 30px rgba(0,0,0,0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            height: 100vh;
+        }
+
+        /* Layout */
+        #app {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: var(--surface);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover {
+            background: rgba(212, 116, 138, 0.05);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(212, 116, 138, 0.3);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            position: relative;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* Components */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212, 116, 138, 0.4); }
+        
+        .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: rgba(212, 116, 138, 0.05); }
+
+        .btn-ghost { background: transparent; color: var(--text-light); }
+        .btn-ghost:hover { background: rgba(0,0,0,0.05); }
+
+        /* Dashboard Specifics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-value { font-size: 24px; font-weight: 700; color: var(--text); }
+        .stat-label { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-icon { color: var(--primary); margin-bottom: 8px; }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+
+        /* Table/List Styles */
+        .data-list { width: 100%; border-collapse: collapse; }
+        .data-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .data-item:last-child { border-bottom: none; }
+        .data-item:hover { background: rgba(0,0,0,0.01); }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            margin-right: 16px;
+        }
+
+        .item-info { flex: 1; }
+        .item-title { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+        .item-subtitle { color: var(--text-light); font-size: 13px; }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-pending { background: #FFF9C4; color: #FBC02D; }
+        .badge-confirmed { background: #E1F5FE; color: #0288D1; }
+        .badge-done { background: #E8F5E9; color: #2E7D32; }
+        .badge-cancelled { background: #FFEBEE; color: #C62828; }
+
+        /* Agenda Grid */
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .time-col {
+            background: #FAFAFA;
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .time-slot {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-light);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .grid-col {
+            position: relative;
+        }
+
+        .grid-row {
+            height: 60px;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+            cursor: pointer;
+        }
+
+        .grid-row:hover { background: rgba(212, 116, 138, 0.02); }
+
+        .appointment-block {
+            position: absolute;
+            left: 8px;
+            right: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(212, 116, 138, 0.2);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active { display: flex; opacity: 1; }
+
+        .modal {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal { transform: translateY(0); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            outline: none;
+            font-size: 14px;
+        }
+        .form-control:focus { border-color: var(--primary); }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(212, 116, 138, 0.4);
+            cursor: pointer;
+            z-index: 50;
+            border: none;
+        }
+
+        /* Client View (Self-Registration) */
+        #client-view {
+            display: none;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .step-card {
+            max-width: 400px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .step-dot { width: 8px; height: 8px; border-radius: 4px; background: #EEE; }
+        .step-dot.active { width: 24px; background: var(--primary); }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            display: none;
+            z-index: 2000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            aside {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 70px;
+                flex-direction: row;
+                padding: 0 10px;
+                justify-content: space-around;
+            }
+            .logo { display: none; }
+            nav { flex-direction: row; gap: 0; justify-content: space-around; width: 100%; }
+            .nav-item { flex-direction: column; gap: 4px; padding: 10px; font-size: 10px; }
+            .nav-item i { width: 20px; height: 20px; }
+            main { padding: 20px; padding-bottom: 100px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .dashboard-content { grid-template-columns: 1fr; }
+        }
+
+        /* Stock Progress Bar */
+        .stock-bar-bg { height: 8px; background: #EEE; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .stock-bar-fill { height: 100%; border-radius: 4px; transition: var(--transition); }
+
+        .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .choice-item {
+            padding: 12px;
+            border: 1px solid #EEE;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+        }
+        .choice-item.selected { border-color: var(--primary); background: rgba(212, 116, 138, 0.05); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- Main App Container -->
+    <div id="app">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="logo">
+                <div class="logo-icon"><i data-lucide="sparkles"></i></div>
+                BeautyFlow
+            </div>
+            <nav>
+                <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
+                <div class="nav-item" onclick="showView('agenda')"><i data-lucide="calendar"></i><span>Agenda</span></div>
+                <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>Clientes</span></div>
+                <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Caixa</span></div>
+                <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Estoque</span></div>
+                <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Configurações</span></div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Content will be injected here via JS -->
+        </main>
+    </div>
+
+    <!-- Client Self-Registration View -->
+    <div id="client-view">
+        <div id="client-steps-container"></div>
+    </div>
+
+    <!-- Global Modal Overlay -->
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" id="modal-content" onclick="event.stopPropagation()">
+            <!-- Modal content injected here -->
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast">Operação realizada!</div>
+
+    <script>
+        // --- DATA STATE ---
+        let state = {
+            view: 'dashboard',
+            clientes: [],
+            agendamentos: [],
+            transacoes: [],
+            produtos: [],
+            servicos: [],
+            profissionais: [],
+            config: {
+                nomeClinica: 'BeautyFlow Estética',
+                whatsapp: '5511999999999',
+                apiWebhook: '',
+                horarios: '08:00 - 20:00'
+            }
+        };
+
+        // --- MOCK DATA INITIALIZATION ---
+        function initData() {
+            const saved = localStorage.getItem('beautyflow_data');
+            if (saved) {
+                state = JSON.parse(saved);
+            } else {
+                state.clientes = [
+                    { id: 'c1', nome: 'Ana Silva', whatsapp: '5511988887777', fichaCompleta: true, ultimaVisita: '2024-04-10', totalVisitas: 5, alergias: 'Nenhuma', linkId: 'ana123' },
+                    { id: 'c2', nome: 'Beatriz Costa', whatsapp: '5511977776666', fichaCompleta: false, ultimaVisita: '2024-03-15', totalVisitas: 2, linkId: 'bea456' },
+                    { id: 'c3', nome: 'Carla Souza', whatsapp: '5511966665555', fichaCompleta: true, ultimaVisita: '2024-01-20', totalVisitas: 12, linkId: 'car789' }, // +60 dias
+                    { id: 'c4', nome: 'Daniela Lima', whatsapp: '5511955554444', fichaCompleta: false, ultimaVisita: '2024-04-20', totalVisitas: 1, linkId: 'dan012' }
+                ];
+                state.servicos = [
+                    { id: 's1', nome: 'Sobrancelha', duracao: 30, preco: 45 },
+                    { id: 's2', nome: 'Limpeza de Pele', duracao: 60, preco: 120 },
+                    { id: 's3', nome: 'Design + Henna', duracao: 45, preco: 70 }
+                ];
+                state.profissionais = [
+                    { id: 'p1', nome: 'Fernanda' },
+                    { id: 'p2', nome: 'Juliana' }
+                ];
+                state.agendamentos = [
+                    { id: 'a1', clienteId: 'c1', servicoId: 's1', data: new Date().toISOString().split('T')[0], hora: '09:00', status: 'realizado', profissionalId: 'p1' },
+                    { id: 'a2', clienteId: 'c2', servicoId: 's2', data: new Date().toISOString().split('T')[0], hora: '10:30', status: 'confirmado', profissionalId: 'p2' },
+                    { id: 'a3', clienteId: 'c4', servicoId: 's3', data: new Date().toISOString().split('T')[0], hora: '14:00', status: 'pendente', profissionalId: 'p1' }
+                ];
+                state.produtos = [
+                    { id: 'pr1', nome: 'Cera Mel', qtd: 5, min: 10, un: 'un', cat: 'Depilação' },
+                    { id: 'pr2', nome: 'Álcool 70%', qtd: 2, min: 5, un: 'litros', cat: 'Higiene' },
+                    { id: 'pr3', nome: 'Máscara Argila', qtd: 15, min: 5, un: 'un', cat: 'Limpeza' }
+                ];
+                state.transacoes = [
+                    { id: 't1', tipo: 'entrada', valor: 45, desc: 'Sobrancelha - Ana Silva', data: new Date().toISOString().split('T')[0], fpag: 'Pix' },
+                    { id: 't2', tipo: 'saida', valor: 200, desc: 'Aluguel Semanal', data: new Date().toISOString().split('T')[0], fpag: 'Dinheiro' }
+                ];
+                save();
+            }
+        }
+
+        function save() {
+            localStorage.setItem('beautyflow_data', JSON.stringify(state));
+        }
+
+        // --- UI ROUTING ---
+        function showView(viewName) {
+            state.view = viewName;
+            
+            // Update active sidebar item
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+                if (el.innerText.toLowerCase() === viewName) el.classList.add('active');
+            });
+
+            const main = document.getElementById('main-content');
+            
+            if (viewName === 'dashboard') renderDashboard(main);
+            else if (viewName === 'agenda') renderAgenda(main);
+            else if (viewName === 'clientes') renderClientes(main);
+            else if (viewName === 'caixa') renderCaixa(main);
+            else if (viewName === 'estoque') renderEstoque(main);
+            else if (viewName === 'config') renderConfig(main);
+
+            lucide.createIcons();
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard(container) {
+            const hoje = new Date().toISOString().split('T')[0];
+            const agendamentosHoje = state.agendamentos.filter(a => a.data === hoje);
+            const receitaHoje = state.transacoes.filter(t => t.data === hoje && t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0);
+            
+            const atrasados = state.clientes.filter(c => {
+                const diff = (new Date() - new Date(c.ultimaVisita)) / (1000 * 60 * 60 * 24);
+                return diff > 60;
+            }).length;
+
+            const estoqueBaixo = state.produtos.filter(p => p.qtd < p.min).length;
+
+            container.innerHTML = `
+                <header>
+                    <div>
+                        <h1>Olá, Bem-vinda! ✨</h1>
+                        <p style="color: var(--text-light); font-size: 14px;">Aqui está o resumo da sua clínica hoje.</p>
+                    </div>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <i data-lucide="calendar" class="stat-icon"></i>
+                        <span class="stat-value">${agendamentosHoje.length}</span>
+                        <span class="stat-label">Agendamentos Hoje</span>
+                    </div>
+                    <div class="card stat-card">
+                        <i data-lucide="dollar-sign" class="stat-icon"></i>
+                        <span class="stat-value">R$ ${receitaHoje.toFixed(2)}</span>
+                        <span class="stat-label">Receita do Dia</span>
+                    </div>
+                    <div class="card stat-card" onclick="showView('clientes')" style="cursor:pointer">
+                        <i data-lucide="alert-circle" class="stat-icon" style="color: var(--danger)"></i>
+                        <span class="stat-value">${atrasados}</span>
+                        <span class="stat-label">Clientes s/ Retorno</span>
+                    </div>
+                    <div class="card stat-card" onclick="showView('estoque')" style="cursor:pointer">
+                        <i data-lucide="package" class="stat-icon" style="color: var(--warning)"></i>
+                        <span class="stat-value">${estoqueBaixo}</span>
+                        <span class="stat-label">Itens p/ Reposição</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Agenda de Hoje</h3>
+                        <div class="data-list">
+                            ${agendamentosHoje.length ? agendamentosHoje.map(a => {
+                                const c = state.clientes.find(cli => cli.id === a.clienteId);
+                                const s = state.servicos.find(ser => ser.id === a.servicoId);
+                                return `
+                                    <div class="data-item">
+                                        <div class="avatar">${c ? c.nome[0] : '?'}</div>
+                                        <div class="item-info">
+                                            <div class="item-title">${c ? c.nome : 'Cliente Removido'}</div>
+                                            <div class="item-subtitle">${a.hora} — ${s ? s.nome : 'Serviço'}</div>
+                                        </div>
+                                        <span class="badge badge-${a.status}">${a.status}</span>
+                                    </div>
+                                `;
+                            }).join('') : '<p style="color: var(--text-light)">Nenhum agendamento para hoje.</p>'}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Próximo Atendimento</h3>
+                        ${agendamentosHoje.find(a => a.status !== 'realizado') ? `
+                            <div style="text-align: center;">
+                                <div class="avatar" style="width: 80px; height: 80px; margin: 0 auto 16px; font-size: 32px;">
+                                    ${state.clientes.find(c => c.id === agendamentosHoje.find(a => a.status !== 'realizado').clienteId).nome[0]}
+                                </div>
+                                <h2 style="font-size: 20px;">${state.clientes.find(c => c.id === agendamentosHoje.find(a => a.status !== 'realizado').clienteId).nome}</h2>
+                                <p style="color: var(--primary); font-weight: 600; margin-top: 4px;">Às ${agendamentosHoje.find(a => a.status !== 'realizado').hora}</p>
+                                <button class="btn btn-primary" style="width: 100%; margin-top: 24px;" onclick="showView('agenda')">Ver na Agenda</button>
+                            </div>
+                        ` : '<p style="text-align:center; color: var(--text-light)">Tudo pronto por hoje!</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- AGENDA ---
+        function renderAgenda(container) {
+            const hojeStr = new Date().toISOString().split('T')[0];
+            
+            container.innerHTML = `
+                <header>
+                    <h1>Agenda Diária</h1>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-outline" onclick="toast('Em breve: Vista semanal')"><i data-lucide="columns"></i> Semanal</button>
+                        <button class="btn btn-primary" onclick="openModal('novo-agendamento')"><i data-lucide="plus"></i> Novo Horário</button>
+                    </div>
+                </header>
+
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="btn btn-ghost"><i data-lucide="chevron-left"></i></button>
+                        <span style="font-weight: 700;">Hoje, ${new Date().toLocaleDateString('pt-BR', {day:'numeric', month:'long'})}</span>
+                        <button class="btn btn-ghost"><i data-lucide="chevron-right"></i></button>
+                    </div>
+
+                    <div class="agenda-grid">
+                        <div class="time-col">
+                            ${Array.from({length: 13}, (_, i) => `<div class="time-slot">${(i + 8).toString().padStart(2, '0')}:00</div>`).join('')}
+                        </div>
+                        <div class="grid-col" id="agenda-slots">
+                            ${Array.from({length: 12}, (_, i) => `<div class="grid-row" onclick="openModal('novo-agendamento', {hora: '${(i+8).toString().padStart(2, '0')}:00'})"></div>`).join('')}
+                            <!-- Agendamentos aqui -->
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Render blocks
+            const slots = document.getElementById('agenda-slots');
+            state.agendamentos.filter(a => a.data === hojeStr).forEach(a => {
+                const hour = parseInt(a.hora.split(':')[0]);
+                const min = parseInt(a.hora.split(':')[1]);
+                const top = ((hour - 8) * 60) + min;
+                const s = state.servicos.find(ser => ser.id === a.servicoId);
+                const c = state.clientes.find(cli => cli.id === a.clienteId);
+                const duracao = s ? s.duracao : 30;
+
+                const block = document.createElement('div');
+                block.className = 'appointment-block';
+                block.style.top = top + 'px';
+                block.style.height = duracao + 'px';
+                block.innerHTML = `<strong>${a.hora}</strong> ${c ? c.nome : 'Cli'} - ${s ? s.nome : 'Srv'}`;
+                block.onclick = (e) => { e.stopPropagation(); openModal('detalhe-agendamento', a); };
+                slots.appendChild(block);
+            });
+        }
+
+        // --- CLIENTES ---
+        function renderClientes(container) {
+            container.innerHTML = `
+                <header>
+                    <h1>Clientes</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-cliente')"><i data-lucide="user-plus"></i> Novo Cadastro</button>
+                </header>
+
+                <div class="card" style="margin-bottom: 24px;">
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <i data-lucide="search" style="color: var(--text-light)"></i>
+                        <input type="text" class="form-control" placeholder="Buscar por nome ou WhatsApp..." onkeyup="filterClientes(this.value)" style="border: none;">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="data-list" id="clientes-lista">
+                        ${renderClientesList(state.clientes)}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderClientesList(list) {
+            return list.map(c => {
+                const diff = (new Date() - new Date(c.ultimaVisita)) / (1000 * 60 * 60 * 24);
+                const isAtrasado = diff > 60;
+                return `
+                    <div class="data-item" onclick="openModal('perfil-cliente', '${c.id}')" style="cursor:pointer">
+                        <div class="avatar" style="background: ${c.fichaCompleta ? 'var(--primary)' : 'var(--warning)'}">
+                            ${c.nome[0]}
+                        </div>
+                        <div class="item-info">
+                            <div class="item-title">
+                                ${c.nome} 
+                                ${isAtrasado ? '<span style="color: var(--danger); font-size: 10px;">🔴 +60 dias</span>' : ''}
+                            </div>
+                            <div class="item-subtitle">${c.whatsapp} • ${c.totalVisitas} visitas</div>
+                        </div>
+                        <div>
+                            ${c.fichaCompleta ? '<span class="badge badge-done">Ficha OK</span>' : '<span class="badge badge-pending">Incompleta</span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // --- CAIXA ---
+        function renderCaixa(container) {
+            const entradas = state.transacoes.filter(t => t.tipo === 'entrada').reduce((a, b) => a + b.valor, 0);
+            const saidas = state.transacoes.filter(t => t.tipo === 'saida').reduce((a, b) => a + b.valor, 0);
+
+            container.innerHTML = `
+                <header>
+                    <h1>Caixa</h1>
+                    <button class="btn btn-primary" onclick="openModal('nova-transacao')"><i data-lucide="plus"></i> Movimentação</button>
+                </header>
+
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <span class="stat-label">Saldo Atual</span>
+                        <span class="stat-value" style="color: var(--success)">R$ ${(entradas - saidas).toFixed(2)}</span>
+                    </div>
+                    <div class="card stat-card">
+                        <span class="stat-label">Entradas (Mês)</span>
+                        <span class="stat-value">R$ ${entradas.toFixed(2)}</span>
+                    </div>
+                    <div class="card stat-card">
+                        <span class="stat-label">Saídas (Mês)</span>
+                        <span class="stat-value" style="color: var(--danger)">R$ ${saidas.toFixed(2)}</span>
+                    </div>
+                    <div class="card stat-card">
+                        <span class="stat-label">Forma mais usada</span>
+                        <span class="stat-value">Pix</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Movimentações Recentes</h3>
+                    <div class="data-list">
+                        ${state.transacoes.sort((a,b) => new Date(b.data) - new Date(a.data)).map(t => `
+                            <div class="data-item">
+                                <div style="margin-right: 16px; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
+                                    <i data-lucide="${t.tipo === 'entrada' ? 'arrow-up-circle' : 'arrow-down-circle'}"></i>
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">${t.desc}</div>
+                                    <div class="item-subtitle">${new Date(t.data).toLocaleDateString('pt-BR')} • ${t.fpag}</div>
+                                </div>
+                                <div style="font-weight: 700; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
+                                    ${t.tipo === 'entrada' ? '+' : '-'} R$ ${t.valor.toFixed(2)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- ESTOQUE ---
+        function renderEstoque(container) {
+            container.innerHTML = `
+                <header>
+                    <h1>Estoque</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-produto')"><i data-lucide="plus"></i> Novo Produto</button>
+                </header>
+
+                <div class="card">
+                    <div class="data-list">
+                        ${state.produtos.map(p => {
+                            const percent = Math.min((p.qtd / (p.min * 1.5)) * 100, 100);
+                            const color = p.qtd < p.min ? 'var(--danger)' : (p.qtd < p.min * 1.2 ? 'var(--warning)' : 'var(--success)');
+                            return `
+                                <div class="data-item" style="flex-direction: column; align-items: stretch; padding: 20px;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                        <div class="item-info">
+                                            <div class="item-title">${p.nome} <span class="badge" style="background: #EEE; color: #666; margin-left: 8px;">${p.cat}</span></div>
+                                            <div class="item-subtitle">${p.qtd} ${p.un} no estoque (mín: ${p.min})</div>
+                                        </div>
+                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="darBaixaEstoque('${p.id}')">Dar Baixa</button>
+                                    </div>
+                                    <div class="stock-bar-bg">
+                                        <div class="stock-bar-fill" style="width: ${percent}%; background: ${color}"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- CONFIGURAÇÕES ---
+        function renderConfig(container) {
+            container.innerHTML = `
+                <header><h1>Configurações</h1></header>
+                <div class="dashboard-content" style="grid-template-columns: 1fr 1fr">
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Meu Negócio</h3>
+                        <div class="form-group">
+                            <label>Nome da Clínica</label>
+                            <input type="text" class="form-control" value="${state.config.nomeClinica}">
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp Comercial</label>
+                            <input type="text" class="form-control" value="${state.config.whatsapp}">
+                        </div>
+                        <button class="btn btn-primary" onclick="toast('Configurações salvas!')">Salvar Mudanças</button>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Serviços Oferecidos</h3>
+                        <div class="data-list">
+                            ${state.servicos.map(s => `
+                                <div class="data-item">
+                                    <div class="item-info">
+                                        <div class="item-title">${s.nome}</div>
+                                        <div class="item-subtitle">${s.duracao} min • R$ ${s.preco.toFixed(2)}</div>
+                                    </div>
+                                    <i data-lucide="edit-2" class="stat-icon" style="cursor:pointer; width: 18px;"></i>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 20px;">+ Adicionar Serviço</button>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 32px;">
+                    <h3 style="margin-bottom: 12px;">Integração WhatsApp (Automático)</h3>
+                    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
+                        Para enviar mensagens automáticas, integre com uma API (Evolution API ou Z-API).
+                    </p>
+                    <div class="form-group">
+                        <label>Webhook URL</label>
+                        <input type="text" class="form-control" placeholder="https://sua-api.com/webhook" value="${state.config.apiWebhook}">
+                    </div>
+                    <button class="btn btn-primary">Testar Conexão</button>
+                </div>
+            `;
+        }
+
+        // --- MODAL SYSTEM ---
+        function openModal(type, data = null) {
+            const overlay = document.getElementById('modal-overlay');
+            const content = document.getElementById('modal-content');
+            overlay.classList.add('active');
+
+            if (type === 'novo-cliente') {
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Cadastrar Cliente</h2>
+                    <div class="form-group">
+                        <label>Nome Completo *</label>
+                        <input type="text" id="new-cli-nome" class="form-control" placeholder="Ex: Maria Oliveira">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp (com DDD) *</label>
+                        <input type="text" id="new-cli-tel" class="form-control" placeholder="Ex: 11988887777">
+                    </div>
+                    <div style="display: flex; gap: 12px; margin-top: 32px;">
+                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
+                        <button class="btn btn-primary" onclick="saveNovoCliente()" style="flex: 2">Salvar Cadastro</button>
+                    </div>
+                `;
+            }
+
+            if (type === 'novo-agendamento') {
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Novo Agendamento</h2>
+                    <div class="form-group">
+                        <label>Cliente</label>
+                        <select id="new-age-cli" class="form-control">
+                            ${state.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Serviço</label>
+                        <select id="new-age-srv" class="form-control">
+                            ${state.servicos.map(s => `<option value="${s.id}">${s.nome} (R$ ${s.preco})</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Hora</label>
+                            <input type="time" id="new-age-hora" class="form-control" value="${data && data.hora ? data.hora : '08:00'}">
+                        </div>
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" id="new-age-data" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoAgendamento()">Confirmar Horário</button>
+                `;
+            }
+
+            if (type === 'detalhe-agendamento') {
+                const c = state.clientes.find(cli => cli.id === data.clienteId);
+                const s = state.servicos.find(ser => ser.id === data.servicoId);
+                content.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <span class="badge badge-${data.status}">${data.status}</span>
+                        <h2 style="margin-top: 12px;">${c ? c.nome : 'Cliente'}</h2>
+                        <p style="color: var(--text-light)">${s ? s.nome : 'Serviço'} • ${data.hora}</p>
+                    </div>
+                    <div style="display: grid; gap: 12px;">
+                        ${data.status !== 'realizado' ? `
+                            <button class="btn btn-primary" onclick="marcarComoRealizado('${data.id}')" style="justify-content: center;">
+                                <i data-lucide="check"></i> Marcar como Realizado
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-outline" onclick="enviarWhats('${c.whatsapp}', 'confirmacao', {nome: '${c.nome}', servico: '${s.nome}', hora: '${data.hora}'})" style="justify-content: center;">
+                            <i data-lucide="message-circle"></i> Enviar Confirmação
+                        </button>
+                        <button class="btn btn-ghost" onclick="excluirAgendamento('${data.id}')" style="justify-content: center; color: var(--danger)">
+                            <i data-lucide="trash-2"></i> Cancelar Agendamento
+                        </button>
+                    </div>
+                `;
+            }
+
+            if (type === 'perfil-cliente') {
+                const c = state.clientes.find(cli => cli.id === data);
+                content.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                        <div class="avatar" style="width: 60px; height: 60px; font-size: 24px;">${c.nome[0]}</div>
+                        <div>
+                            <h2>${c.nome}</h2>
+                            <p style="color: var(--text-light)">${c.whatsapp}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid #EEE;">
+                        <div style="padding: 10px; color: var(--primary); border-bottom: 2px solid var(--primary); cursor:pointer">Resumo</div>
+                        <div style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toast('Em breve: Fotos e Histórico')">Fotos</div>
+                        <div style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toast('Em breve: Fotos e Histórico')">Histórico</div>
+                    </div>
+                    <div class="card" style="background: var(--bg); box-shadow: none;">
+                        <p><strong>Alergias:</strong> ${c.alergias || 'Nenhuma informada'}</p>
+                        <p><strong>Ficha:</strong> ${c.fichaCompleta ? '✅ Completa' : '⚠️ Incompleta'}</p>
+                    </div>
+                    <div style="display: grid; gap: 12px; margin-top: 24px;">
+                        ${!c.fichaCompleta ? `
+                            <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', link: '${window.location.href.split('#')[0]}#ficha?id=${c.linkId}'})">
+                                Enviar Ficha pelo WhatsApp
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-outline" style="justify-content: center" onclick="closeModal(); openModal('novo-agendamento')">Novo Agendamento</button>
+                    </div>
+                `;
+            }
+
+            lucide.createIcons();
+        }
+
+        function closeModal(e) {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        // --- ACTIONS ---
+        function saveNovoCliente() {
+            const nome = document.getElementById('new-cli-nome').value;
+            const tel = document.getElementById('new-cli-tel').value;
+            if (!nome || !tel) return alert('Preencha nome e WhatsApp!');
+            
+            const novo = {
+                id: 'c' + Date.now(),
+                nome: nome,
+                whatsapp: tel.replace(/\D/g, ''),
+                fichaCompleta: false,
+                ultimaVisita: new Date().toISOString().split('T')[0],
+                totalVisitas: 0,
+                linkId: Math.random().toString(36).substr(2, 6)
+            };
+            state.clientes.push(novo);
+            save();
+            closeModal();
+            showView('clientes');
+            toast('Cliente cadastrado!');
+        }
+
+        function saveNovoAgendamento() {
+            const cliId = document.getElementById('new-age-cli').value;
+            const srvId = document.getElementById('new-age-srv').value;
+            const hora = document.getElementById('new-age-hora').value;
+            const data = document.getElementById('new-age-data').value;
+
+            const novo = {
+                id: 'a' + Date.now(),
+                clienteId: cliId,
+                servicoId: srvId,
+                hora: hora,
+                data: data,
+                status: 'pendente',
+                profissionalId: 'p1'
+            };
+            state.agendamentos.push(novo);
+            save();
+            closeModal();
+            showView('agenda');
+            toast('Agendamento criado!');
+        }
+
+        function marcarComoRealizado(id) {
+            const a = state.agendamentos.find(item => item.id === id);
+            const s = state.servicos.find(ser => ser.id === a.servicoId);
+            const c = state.clientes.find(cli => cli.id === a.clienteId);
+            
+            a.status = 'realizado';
+            c.ultimaVisita = a.data;
+            c.totalVisitas++;
+
+            // Lançar no caixa
+            state.transacoes.push({
+                id: 't' + Date.now(),
+                tipo: 'entrada',
+                valor: s.preco,
+                desc: `${s.nome} - ${c.nome}`,
+                data: a.data,
+                fpag: 'Pix'
+            });
+
+            save();
+            closeModal();
+            showView('agenda');
+            toast('Atendimento finalizado e lançado no caixa!');
+        }
+
+        function darBaixaEstoque(id) {
+            const p = state.produtos.find(item => item.id === id);
+            if (p.qtd > 0) {
+                p.qtd--;
+                save();
+                renderEstoque(document.getElementById('main-content'));
+                toast('Baixa realizada!');
+            }
+        }
+
+        function filterClientes(val) {
+            const filtered = state.clientes.filter(c => c.nome.toLowerCase().includes(val.toLowerCase()) || c.whatsapp.includes(val));
+            document.getElementById('clientes-lista').innerHTML = renderClientesList(filtered);
+        }
+
+        function toast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function enviarWhats(tel, tipo, dados) {
+            let msg = '';
+            if (tipo === 'confirmacao') {
+                msg = `Olá ${dados.nome}! 😊 Seu agendamento foi confirmado para hoje às ${dados.hora} — ${dados.servico}. Te esperamos! 💖 ${state.config.nomeClinica}`;
+            } else if (tipo === 'ficha') {
+                msg = `Olá ${dados.nome}! 😊 Para agilizar seu atendimento na ${state.config.nomeClinica}, preencha rapidinho sua ficha pelo link abaixo. Leva menos de 1 minuto! 👇 ${dados.link}`;
+            }
+            window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // --- CLIENT FLOW (FICHA) ---
+        function checkClientRoute() {
+            if (window.location.hash.startsWith('#ficha')) {
+                document.getElementById('app').style.display = 'none';
+                document.getElementById('client-view').style.display = 'block';
+                renderFichaStep(1);
+            }
+        }
+
+        let fichaData = { step: 1 };
+        function renderFichaStep(step) {
+            const container = document.getElementById('client-steps-container');
+            if (step === 1) {
+                container.innerHTML = `
+                    <div class="step-card">
+                        <div class="logo" style="justify-content: center; margin-bottom: 20px;">BeautyFlow</div>
+                        <div class="step-indicator">
+                            <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
+                        </div>
+                        <h2>Quase lá! ✨</h2>
+                        <p style="color: var(--text-light); margin-bottom: 24px;">Conte-nos um pouco sobre você.</p>
+                        <div class="form-group" style="text-align: left;">
+                            <label>Data de Nascimento</label>
+                            <input type="date" class="form-control">
+                        </div>
+                        <div class="form-group" style="text-align: left;">
+                            <label>E-mail (opcional)</label>
+                            <input type="email" class="form-control" placeholder="seu@email.com">
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="renderFichaStep(2)">Continuar</button>
+                    </div>
+                `;
+            } else if (step === 2) {
+                container.innerHTML = `
+                    <div class="step-card">
+                        <div class="step-indicator">
+                            <div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div>
+                        </div>
+                        <h2>Como nos conheceu?</h2>
+                        <div class="choice-grid" style="margin-top: 24px;">
+                            <div class="choice-item" onclick="selectChoice(this)">Instagram</div>
+                            <div class="choice-item" onclick="selectChoice(this)">Indicação</div>
+                            <div class="choice-item" onclick="selectChoice(this)">Google</div>
+                            <div class="choice-item" onclick="selectChoice(this)">Passando na rua</div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="renderFichaStep(3)">Continuar</button>
+                    </div>
+                `;
+            } else if (step === 3) {
+                container.innerHTML = `
+                    <div class="step-card">
+                        <div class="step-indicator">
+                            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div>
+                        </div>
+                        <h2>Alergias ou Condições?</h2>
+                        <p style="color: var(--text-light); margin-bottom: 24px;">Importante para sua segurança.</p>
+                        <textarea class="form-control" rows="4" placeholder="Ex: Alergia a iodo, gestante, etc."></textarea>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="renderFichaStep(4)">Finalizar Ficha</button>
+                    </div>
+                `;
+            } else if (step === 4) {
+                container.innerHTML = `
+                    <div class="step-card">
+                        <div style="font-size: 60px; margin-bottom: 20px;">💖</div>
+                        <h2>Tudo pronto!</h2>
+                        <p style="color: var(--text-light)">Sua ficha foi enviada com sucesso. Estamos ansiosas para te atender!</p>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 32px;" onclick="window.location.hash=''">Fechar</button>
+                    </div>
+                `;
+            }
+        }
+
+        function selectChoice(el) {
+            document.querySelectorAll('.choice-item').forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            initData();
+            checkClientRoute();
+            if (!window.location.hash.startsWith('#ficha')) {
+                showView('dashboard');
+            }
+        };
+
+        window.onhashchange = () => {
+            if (window.location.hash === '') window.location.reload();
+            checkClientRoute();
+        };
+
+        // Modal close on ESC
+        window.onkeydown = (e) => {
+            if (e.key === 'Escape') closeModal();
+        };
+    </script>
+</body>
+</html>
