@@ -699,26 +699,76 @@
                     </div>
                 </div>
 
-                <div class="dashboard-content">
-                    <div class="card">
-                        <h3 style="margin-bottom: 20px;">Agenda de Hoje</h3>
-                        <div class="data-list">
-                            ${agendamentosHoje.length ? agendamentosHoje.map(a => {
-                                const c = state.clientes.find(cli => cli.id === a.clienteId);
-                                const s = state.servicos.find(ser => ser.id === a.servicoId);
-                                return `
-                                    <div class="data-item">
-                                        <div class="avatar">${c ? c.nome[0] : '?'}</div>
-                                        <div class="item-info">
-                                            <div class="item-title">${c ? c.nome : 'Cliente Removido'}</div>
-                                            <div class="item-subtitle">${a.hora} — ${s ? s.nome : 'Serviço'}</div>
+                <div class="dashboard-content" style="grid-template-columns: 1.5fr 1fr; display: grid; gap: 24px;">
+                    <div>
+                        <div class="card" style="margin-bottom: 24px;">
+                            <h3 style="margin-bottom: 20px; color: var(--primary);">🏆 Performance de Serviços (Mês)</h3>
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                                    <thead>
+                                        <tr style="text-align: left; border-bottom: 1px solid #EEE; color: var(--text-light);">
+                                            <th style="padding: 10px 5px;">Serviço</th>
+                                            <th style="padding: 10px 5px; text-align: center;">Qtd</th>
+                                            <th style="padding: 10px 5px; text-align: right;">Custo</th>
+                                            <th style="padding: 10px 5px; text-align: right;">Lucro</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(() => {
+                                            const mesAtual = new Date().getMonth();
+                                            const anoAtual = new Date().getFullYear();
+                                            const realizados = state.agendamentos.filter(a => {
+                                                const d = new Date(a.data);
+                                                return d.getMonth() === mesAtual && d.getFullYear() === anoAtual && a.status === 'realizado';
+                                            });
+                                            
+                                            const stats = {};
+                                            realizados.forEach(a => {
+                                                if (!stats[a.servicoId]) stats[a.servicoId] = { count: 0, receita: 0, custo: 0 };
+                                                const s = state.servicos.find(ser => ser.id === a.servicoId);
+                                                if (s) {
+                                                    stats[a.servicoId].count++;
+                                                    stats[a.servicoId].receita += s.preco;
+                                                    stats[a.servicoId].custo += (s.custo || 0);
+                                                    stats[a.servicoId].nome = s.nome;
+                                                }
+                                            });
+                                            
+                                            return Object.values(stats).sort((a,b) => b.count - a.count).map(s => `
+                                                <tr style="border-bottom: 1px solid #F9F9F9;">
+                                                    <td style="padding: 10px 5px; font-weight: 600;">${s.nome}</td>
+                                                    <td style="padding: 10px 5px; text-align: center;">${s.count}</td>
+                                                    <td style="padding: 10px 5px; text-align: right; color: var(--danger);">R$ ${s.custo.toFixed(2)}</td>
+                                                    <td style="padding: 10px 5px; text-align: right; color: var(--success); font-weight: 700;">R$ ${(s.receita - s.custo).toFixed(2)}</td>
+                                                </tr>
+                                            `).join('') || '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #999;">Sem dados este mês.</td></tr>';
+                                        })()}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 20px;">Agenda de Hoje</h3>
+                            <div class="data-list">
+                                ${agendamentosHoje.length ? agendamentosHoje.map(a => {
+                                    const c = state.clientes.find(cli => cli.id === a.clienteId);
+                                    const s = state.servicos.find(ser => ser.id === a.servicoId);
+                                    return `
+                                        <div class="data-item">
+                                            <div class="avatar">${c ? c.nome[0] : '?'}</div>
+                                            <div class="item-info">
+                                                <div class="item-title">${c ? c.nome : 'Cliente Removido'}</div>
+                                                <div class="item-subtitle">${a.hora} — ${s ? s.nome : 'Serviço'}</div>
+                                            </div>
+                                            <span class="badge badge-${a.status}">${a.status}</span>
                                         </div>
-                                        <span class="badge badge-${a.status}">${a.status}</span>
-                                    </div>
-                                `;
-                            }).join('') : '<p style="color: var(--text-light)">Nenhum agendamento para hoje.</p>'}
+                                    `;
+                                }).join('') : '<p style="color: var(--text-light)">Nenhum agendamento para hoje.</p>'}
+                            </div>
                         </div>
                     </div>
+
                     <div class="card">
                         <h3 style="margin-bottom: 20px;">Aniversariantes do Dia 🎂</h3>
                         <div class="data-list">
@@ -1102,6 +1152,10 @@
                             <label>Preço (R$) *</label>
                             <input type="number" id="new-srv-preco" class="form-control" placeholder="150">
                         </div>
+                        <div class="form-group">
+                            <label>Custo Mat. (R$)</label>
+                            <input type="number" id="new-srv-custo" class="form-control" placeholder="30.00">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Pontos Gerados (Programa Fidelidade)</label>
@@ -1326,6 +1380,7 @@
             const nome = document.getElementById('new-srv-nome').value;
             const dur = document.getElementById('new-srv-dur').value;
             const preco = document.getElementById('new-srv-preco').value;
+            const custo = document.getElementById('new-srv-custo').value || 0;
             const pts = document.getElementById('new-srv-pts').value || 0;
 
             if (!nome || !dur || !preco) return alert('Preencha todos os campos!');
@@ -1335,6 +1390,7 @@
                 nome: nome,
                 duracao: parseInt(dur),
                 preco: parseFloat(preco),
+                custo: parseFloat(custo),
                 pontos: parseInt(pts)
             };
             state.servicos.push(novo);
