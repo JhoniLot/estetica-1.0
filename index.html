@@ -1631,14 +1631,15 @@
                     </div>
 
                     <!-- Tabs Nav -->
-                    <div style="display: flex; background: white; border-bottom: 1px solid #EEE;">
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'resumo')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'resumo' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'resumo' ? 'var(--primary)' : 'transparent'}">Resumo</div>
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'historico')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'historico' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'historico' ? 'var(--primary)' : 'transparent'}">Histórico</div>
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'galeria')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'galeria' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'galeria' ? 'var(--primary)' : 'transparent'}">Galeria</div>
+                    <div style="display: flex; background: white; border-bottom: 1px solid #EEE; overflow-x: auto;">
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'resumo')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'resumo' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'resumo' ? 'var(--primary)' : 'transparent'}">Resumo</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'agendar' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'agendar' ? 'var(--primary)' : 'transparent'}">Agendar</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'historico')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'historico' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'historico' ? 'var(--primary)' : 'transparent'}">Histórico</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'galeria')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'galeria' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'galeria' ? 'var(--primary)' : 'transparent'}">Galeria</div>
                     </div>
 
                     <!-- Tab Content -->
-                    <div style="padding: 30px; min-height: 300px; background: #FDFBF7;">
+                    <div style="padding: 30px; min-height: 350px; background: #FDFBF7;">
                         ${activeTab === 'resumo' ? `
                             <h3 style="font-size: 16px; margin-bottom: 15px;">Suas Informações</h3>
                             <div class="card" style="padding: 20px; box-shadow: none; border: 1px solid #EEE;">
@@ -1646,7 +1647,28 @@
                                 <div style="margin-bottom: 12px; font-size: 14px;"><strong>Instagram:</strong> ${c.insta || '-'}</div>
                                 <div style="font-size: 14px;"><strong>Alergias/Observações:</strong><br><span style="color: var(--text-light)">${c.alergias || 'Nenhuma informada.'}</span></div>
                             </div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="window.open('https://wa.me/${state.config.whatsapp}', '_blank')">Agendar Novo Horário</button>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')">Agendar Novo Horário</button>
+                        ` : ''}
+
+                        ${activeTab === 'agendar' ? `
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                <h3 style="font-size: 16px;">Novo Agendamento</h3>
+                                <div class="form-group">
+                                    <label>Escolha o Serviço</label>
+                                    <select id="self-srv" class="form-control" onchange="updateAvailableSlots()">
+                                        <option value="">Selecione...</option>
+                                        ${state.servicos.map(s => `<option value="${s.id}">${s.nome} — R$ ${s.preco.toFixed(2)}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Escolha a Data</label>
+                                    <input type="date" id="self-date" class="form-control" min="${new Date().toISOString().split('T')[0]}" onchange="updateAvailableSlots()">
+                                </div>
+                                <div id="self-slots-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                                    <p style="grid-column: span 3; font-size: 12px; color: #999; text-align: center;">Selecione o serviço e a data acima.</p>
+                                </div>
+                                <button id="btn-self-confirm" class="btn btn-primary" style="width: 100%; margin-top: 10px; display: none;" onclick="confirmSelfBooking('${c.id}')">Confirmar Horário</button>
+                            </div>
                         ` : ''}
 
                         ${activeTab === 'historico' ? `
@@ -1696,6 +1718,66 @@
                     </div>
                 </div>
             `;
+        }
+
+        let selectedSlot = null;
+        function updateAvailableSlots() {
+            const date = document.getElementById('self-date').value;
+            const srvId = document.getElementById('self-srv').value;
+            const container = document.getElementById('self-slots-container');
+            const btnConfirm = document.getElementById('btn-self-confirm');
+
+            if (!date || !srvId) return;
+
+            const baseSlots = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
+            const bookedSlots = state.agendamentos.filter(a => a.data === date && a.status !== 'cancelado').map(a => a.hora);
+            
+            const freeSlots = baseSlots.filter(s => !bookedSlots.includes(s));
+
+            container.innerHTML = freeSlots.map(s => `
+                <div class="slot-btn" onclick="selectSlot(this, '${s}')" style="padding: 10px; border: 1px solid #EEE; border-radius: 10px; text-align: center; font-size: 13px; cursor:pointer; background: white;">${s}</div>
+            `).join('') || '<p style="grid-column: span 3; text-align: center; color: var(--danger); font-size: 12px;">Nenhum horário disponível para este dia.</p>';
+            
+            selectedSlot = null;
+            btnConfirm.style.display = 'none';
+        }
+
+        function selectSlot(el, slot) {
+            document.querySelectorAll('.slot-btn').forEach(b => {
+                b.style.background = 'white';
+                b.style.color = 'var(--text-main)';
+                b.style.borderColor = '#EEE';
+            });
+            el.style.background = 'var(--primary)';
+            el.style.color = 'white';
+            el.style.borderColor = 'var(--primary)';
+            selectedSlot = slot;
+            document.getElementById('btn-self-confirm').style.display = 'block';
+        }
+
+        function confirmSelfBooking(cliId) {
+            const srvId = document.getElementById('self-srv').value;
+            const date = document.getElementById('self-date').value;
+            const s = state.servicos.find(ser => ser.id === srvId);
+
+            if (!selectedSlot) return;
+
+            const novo = {
+                id: 'a' + Date.now(),
+                clienteId: cliId,
+                servicoId: srvId,
+                hora: selectedSlot,
+                data: date,
+                status: 'pendente',
+                profissionalId: 'p1',
+                fotos: []
+            };
+
+            state.agendamentos.push(novo);
+            save();
+            
+            alert(`Tudo certo! Seu agendamento de ${s.nome} foi marcado para o dia ${new Date(date).toLocaleDateString()} às ${selectedSlot}.✨`);
+            renderPortalCliente(state.clientes.find(cli => cli.id === cliId), 'historico');
         }
 
         let fichaData = { step: 1, currentClient: null };
