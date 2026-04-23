@@ -456,6 +456,7 @@
                 <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
                 <div class="nav-item" onclick="showView('agenda')"><i data-lucide="calendar"></i><span>Agenda</span></div>
                 <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>Clientes</span></div>
+                <div class="nav-item" onclick="showView('servicos')"><i data-lucide="scissors"></i><span>Serviços</span></div>
                 <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Caixa</span></div>
                 <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Estoque</span></div>
                 <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Configurações</span></div>
@@ -559,6 +560,7 @@
             if (viewName === 'dashboard') renderDashboard(main);
             else if (viewName === 'agenda') renderAgenda(main);
             else if (viewName === 'clientes') renderClientes(main);
+            else if (viewName === 'servicos') renderServicos(main);
             else if (viewName === 'caixa') renderCaixa(main);
             else if (viewName === 'estoque') renderEstoque(main);
             else if (viewName === 'config') renderConfig(main);
@@ -746,6 +748,37 @@
             }).join('');
         }
 
+        // --- SERVICOS ---
+        function renderServicos(container) {
+            container.innerHTML = `
+                <header>
+                    <h1>Serviços</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-servico')"><i data-lucide="plus"></i> Novo Serviço</button>
+                </header>
+
+                <div class="card">
+                    <div class="data-list" id="servicos-lista-main">
+                        ${state.servicos.map(s => `
+                            <div class="data-item">
+                                <div class="avatar" style="background: rgba(212, 116, 138, 0.1); color: var(--primary)">
+                                    <i data-lucide="sparkles" style="width: 20px;"></i>
+                                </div>
+                                <div class="item-info">
+                                    <div class="item-title">${s.nome}</div>
+                                    <div class="item-subtitle">${s.duracao} min • R$ ${s.preco.toFixed(2)}</div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-ghost" onclick="excluirServico('${s.id}')" style="color: var(--danger)">
+                                        <i data-lucide="trash-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
         // --- CAIXA ---
         function renderCaixa(container) {
             const entradas = state.transacoes.filter(t => t.tipo === 'entrada').reduce((a, b) => a + b.valor, 0);
@@ -840,31 +873,28 @@
                         <h3 style="margin-bottom: 20px;">Meu Negócio</h3>
                         <div class="form-group">
                             <label>Nome da Clínica</label>
-                            <input type="text" class="form-control" value="${state.config.nomeClinica}">
+                            <input type="text" class="form-control" id="cfg-nome" value="${state.config.nomeClinica}">
                         </div>
                         <div class="form-group">
                             <label>WhatsApp Comercial</label>
-                            <input type="text" class="form-control" value="${state.config.whatsapp}">
+                            <input type="text" class="form-control" id="cfg-whats" value="${state.config.whatsapp}">
                         </div>
-                        <button class="btn btn-primary" onclick="toast('Configurações salvas!')">Salvar Mudanças</button>
+                        <button class="btn btn-primary" onclick="salvarConfigGeral()">Salvar Mudanças</button>
                     </div>
 
                     <div class="card">
-                        <h3 style="margin-bottom: 20px;">Serviços Oferecidos</h3>
-                        <div class="data-list" id="servicos-lista-config">
-                            ${state.servicos.map(s => `
+                        <h3 style="margin-bottom: 20px;">Profissionais</h3>
+                        <div class="data-list">
+                            ${state.profissionais.map(p => `
                                 <div class="data-item">
                                     <div class="item-info">
-                                        <div class="item-title">${s.nome}</div>
-                                        <div class="item-subtitle">${s.duracao} min • R$ ${s.preco.toFixed(2)}</div>
+                                        <div class="item-title">${p.nome}</div>
                                     </div>
-                                    <div style="display: flex; gap: 8px;">
-                                        <i data-lucide="trash-2" onclick="excluirServico('${s.id}')" class="stat-icon" style="cursor:pointer; width: 18px; color: var(--danger)"></i>
-                                    </div>
+                                    <i data-lucide="trash-2" class="stat-icon" style="cursor:pointer; width: 18px; color: var(--danger)"></i>
                                 </div>
                             `).join('')}
                         </div>
-                        <button class="btn btn-outline" style="width: 100%; margin-top: 20px;" onclick="openModal('novo-servico')">+ Adicionar Serviço</button>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 20px;" onclick="toast('Adicionar profissional em breve...')">+ Adicionar Profissional</button>
                     </div>
                 </div>
 
@@ -1059,7 +1089,7 @@
             state.servicos.push(novo);
             save();
             closeModal();
-            showView('config');
+            showView('servicos');
             toast('Serviço adicionado!');
         }
 
@@ -1067,8 +1097,15 @@
             if (!confirm('Tem certeza que deseja excluir este serviço?')) return;
             state.servicos = state.servicos.filter(s => s.id !== id);
             save();
-            showView('config');
+            showView('servicos');
             toast('Serviço removido!');
+        }
+
+        function salvarConfigGeral() {
+            state.config.nomeClinica = document.getElementById('cfg-nome').value;
+            state.config.whatsapp = document.getElementById('cfg-whats').value;
+            save();
+            toast('Configurações salvas!');
         }
 
         function saveNovoAgendamento() {
