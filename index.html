@@ -1411,6 +1411,32 @@
             }
         }
 
+        function marcarComoRealizado(id) {
+            const a = state.agendamentos.find(item => item.id === id);
+            const s = state.servicos.find(ser => ser.id === a.servicoId);
+            const c = state.clientes.find(cli => cli.id === a.clienteId);
+            
+            a.status = 'realizado';
+            c.ultimaVisita = a.data;
+            c.totalVisitas++;
+            
+            // Fidelidade
+            if (s && s.pontos) {
+                c.pontos = (c.pontos || 0) + s.pontos;
+            }
+
+            // Lançar no caixa
+            state.transacoes.push({
+                id: 't' + Date.now(),
+                tipo: 'entrada',
+                valor: s ? s.preco : 0,
+                desc: `${s ? s.nome : 'Serviço'} - ${c.nome}`,
+                data: a.data,
+                fpag: 'Pix'
+            });
+
+            save();
+
             // Opção de Avaliação
             const estrelas = prompt("Finalizado! Avaliação da cliente (1-5 estrelas):", "5");
             if (estrelas) {
@@ -1431,6 +1457,10 @@
             if (confirm("Deseja enviar a mensagem de agradecimento com link de avaliação?")) {
                 enviarWhats(c.whatsapp, 'avaliacao', { nome: c.nome });
             }
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
         }
 
         function salvarTemplates() {
