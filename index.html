@@ -1205,9 +1205,19 @@
                         </div>
                     </div>
 
+                    <div style="margin-top: 24px; padding: 16px; background: #FDFBF7; border-radius: 12px; border: 1px solid #EEE;">
+                        <label style="font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Link do Portal / Ficha</label>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <input type="text" id="portal-link-${c.id}" class="form-control" readonly value="${window.location.href.split('#')[0]}#ficha?id=${c.linkId}" style="font-size: 12px; height: 38px;">
+                            <button class="btn btn-primary" style="padding: 0 15px; height: 38px;" onclick="copiarLinkPortal('${c.id}')">
+                                <i data-lucide="copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div style="display: grid; gap: 12px; margin-top: 24px;">
                         <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', linkId: '${c.linkId}'})">
-                            <i data-lucide="message-circle"></i> Enviar Portal/Ficha
+                            <i data-lucide="message-circle"></i> Enviar pelo WhatsApp
                         </button>
                         <button class="btn btn-outline" style="justify-content: center" onclick="closeModal(); openModal('novo-agendamento')">Novo Agendamento</button>
                     </div>
@@ -1541,6 +1551,14 @@
                 </html>
             `);
             printWindow.document.close();
+        }
+
+        function copiarLinkPortal(id) {
+            const copyText = document.getElementById(`portal-link-${id}`);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            toast('Link copiado para a área de transferência!');
         }
 
         function enviarWhats(tel, templateKey, data = {}) {
