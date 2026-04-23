@@ -1206,11 +1206,9 @@
                     </div>
 
                     <div style="display: grid; gap: 12px; margin-top: 24px;">
-                        ${!c.fichaCompleta ? `
-                            <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', link: '${window.location.href.split('#')[0]}#ficha?id=${c.linkId}'})">
-                                Enviar Ficha pelo WhatsApp
-                            </button>
-                        ` : ''}
+                        <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', linkId: '${c.linkId}'})">
+                            <i data-lucide="message-circle"></i> Enviar Portal/Ficha
+                        </button>
                         <button class="btn btn-outline" style="justify-content: center" onclick="closeModal(); openModal('novo-agendamento')">Novo Agendamento</button>
                     </div>
                 `;
@@ -1551,22 +1549,90 @@
             msg = msg.replace(/\[dia\]/g, data.dia || "hoje");
             msg = msg.replace(/\[hora\]/g, data.hora || "");
             msg = msg.replace(/\[servico\]/g, data.servico || "");
-            msg = msg.replace(/\[link\]/g, `https://${window.location.host}/#ficha?id=${data.linkId || 'feedback'}`);
+            
+            // Gerar link correto
+            const base = window.location.href.split('#')[0];
+            const finalLink = `${base}#ficha?id=${data.linkId || 'feedback'}`;
+            msg = msg.replace(/\[link\]/g, finalLink);
             
             window.open(`https://wa.me/${tel}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // --- CLIENT FLOW (FICHA) ---
+        // --- CLIENT FLOW (PORTAL) ---
         function checkClientRoute() {
             if (window.location.hash.startsWith('#ficha')) {
                 document.getElementById('app').style.display = 'none';
                 document.getElementById('client-view').style.display = 'block';
-                renderFichaStep(1);
+                
+                const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+                const id = urlParams.get('id');
+                const c = state.clientes.find(cli => cli.linkId === id);
+
+                if (c) {
+                    if (c.fichaCompleta) {
+                        renderPortalCliente(c);
+                    } else {
+                        renderFichaStep(1, c);
+                    }
+                } else {
+                    document.getElementById('client-steps-container').innerHTML = '<h2>Link Inválido</h2>';
+                }
             }
         }
 
-        let fichaData = { step: 1 };
-        function renderFichaStep(step) {
+        function renderPortalCliente(c) {
+            const container = document.getElementById('client-steps-container');
+            const atendimentos = state.agendamentos.filter(a => a.clienteId === c.id && a.status === 'realizado');
+            
+            container.innerHTML = `
+                <div class="step-card" style="max-width: 500px; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                        <div class="avatar" style="margin:0">${c.nome[0]}</div>
+                        <div>
+                            <h2 style="margin:0">Olá, ${c.nome.split(' ')[0]}! ✨</h2>
+                            <p style="font-size: 14px; color: var(--text-light)">Bem-vinda ao seu portal exclusivo.</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; margin-bottom: 24px;">
+                        <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Saldo de Pontos</span>
+                        <div style="font-size: 32px; font-weight: 700; margin-top: 5px;">${c.pontos || 0} pts</div>
+                        <p style="font-size: 11px; margin-top: 10px; opacity: 0.9;">Continue cuidando de você e acumule mais!</p>
+                    </div>
+
+                    <h3 style="font-size: 18px; margin-bottom: 15px;">Meus Atendimentos</h3>
+                    <div class="data-list" style="margin-bottom: 30px;">
+                        ${atendimentos.length ? atendimentos.map(a => {
+                            const s = state.servicos.find(ser => ser.id === a.servicoId);
+                            return `
+                                <div class="data-item" style="padding: 12px 0;">
+                                    <div class="item-info">
+                                        <div class="item-title" style="font-size: 14px;">${s ? s.nome : 'Serviço'}</div>
+                                        <div class="item-subtitle" style="font-size: 12px;">${new Date(a.data).toLocaleDateString()}</div>
+                                    </div>
+                                    <div style="font-weight: 700; color: var(--primary)">+ ${s ? s.pontos : 0} pts</div>
+                                </div>
+                            `;
+                        }).join('') : '<p style="color: var(--text-light); font-size: 14px;">Você ainda não possui atendimentos registrados.</p>'}
+                    </div>
+
+                    <h3 style="font-size: 18px; margin-bottom: 15px;">Minha Galeria ✨</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        ${c.fotos && c.fotos.length ? c.fotos.map(f => `
+                            <div style="border-radius: 12px; overflow: hidden; height: 140px; border: 1px solid #EEE;">
+                                <img src="${f.url}" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        `).join('') : '<p style="grid-column: span 2; color: var(--text-light); font-size: 14px;">Suas fotos de evolução aparecerão aqui.</p>'}
+                    </div>
+
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 40px;" onclick="window.location.hash=''">Sair do Portal</button>
+                </div>
+            `;
+        }
+
+        let fichaData = { step: 1, currentClient: null };
+        function renderFichaStep(step, client) {
+            fichaData.currentClient = client || fichaData.currentClient;
             const container = document.getElementById('client-steps-container');
             if (step === 1) {
                 container.innerHTML = `
@@ -1575,17 +1641,17 @@
                         <div class="step-indicator">
                             <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
                         </div>
-                        <h2>Quase lá! ✨</h2>
-                        <p style="color: var(--text-light); margin-bottom: 24px;">Conte-nos um pouco sobre você.</p>
+                        <h2>Olá, ${fichaData.currentClient.nome.split(' ')[0]}! ✨</h2>
+                        <p style="color: var(--text-light); margin-bottom: 24px;">Complete sua ficha para um atendimento personalizado.</p>
                         <div class="form-group" style="text-align: left;">
                             <label>Data de Nascimento</label>
-                            <input type="date" class="form-control">
+                            <input type="date" id="ficha-nasc" class="form-control" value="${fichaData.currentClient.nascimento || ''}">
                         </div>
                         <div class="form-group" style="text-align: left;">
-                            <label>E-mail (opcional)</label>
-                            <input type="email" class="form-control" placeholder="seu@email.com">
+                            <label>Instagram (@usuario)</label>
+                            <input type="text" id="ficha-insta" class="form-control" placeholder="@" value="${fichaData.currentClient.insta || ''}">
                         </div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="renderFichaStep(2)">Continuar</button>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveFichaStep(1)">Continuar</button>
                     </div>
                 `;
             } else if (step === 2) {
@@ -1594,37 +1660,26 @@
                         <div class="step-indicator">
                             <div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div>
                         </div>
-                        <h2>Como nos conheceu?</h2>
-                        <div class="choice-grid" style="margin-top: 24px;">
-                            <div class="choice-item" onclick="selectChoice(this)">Instagram</div>
-                            <div class="choice-item" onclick="selectChoice(this)">Indicação</div>
-                            <div class="choice-item" onclick="selectChoice(this)">Google</div>
-                            <div class="choice-item" onclick="selectChoice(this)">Passando na rua</div>
-                        </div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="renderFichaStep(3)">Continuar</button>
-                    </div>
-                `;
-            } else if (step === 3) {
-                container.innerHTML = `
-                    <div class="step-card">
-                        <div class="step-indicator">
-                            <div class="step-dot"></div><div class="step-dot"></div><div class="step-dot active"></div>
-                        </div>
                         <h2>Alergias ou Condições?</h2>
                         <p style="color: var(--text-light); margin-bottom: 24px;">Importante para sua segurança.</p>
-                        <textarea class="form-control" rows="4" placeholder="Ex: Alergia a iodo, gestante, etc."></textarea>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="renderFichaStep(4)">Finalizar Ficha</button>
+                        <textarea id="ficha-alergias" class="form-control" rows="4" placeholder="Ex: Alergia a iodo, gestante, pele sensível...">${fichaData.currentClient.alergias || ''}</textarea>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="saveFichaStep(2)">Finalizar e Entrar no Portal</button>
                     </div>
                 `;
-            } else if (step === 4) {
-                container.innerHTML = `
-                    <div class="step-card">
-                        <div style="font-size: 60px; margin-bottom: 20px;">💖</div>
-                        <h2>Tudo pronto!</h2>
-                        <p style="color: var(--text-light)">Sua ficha foi enviada com sucesso. Estamos ansiosas para te atender!</p>
-                        <button class="btn btn-outline" style="width: 100%; margin-top: 32px;" onclick="window.location.hash=''">Fechar</button>
-                    </div>
-                `;
+            }
+        }
+
+        function saveFichaStep(step) {
+            const c = state.clientes.find(cli => cli.id === fichaData.currentClient.id);
+            if (step === 1) {
+                c.nascimento = document.getElementById('ficha-nasc').value;
+                c.insta = document.getElementById('ficha-insta').value;
+                renderFichaStep(2);
+            } else if (step === 2) {
+                c.alergias = document.getElementById('ficha-alergias').value;
+                c.fichaCompleta = true;
+                save();
+                renderPortalCliente(c);
             }
         }
 
