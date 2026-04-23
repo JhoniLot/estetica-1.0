@@ -601,6 +601,7 @@
             
             if (viewName === 'dashboard') renderDashboard(main);
             else if (viewName === 'agenda') renderAgenda(main);
+            else if (viewName === 'agenda-semanal') renderAgendaSemanal(main);
             else if (viewName === 'clientes') renderClientes(main);
             else if (viewName === 'servicos') renderServicos(main);
             else if (viewName === 'caixa') renderCaixa(main);
@@ -608,6 +609,45 @@
             else if (viewName === 'config') renderConfig(main);
 
             lucide.createIcons();
+        }
+
+        // --- AGENDA SEMANAL ---
+        function renderAgendaSemanal(container) {
+            const startOfWeek = new Date(agendaData);
+            startOfWeek.setDate(agendaData.getDate() - agendaData.getDay());
+            
+            const dias = [];
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(startOfWeek);
+                d.setDate(startOfWeek.getDate() + i);
+                dias.push(d);
+            }
+
+            container.innerHTML = `
+                <header>
+                    <h1>Agenda Semanal</h1>
+                    <button class="btn btn-primary" onclick="showView('agenda')">Voltar p/ Diária</button>
+                </header>
+                <div class="card" style="overflow-x: auto;">
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; min-width: 800px;">
+                        ${dias.map(d => {
+                            const dStr = d.toISOString().split('T')[0];
+                            const ags = state.agendamentos.filter(a => a.data === dStr);
+                            return `
+                                <div style="border-right: 1px solid #EEE; padding-right: 10px;">
+                                    <div style="text-align: center; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid var(--primary);">
+                                        ${d.toLocaleDateString('pt-BR', {weekday: 'short'})}<br>
+                                        <span style="font-size: 12px; color: var(--text-light)">${d.getDate()}</span>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                                        ${ags.map(a => `<div class="badge badge-${a.status}" style="font-size: 9px; cursor:pointer" onclick="openModal('detalhe-agendamento', ${JSON.stringify(a).replace(/"/g, '&quot;')})">${a.hora}</div>`).join('')}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         // --- DASHBOARD ---
@@ -698,32 +738,33 @@
         }
 
         // --- AGENDA ---
+        let agendaData = new Date();
+
         function renderAgenda(container) {
-            const hojeStr = new Date().toISOString().split('T')[0];
+            const dataStr = agendaData.toISOString().split('T')[0];
             
             container.innerHTML = `
                 <header>
                     <h1>Agenda Diária</h1>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline" onclick="toast('Em breve: Vista semanal')"><i data-lucide="columns"></i> Semanal</button>
+                        <button class="btn btn-outline" onclick="showView('agenda-semanal')"><i data-lucide="columns"></i> Semanal</button>
                         <button class="btn btn-primary" onclick="openModal('novo-agendamento')"><i data-lucide="plus"></i> Novo Horário</button>
                     </div>
                 </header>
 
                 <div class="calendar-container">
                     <div class="calendar-header">
-                        <button class="btn btn-ghost"><i data-lucide="chevron-left"></i></button>
-                        <span style="font-weight: 700;">Hoje, ${new Date().toLocaleDateString('pt-BR', {day:'numeric', month:'long'})}</span>
-                        <button class="btn btn-ghost"><i data-lucide="chevron-right"></i></button>
+                        <button class="btn btn-ghost" onclick="mudarData(-1)"><i data-lucide="chevron-left"></i></button>
+                        <span style="font-weight: 700;">${agendaData.toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'})}</span>
+                        <button class="btn btn-ghost" onclick="mudarData(1)"><i data-lucide="chevron-right"></i></button>
                     </div>
 
                     <div class="agenda-grid">
                         <div class="time-col">
                             ${Array.from({length: 13}, (_, i) => `<div class="time-slot">${(i + 8).toString().padStart(2, '0')}:00</div>`).join('')}
                         </div>
-                        <div class="grid-col" id="agenda-slots">
+                        <div class="grid-col" id="agenda-slots" style="position: relative;">
                             ${Array.from({length: 12}, (_, i) => `<div class="grid-row" onclick="openModal('novo-agendamento', {hora: '${(i+8).toString().padStart(2, '0')}:00'})"></div>`).join('')}
-                            <!-- Agendamentos aqui -->
                         </div>
                     </div>
                 </div>
@@ -731,7 +772,7 @@
 
             // Render blocks
             const slots = document.getElementById('agenda-slots');
-            state.agendamentos.filter(a => a.data === hojeStr).forEach(a => {
+            state.agendamentos.filter(a => a.data === dataStr).forEach(a => {
                 const hour = parseInt(a.hora.split(':')[0]);
                 const min = parseInt(a.hora.split(':')[1]);
                 const top = ((hour - 8) * 60) + min;
@@ -747,6 +788,12 @@
                 block.onclick = (e) => { e.stopPropagation(); openModal('detalhe-agendamento', a); };
                 slots.appendChild(block);
             });
+            lucide.createIcons();
+        }
+
+        function mudarData(dias) {
+            agendaData.setDate(agendaData.getDate() + dias);
+            renderAgenda(document.getElementById('main-content'));
         }
 
         // --- CLIENTES ---
@@ -975,10 +1022,62 @@
                         <label>WhatsApp (com DDD) *</label>
                         <input type="text" id="new-cli-tel" class="form-control" placeholder="Ex: 11988887777">
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Aniversário (Opcional)</label>
+                            <input type="date" id="new-cli-nasc" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Instagram (Opcional)</label>
+                            <input type="text" id="new-cli-insta" class="form-control" placeholder="@usuario">
+                        </div>
+                    </div>
                     <div style="display: flex; gap: 12px; margin-top: 32px;">
                         <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
                         <button class="btn btn-primary" onclick="saveNovoCliente()" style="flex: 2">Salvar Cadastro</button>
                     </div>
+                `;
+            }
+
+            if (type === 'nova-transacao') {
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Lançar Saída</h2>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Compra de materiais">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Valor (R$)</label>
+                            <input type="number" id="new-tr-valor" class="form-control" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Data</label>
+                            <input type="date" id="new-tr-data" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">Lançar Movimentação</button>
+                `;
+            }
+
+            if (type === 'novo-produto') {
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Novo Produto</h2>
+                    <div class="form-group">
+                        <label>Nome do Produto</label>
+                        <input type="text" id="new-pr-nome" class="form-control" placeholder="Ex: Cera Mel">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Qtd Atual</label>
+                            <input type="number" id="new-pr-qtd" class="form-control" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Mínimo</label>
+                            <input type="number" id="new-pr-min" class="form-control" value="5">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoProduto()">Cadastrar Produto</button>
                 `;
             }
 
@@ -1066,12 +1165,14 @@
 
             if (type === 'perfil-cliente') {
                 const c = state.clientes.find(cli => cli.id === data);
+                if (!c.fotos) c.fotos = [];
+
                 content.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
                         <div class="avatar" style="width: 60px; height: 60px; font-size: 24px;">${c.nome[0]}</div>
                         <div>
                             <h2>${c.nome}</h2>
-                            <p style="color: var(--text-light)">${c.whatsapp}</p>
+                            <p style="color: var(--text-light)">${c.whatsapp} • ${c.insta || 'Sem Instagram'}</p>
                         </div>
                     </div>
                     
@@ -1087,13 +1188,18 @@
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid #EEE;">
-                        <div style="padding: 10px; color: var(--primary); border-bottom: 2px solid var(--primary); cursor:pointer">Resumo</div>
-                        <div style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toast('Em breve: Fotos e Histórico')">Fotos</div>
+                        <div id="tab-resumo" style="padding: 10px; color: var(--primary); border-bottom: 2px solid var(--primary); cursor:pointer">Resumo</div>
+                        <div id="tab-fotos" style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toggleClientTab('fotos', '${c.id}')">Fotos (Antes/Depois)</div>
                     </div>
-                    <div class="card" style="background: var(--bg); box-shadow: none; padding: 20px;">
-                        <p style="font-size: 14px; margin-bottom: 8px;"><strong>Alergias:</strong> ${c.alergias || 'Nenhuma informada'}</p>
-                        <p style="font-size: 14px;"><strong>Última Visita:</strong> ${c.ultimaVisita || 'Nunca'}</p>
+
+                    <div id="perfil-tab-content">
+                        <div class="card" style="background: var(--bg); box-shadow: none; padding: 20px;">
+                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Alergias:</strong> ${c.alergias || 'Nenhuma informada'}</p>
+                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Aniversário:</strong> ${c.nascimento || 'Não informado'}</p>
+                            <p style="font-size: 14px;"><strong>Última Visita:</strong> ${c.ultimaVisita || 'Nunca'}</p>
+                        </div>
                     </div>
+
                     <div style="display: grid; gap: 12px; margin-top: 24px;">
                         ${!c.fichaCompleta ? `
                             <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', link: '${window.location.href.split('#')[0]}#ficha?id=${c.linkId}'})">
@@ -1108,23 +1214,81 @@
             lucide.createIcons();
         }
 
-        function closeModal(e) {
-            document.getElementById('modal-overlay').classList.remove('active');
+        function toggleClientTab(tab, id) {
+            const c = state.clientes.find(cli => cli.id === id);
+            const container = document.getElementById('perfil-tab-content');
+            const tabResumo = document.getElementById('tab-resumo');
+            const tabFotos = document.getElementById('tab-fotos');
+
+            if (tab === 'fotos') {
+                tabResumo.style.color = 'var(--text-light)';
+                tabResumo.style.borderBottom = 'none';
+                tabFotos.style.color = 'var(--primary)';
+                tabFotos.style.borderBottom = '2px solid var(--primary)';
+
+                container.innerHTML = `
+                    <div class="card" style="background: #FDFBF7; border: 1px dashed var(--primary); padding: 20px; text-align: center; cursor:pointer" onclick="document.getElementById('photo-upload').click()">
+                        <i data-lucide="camera" style="margin-bottom: 8px; color: var(--primary)"></i>
+                        <p style="font-size: 13px; font-weight: 600; color: var(--primary)">Adicionar Foto (Antes/Depois)</p>
+                        <input type="file" id="photo-upload" style="display: none" accept="image/*" onchange="uploadFoto('${id}')">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;" id="gallery-${id}">
+                        ${c.fotos.length ? c.fotos.map(f => `
+                            <div style="border-radius: 12px; overflow: hidden; height: 120px; border: 1px solid #EEE; position: relative">
+                                <img src="${f.url}" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); color: white; font-size: 9px; padding: 4px; text-align: center">
+                                    ${new Date(f.data).toLocaleDateString()}
+                                </div>
+                            </div>
+                        `).join('') : '<p style="grid-column: span 2; text-align: center; color: var(--text-light); font-size: 12px; padding: 20px;">Nenhuma foto registrada.</p>'}
+                    </div>
+                `;
+                lucide.createIcons();
+            } else {
+                showView('clientes'); // Refresh para voltar
+                openModal('perfil-cliente', id);
+            }
+        }
+
+        function uploadFoto(id) {
+            const file = document.getElementById('photo-upload').files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const c = state.clientes.find(cli => cli.id === id);
+                if (!c.fotos) c.fotos = [];
+                c.fotos.push({
+                    url: e.target.result,
+                    data: new Date().toISOString()
+                });
+                save();
+                toggleClientTab('fotos', id);
+                toast('Foto adicionada!');
+            };
+            reader.readAsDataURL(file);
         }
 
         // --- ACTIONS ---
         function saveNovoCliente() {
             const nome = document.getElementById('new-cli-nome').value;
             const tel = document.getElementById('new-cli-tel').value;
+            const nasc = document.getElementById('new-cli-nasc').value;
+            const insta = document.getElementById('new-cli-insta').value;
+
             if (!nome || !tel) return alert('Preencha nome e WhatsApp!');
             
             const novo = {
                 id: 'c' + Date.now(),
                 nome: nome,
                 whatsapp: tel.replace(/\D/g, ''),
+                nascimento: nasc,
+                insta: insta,
                 fichaCompleta: false,
                 ultimaVisita: new Date().toISOString().split('T')[0],
                 totalVisitas: 0,
+                pontos: 0,
+                fotos: [],
                 linkId: Math.random().toString(36).substr(2, 6)
             };
             state.clientes.push(novo);
@@ -1193,31 +1357,59 @@
             toast('Agendamento criado!');
         }
 
-        function marcarComoRealizado(id) {
-            const a = state.agendamentos.find(item => item.id === id);
-            const s = state.servicos.find(ser => ser.id === a.servicoId);
-            const c = state.clientes.find(cli => cli.id === a.clienteId);
-            
-            a.status = 'realizado';
-            c.ultimaVisita = a.data;
-            c.totalVisitas++;
-            
-            // Fidelidade
-            if (s.pontos) {
-                c.pontos = (c.pontos || 0) + s.pontos;
-            }
+        function saveNovaTransacao() {
+            const desc = document.getElementById('new-tr-desc').value;
+            const valor = document.getElementById('new-tr-valor').value;
+            const data = document.getElementById('new-tr-data').value;
 
-            // Lançar no caixa
+            if (!desc || !valor) return alert('Preencha todos os campos!');
+
             state.transacoes.push({
                 id: 't' + Date.now(),
-                tipo: 'entrada',
-                valor: s.preco,
-                desc: `${s.nome} - ${c.nome}`,
-                data: a.data,
-                fpag: 'Pix'
+                tipo: 'saida',
+                valor: parseFloat(valor),
+                desc: desc,
+                data: data,
+                fpag: 'Dinheiro'
             });
-
             save();
+            closeModal();
+            showView('caixa');
+            toast('Saída lançada com sucesso!');
+        }
+
+        function saveNovoProduto() {
+            const nome = document.getElementById('new-pr-nome').value;
+            const qtd = document.getElementById('new-pr-qtd').value;
+            const min = document.getElementById('new-pr-min').value;
+
+            if (!nome) return alert('Preencha o nome do produto!');
+
+            state.produtos.push({
+                id: 'pr' + Date.now(),
+                nome: nome,
+                qtd: parseInt(qtd),
+                min: parseInt(min),
+                un: 'un',
+                cat: 'Diversos'
+            });
+            save();
+            closeModal();
+            showView('estoque');
+            toast('Produto cadastrado!');
+        }
+
+        function darBaixaEstoque(id) {
+            const p = state.produtos.find(item => item.id === id);
+            if (p && p.qtd > 0) {
+                p.qtd--;
+                save();
+                showView('estoque');
+                toast('Baixa realizada!');
+            } else {
+                toast('Estoque zerado!');
+            }
+        }
 
             // Opção de Avaliação
             const estrelas = prompt("Finalizado! Avaliação da cliente (1-5 estrelas):", "5");
