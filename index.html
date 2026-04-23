@@ -944,20 +944,17 @@
                         `).join('')}
                         <button class="btn btn-outline" style="width: 100%" onclick="salvarTemplates()">Salvar Templates</button>
                     </div>
-                </div>
-            `;
-        }
-
-                <div class="card" style="margin-top: 32px;">
-                    <h3 style="margin-bottom: 12px;">Integração WhatsApp (Automático)</h3>
-                    <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
-                        Para enviar mensagens automáticas, integre com uma API (Evolution API ou Z-API).
-                    </p>
-                    <div class="form-group">
-                        <label>Webhook URL</label>
-                        <input type="text" class="form-control" placeholder="https://sua-api.com/webhook" value="${state.config.apiWebhook}">
+                    <div class="card" style="margin-top: 32px; grid-column: span 2;">
+                        <h3 style="margin-bottom: 12px;">Integração WhatsApp (Automático)</h3>
+                        <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
+                            Para enviar mensagens automáticas, integre com uma API (Evolution API ou Z-API).
+                        </p>
+                        <div class="form-group">
+                            <label>Webhook URL</label>
+                            <input type="text" class="form-control" placeholder="https://sua-api.com/webhook" value="${state.config.apiWebhook}">
+                        </div>
+                        <button class="btn btn-primary" onclick="toast('Integração em desenvolvimento...')">Testar Conexão</button>
                     </div>
-                    <button class="btn btn-primary" onclick="toast('Integração em desenvolvimento...')">Testar Conexão</button>
                 </div>
             `;
         }
