@@ -949,7 +949,10 @@
                                             <div class="item-title">${p.nome} <span class="badge" style="background: #EEE; color: #666; margin-left: 8px;">${p.cat}</span></div>
                                             <div class="item-subtitle">${p.qtd} ${p.un} no estoque (mín: ${p.min})</div>
                                         </div>
-                                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="darBaixaEstoque('${p.id}')">Dar Baixa</button>
+                                        <div style="display: flex; gap: 8px;">
+                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px; border-color: var(--success); color: var(--success);" onclick="reporEstoque('${p.id}')">Repor</button>
+                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="darBaixaEstoque('${p.id}')">Dar Baixa</button>
+                                        </div>
                                     </div>
                                     <div class="stock-bar-bg">
                                         <div class="stock-bar-fill" style="width: ${percent}%; background: ${color}"></div>
@@ -1408,6 +1411,16 @@
                 toast('Baixa realizada!');
             } else {
                 toast('Estoque zerado!');
+            }
+        }
+
+        function reporEstoque(id) {
+            const p = state.produtos.find(item => item.id === id);
+            if (p) {
+                p.qtd++;
+                save();
+                showView('estoque');
+                toast('Estoque reposto!');
             }
         }
 
