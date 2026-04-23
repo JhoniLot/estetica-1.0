@@ -1229,6 +1229,7 @@
 
         function toggleClientTab(tab, id) {
             const c = state.clientes.find(cli => cli.id === id);
+            const atendimentos = state.agendamentos.filter(a => a.clienteId === c.id && a.status === 'realizado').sort((a,b) => new Date(b.data) - new Date(a.data));
             const container = document.getElementById('perfil-tab-content');
             const tabResumo = document.getElementById('tab-resumo');
             const tabFotos = document.getElementById('tab-fotos');
@@ -1240,44 +1241,54 @@
                 tabFotos.style.borderBottom = '2px solid var(--primary)';
 
                 container.innerHTML = `
-                    <div class="card" style="background: #FDFBF7; border: 1px dashed var(--primary); padding: 20px; text-align: center; cursor:pointer" onclick="document.getElementById('photo-upload').click()">
-                        <i data-lucide="camera" style="margin-bottom: 8px; color: var(--primary)"></i>
-                        <p style="font-size: 13px; font-weight: 600; color: var(--primary)">Adicionar Foto (Antes/Depois)</p>
-                        <input type="file" id="photo-upload" style="display: none" accept="image/*" onchange="uploadFoto('${id}')">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;" id="gallery-${id}">
-                        ${c.fotos.length ? c.fotos.map(f => `
-                            <div style="border-radius: 12px; overflow: hidden; height: 120px; border: 1px solid #EEE; position: relative">
-                                <img src="${f.url}" style="width: 100%; height: 100%; object-fit: cover;">
-                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.5); color: white; font-size: 9px; padding: 4px; text-align: center">
-                                    ${new Date(f.data).toLocaleDateString()}
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        ${atendimentos.map(a => {
+                            const s = state.servicos.find(ser => ser.id === a.servicoId);
+                            const fotos = a.fotos || [];
+                            return `
+                                <div class="card" style="background: white; padding: 15px; border: 1px solid #EEE; box-shadow: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <div>
+                                            <div style="font-weight: 700; font-size: 14px;">${s ? s.nome : ''}</div>
+                                            <div style="font-size: 12px; color: var(--text-light)">${new Date(a.data).toLocaleDateString()}</div>
+                                        </div>
+                                        <button class="btn btn-ghost" style="padding: 5px 10px; font-size: 10px; color: var(--primary)" onclick="document.getElementById('upload-${a.id}').click()">
+                                            <i data-lucide="plus"></i> Foto
+                                        </button>
+                                        <input type="file" id="upload-${a.id}" style="display: none" accept="image/*" onchange="uploadFotoAtendimento('${a.id}', '${c.id}')">
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                        ${fotos.map(f => `
+                                            <div style="border-radius: 8px; overflow: hidden; height: 80px; border: 1px solid #F0F0F0">
+                                                <img src="${f}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                        `).join('')}
+                                        ${fotos.length === 0 ? '<p style="grid-column: span 3; font-size: 11px; color: #BBB; text-align: center; padding: 10px;">Sem fotos nesta sessão.</p>' : ''}
+                                    </div>
                                 </div>
-                            </div>
-                        `).join('') : '<p style="grid-column: span 2; text-align: center; color: var(--text-light); font-size: 12px; padding: 20px;">Nenhuma foto registrada.</p>'}
+                            `;
+                        }).join('') || '<p style="text-align: center; color: #999; padding: 20px;">Finalize um atendimento para anexar fotos.</p>'}
                     </div>
                 `;
                 lucide.createIcons();
             } else {
-                showView('clientes'); // Refresh para voltar
+                showView('clientes');
                 openModal('perfil-cliente', id);
             }
         }
 
-        function uploadFoto(id) {
-            const file = document.getElementById('photo-upload').files[0];
+        function uploadFotoAtendimento(agId, cliId) {
+            const file = document.getElementById(`upload-${agId}`).files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const c = state.clientes.find(cli => cli.id === id);
-                if (!c.fotos) c.fotos = [];
-                c.fotos.push({
-                    url: e.target.result,
-                    data: new Date().toISOString()
-                });
+                const a = state.agendamentos.find(item => item.id === agId);
+                if (!a.fotos) a.fotos = [];
+                a.fotos.push(e.target.result);
                 save();
-                toggleClientTab('fotos', id);
-                toast('Foto adicionada!');
+                toggleClientTab('fotos', cliId);
+                toast('Foto anexada à sessão!');
             };
             reader.readAsDataURL(file);
         }
@@ -1598,52 +1609,91 @@
             }
         }
 
-        function renderPortalCliente(c) {
+        function renderPortalCliente(c, activeTab = 'resumo') {
             const container = document.getElementById('client-steps-container');
-            const atendimentos = state.agendamentos.filter(a => a.clienteId === c.id && a.status === 'realizado');
+            const atendimentos = state.agendamentos.filter(a => a.clienteId === c.id && a.status === 'realizado').sort((a,b) => new Date(b.data) - new Date(a.data));
             
             container.innerHTML = `
-                <div class="step-card" style="max-width: 500px; text-align: left;">
-                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
-                        <div class="avatar" style="margin:0">${c.nome[0]}</div>
-                        <div>
-                            <h2 style="margin:0">Olá, ${c.nome.split(' ')[0]}! ✨</h2>
-                            <p style="font-size: 14px; color: var(--text-light)">Bem-vinda ao seu portal exclusivo.</p>
+                <div class="step-card" style="max-width: 500px; text-align: left; padding: 0; overflow: hidden; border-radius: 30px;">
+                    <!-- Header Portal -->
+                    <div style="background: var(--sidebar-bg); padding: 40px 30px; color: white;">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                            <div class="avatar" style="margin:0; border: 2px solid var(--primary);">${c.nome[0]}</div>
+                            <div>
+                                <h2 style="margin:0; color: var(--primary);">Olá, ${c.nome.split(' ')[0]}!</h2>
+                                <p style="font-size: 13px; opacity: 0.7;">Seu espaço exclusivo BeautyFlow</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Fidelidade Acumulada</span>
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary); margin-top: 5px;">${c.pontos || 0} <span style="font-size: 14px; font-weight: 400;">pontos</span></div>
                         </div>
                     </div>
 
-                    <div class="card" style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; margin-bottom: 24px;">
-                        <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">Saldo de Pontos</span>
-                        <div style="font-size: 32px; font-weight: 700; margin-top: 5px;">${c.pontos || 0} pts</div>
-                        <p style="font-size: 11px; margin-top: 10px; opacity: 0.9;">Continue cuidando de você e acumule mais!</p>
+                    <!-- Tabs Nav -->
+                    <div style="display: flex; background: white; border-bottom: 1px solid #EEE;">
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'resumo')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'resumo' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'resumo' ? 'var(--primary)' : 'transparent'}">Resumo</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'historico')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'historico' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'historico' ? 'var(--primary)' : 'transparent'}">Histórico</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'galeria')" style="flex: 1; padding: 15px; text-align: center; font-size: 13px; font-weight: 600; cursor:pointer; color: ${activeTab === 'galeria' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'galeria' ? 'var(--primary)' : 'transparent'}">Galeria</div>
                     </div>
 
-                    <h3 style="font-size: 18px; margin-bottom: 15px;">Meus Atendimentos</h3>
-                    <div class="data-list" style="margin-bottom: 30px;">
-                        ${atendimentos.length ? atendimentos.map(a => {
-                            const s = state.servicos.find(ser => ser.id === a.servicoId);
-                            return `
-                                <div class="data-item" style="padding: 12px 0;">
-                                    <div class="item-info">
-                                        <div class="item-title" style="font-size: 14px;">${s ? s.nome : 'Serviço'}</div>
-                                        <div class="item-subtitle" style="font-size: 12px;">${new Date(a.data).toLocaleDateString()}</div>
-                                    </div>
-                                    <div style="font-weight: 700; color: var(--primary)">+ ${s ? s.pontos : 0} pts</div>
-                                </div>
-                            `;
-                        }).join('') : '<p style="color: var(--text-light); font-size: 14px;">Você ainda não possui atendimentos registrados.</p>'}
-                    </div>
-
-                    <h3 style="font-size: 18px; margin-bottom: 15px;">Minha Galeria ✨</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                        ${c.fotos && c.fotos.length ? c.fotos.map(f => `
-                            <div style="border-radius: 12px; overflow: hidden; height: 140px; border: 1px solid #EEE;">
-                                <img src="${f.url}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <!-- Tab Content -->
+                    <div style="padding: 30px; min-height: 300px; background: #FDFBF7;">
+                        ${activeTab === 'resumo' ? `
+                            <h3 style="font-size: 16px; margin-bottom: 15px;">Suas Informações</h3>
+                            <div class="card" style="padding: 20px; box-shadow: none; border: 1px solid #EEE;">
+                                <div style="margin-bottom: 12px; font-size: 14px;"><strong>Próximo Aniversário:</strong> ${c.nascimento ? new Date(c.nascimento).toLocaleDateString('pt-BR', {day:'numeric', month:'long'}) : 'Não informado'}</div>
+                                <div style="margin-bottom: 12px; font-size: 14px;"><strong>Instagram:</strong> ${c.insta || '-'}</div>
+                                <div style="font-size: 14px;"><strong>Alergias/Observações:</strong><br><span style="color: var(--text-light)">${c.alergias || 'Nenhuma informada.'}</span></div>
                             </div>
-                        `).join('') : '<p style="grid-column: span 2; color: var(--text-light); font-size: 14px;">Suas fotos de evolução aparecerão aqui.</p>'}
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="window.open('https://wa.me/${state.config.whatsapp}', '_blank')">Agendar Novo Horário</button>
+                        ` : ''}
+
+                        ${activeTab === 'historico' ? `
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                                ${atendimentos.map(a => {
+                                    const s = state.servicos.find(ser => ser.id === a.servicoId);
+                                    return `
+                                        <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid #EEE;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <div>
+                                                    <div style="font-weight: 700; font-size: 15px;">${s ? s.nome : 'Serviço'}</div>
+                                                    <div style="font-size: 12px; color: var(--text-light)">${new Date(a.data).toLocaleDateString()}</div>
+                                                </div>
+                                                <div style="font-weight: 700; color: var(--primary)">+${s ? s.pontos : 0} pts</div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('') || '<p style="text-align: center; color: #999;">Ainda não há atendimentos realizados.</p>'}
+                            </div>
+                        ` : ''}
+
+                        ${activeTab === 'galeria' ? `
+                            <div style="display: flex; flex-direction: column; gap: 24px;">
+                                ${atendimentos.map(a => {
+                                    const s = state.servicos.find(ser => ser.id === a.servicoId);
+                                    const fotosAtendimento = a.fotos || [];
+                                    if (fotosAtendimento.length === 0) return '';
+                                    return `
+                                        <div>
+                                            <h4 style="font-size: 14px; margin-bottom: 10px; color: var(--text-light)">${new Date(a.data).toLocaleDateString()} — ${s ? s.nome : ''}</h4>
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                                ${fotosAtendimento.map(f => `
+                                                    <div style="border-radius: 12px; overflow: hidden; height: 150px; border: 1px solid #EEE;">
+                                                        <img src="${f}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                    </div>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('') || '<p style="text-align: center; color: #999;">Suas fotos de evolução aparecerão aqui conforme realizarmos os atendimentos.</p>'}
+                            </div>
+                        ` : ''}
                     </div>
 
-                    <button class="btn btn-outline" style="width: 100%; margin-top: 40px;" onclick="window.location.hash=''">Sair do Portal</button>
+                    <div style="padding: 20px; text-align: center;">
+                        <button class="btn btn-ghost" style="font-size: 12px;" onclick="window.location.hash=''">Sair do Portal</button>
+                    </div>
                 </div>
             `;
         }
