@@ -21,9 +21,9 @@
             --success: #43A047;
             --danger: #D32F2F;
             --warning: #FFA000;
-            --radius: 20px;
-            --shadow: 0 10px 40px rgba(0,0,0,0.06);
-            --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --radius: 16px;
+            --shadow: none; /* Removendo sombras conforme solicitado */
+            --transition: all 0.3s ease;
             --sidebar-width: 280px;
         }
 
@@ -175,11 +175,11 @@
             background: var(--surface);
             border-radius: var(--radius);
             padding: 30px;
-            box-shadow: var(--shadow);
+            box-shadow: none;
             border: 1px solid rgba(0,0,0,0.03);
             transition: var(--transition);
         }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 15px 50px rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-4px); }
 
         .btn {
             padding: 14px 28px;
@@ -456,33 +456,51 @@
             z-index: 2000;
         }
 
-        /* Responsive */
+        /* Responsive Global Fix */
         @media (max-width: 992px) {
             aside {
                 position: fixed;
                 left: -280px;
-                top: 0;
-                bottom: 0;
+                top: 0; bottom: 0;
                 height: 100vh;
-                box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+                box-shadow: 10px 0 30px rgba(0,0,0,0.2);
             }
             aside.active { left: 0; }
             .mobile-header { display: flex; }
-            main { padding: 90px 15px 40px 15px; }
             
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .dashboard-content { grid-template-columns: 1fr !important; gap: 20px; }
-            .form-row { grid-template-columns: 1fr; gap: 0; }
+            main { padding: 90px 15px 30px 15px !important; width: 100vw; }
             
-            .stat-card { padding: 15px; }
-            .stat-value { font-size: 24px; }
-            
-            /* Ajuste de tabelas no mobile */
-            table { display: block; overflow-x: auto; white-space: nowrap; }
-        }
+            /* Forçar coluna única em TUDO no mobile */
+            .stats-grid, 
+            .dashboard-content, 
+            .form-row, 
+            .choice-grid,
+            .config-grid,
+            .finance-grid { 
+                grid-template-columns: 1fr !important; 
+                gap: 15px !important; 
+            }
 
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
+            header { 
+                flex-direction: column !important; 
+                align-items: flex-start !important; 
+                gap: 15px !important; 
+                margin-bottom: 25px !important;
+            }
+            
+            header h1 { font-size: 24px !important; }
+            header .btn { width: 100% !important; justify-content: center !important; }
+
+            .card { padding: 15px !important; width: 100% !important; margin-bottom: 15px !important; }
+            
+            /* Ajuste da Agenda Diária no Mobile */
+            .calendar-container { padding: 10px !important; }
+            .appointment-block { font-size: 11px !important; padding: 5px !important; }
+            
+            /* Ajuste do Estoque */
+            .stock-item { flex-direction: column !important; gap: 15px !important; }
+            .stock-item .btn-group { width: 100% !important; }
+            .stock-item .btn { flex: 1 !important; }
         }
 
         /* Stock Progress Bar */
