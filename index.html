@@ -24,6 +24,7 @@
             --radius: 20px;
             --shadow: 0 10px 40px rgba(0,0,0,0.06);
             --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            --sidebar-width: 280px;
         }
 
         * {
@@ -49,9 +50,23 @@
             width: 100vw;
         }
 
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--sidebar-bg);
+            color: var(--primary);
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1100;
+        }
+
         /* Sidebar Luxury */
         aside {
-            width: 280px;
+            width: var(--sidebar-width);
             background: var(--sidebar-bg);
             display: flex;
             flex-direction: column;
@@ -431,24 +446,24 @@
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             aside {
                 position: fixed;
+                left: -280px;
+                top: 0;
                 bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 70px;
-                flex-direction: row;
-                padding: 0 10px;
-                justify-content: space-around;
+                height: 100%;
             }
-            .logo { display: none; }
-            nav { flex-direction: row; gap: 0; justify-content: space-around; width: 100%; }
-            .nav-item { flex-direction: column; gap: 4px; padding: 10px; font-size: 10px; }
-            .nav-item i { width: 20px; height: 20px; }
-            main { padding: 20px; padding-bottom: 100px; }
+            aside.active { left: 0; }
+            .mobile-header { display: flex; }
+            main { padding-top: 80px; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .dashboard-content { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
         }
 
         /* Stock Progress Bar */
@@ -468,6 +483,11 @@
     </style>
 </head>
 <body>
+
+    <div class="mobile-header">
+        <div class="logo" style="margin:0">BeautyFlow</div>
+        <button class="btn btn-ghost" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
+    </div>
 
     <!-- Main App Container -->
     <div id="app">
@@ -1893,6 +1913,19 @@
             document.querySelectorAll('.choice-item').forEach(i => i.classList.remove('selected'));
             el.classList.add('selected');
         }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking menu item on mobile
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 992) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
 
         // --- INIT ---
         window.onload = () => {
