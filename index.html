@@ -534,7 +534,7 @@
         <aside id="sidebar">
             <div class="logo">
                 <div class="logo-icon"><i data-lucide="sparkles"></i></div>
-                BeautyFlow
+                <span id="sidebar-studio-name">BeautyFlow</span>
             </div>
             <nav>
                 <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
@@ -713,8 +713,9 @@
 
         // --- DASHBOARD ---
         function renderDashboard(container) {
+            const studioName = state.config.nomeClinica || 'Bem-vinda';
             const hoje = new Date().toISOString().split('T')[0];
-            const hojeMMDD = hoje.slice(5); // "04-23"
+            const hojeMMDD = hoje.slice(5);
             
             const agendamentosHoje = state.agendamentos.filter(a => a.data === hoje);
             const receitaHoje = state.transacoes.filter(t => t.data === hoje && t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0);
@@ -730,7 +731,7 @@
             container.innerHTML = `
                 <header>
                     <div>
-                        <h1>Olá, Bem-vinda! ✨</h1>
+                        <h1>Olá, ${studioName}! ✨</h1>
                         <p style="color: var(--text-light); font-size: 14px;">Aqui está o resumo da sua clínica hoje.</p>
                     </div>
                 </header>
@@ -1471,7 +1472,16 @@
             state.config.nomeClinica = document.getElementById('cfg-nome').value;
             state.config.whatsapp = document.getElementById('cfg-whats').value;
             save();
+            updateSidebarLogo();
             toast('Configurações salvas!');
+        }
+
+        function updateSidebarLogo() {
+            const el = document.getElementById('sidebar-studio-name');
+            if (el) el.innerText = state.config.nomeClinica || 'BeautyFlow';
+            
+            const mobEl = document.querySelector('.mobile-header .logo');
+            if (mobEl) mobEl.innerText = state.config.nomeClinica || 'BeautyFlow';
         }
 
         function saveNovoAgendamento() {
@@ -1973,6 +1983,7 @@
         // --- INIT ---
         window.onload = () => {
             initData();
+            updateSidebarLogo();
             checkClientRoute();
             if (!window.location.hash.startsWith('#ficha')) {
                 showView('dashboard');
