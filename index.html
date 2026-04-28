@@ -217,7 +217,7 @@
         /* Stats Luxury */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             margin-bottom: 40px;
         }
@@ -722,10 +722,6 @@
             
             const aniversariantes = state.clientes.filter(c => c.nascimento && c.nascimento.slice(5) === hojeMMDD);
 
-            const mediaAvaliacao = state.avaliacoes.length 
-                ? (state.avaliacoes.reduce((acc, v) => acc + v.estrelas, 0) / state.avaliacoes.length).toFixed(1)
-                : '5.0';
-
             const estoqueBaixo = state.produtos.filter(p => p.qtd < p.min).length;
 
             container.innerHTML = `
@@ -737,11 +733,6 @@
                 </header>
 
                 <div class="stats-grid">
-                    <div class="card stat-card">
-                        <i data-lucide="star" class="stat-icon" style="color: #FFD700"></i>
-                        <span class="stat-value">${mediaAvaliacao}</span>
-                        <span class="stat-label">Média Avaliações</span>
-                    </div>
                     <div class="card stat-card">
                         <i data-lucide="dollar-sign" class="stat-icon"></i>
                         <span class="stat-value">R$ ${receitaHoje.toFixed(2)}</span>
