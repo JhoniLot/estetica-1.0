@@ -619,6 +619,7 @@
                 
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Financeiro</div>
                 <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Fluxo de Caixa</span></div>
+                <div class="nav-item" onclick="openModal('nova-transacao', {tipo: 'entrada'})"><i data-lucide="shopping-bag"></i><span>Vendas (Manual)</span></div>
                 <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="minus-circle"></i><span>Lançar Despesa</span></div>
                 <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Relatórios</span></div>
                 
@@ -677,6 +678,12 @@
 
         // --- MOCK DATA INITIALIZATION ---
         function initData() {
+            const getHojeLocal = () => {
+                const d = new Date();
+                return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+            };
+            const hoje = getHojeLocal();
+
             const saved = localStorage.getItem('beautyflow_data');
             if (saved) {
                 state = JSON.parse(saved);
@@ -708,9 +715,9 @@
                     { id: 'p2', nome: 'Juliana' }
                 ];
                 state.agendamentos = [
-                    { id: 'a1', clienteId: 'c1', servicoId: 's1', data: new Date().toISOString().split('T')[0], hora: '09:00', status: 'realizado', profissionalId: 'p1' },
-                    { id: 'a2', clienteId: 'c2', servicoId: 's2', data: new Date().toISOString().split('T')[0], hora: '10:30', status: 'confirmado', profissionalId: 'p2' },
-                    { id: 'a3', clienteId: 'c4', servicoId: 's3', data: new Date().toISOString().split('T')[0], hora: '14:00', status: 'pendente', profissionalId: 'p1' }
+                    { id: 'a1', clienteId: 'c1', servicoId: 's1', data: hoje, hora: '09:00', status: 'realizado', profissionalId: 'p1' },
+                    { id: 'a2', clienteId: 'c2', servicoId: 's2', data: hoje, hora: '10:30', status: 'confirmado', profissionalId: 'p2' },
+                    { id: 'a3', clienteId: 'c4', servicoId: 's3', data: hoje, hora: '14:00', status: 'pendente', profissionalId: 'p1' }
                 ];
                 state.produtos = [
                     { id: 'pr1', nome: 'Cera Mel', qtd: 5, min: 10, un: 'un', cat: 'Depilação' },
@@ -718,8 +725,8 @@
                     { id: 'pr3', nome: 'Máscara Argila', qtd: 15, min: 5, un: 'un', cat: 'Limpeza' }
                 ];
                 state.transacoes = [
-                    { id: 't1', tipo: 'entrada', valor: 45, desc: 'Sobrancelha - Ana Silva', data: new Date().toISOString().split('T')[0], fpag: 'Pix' },
-                    { id: 't2', tipo: 'saida', valor: 200, desc: 'Aluguel Semanal', data: new Date().toISOString().split('T')[0], fpag: 'Dinheiro' }
+                    { id: 't1', tipo: 'entrada', valor: 45, desc: 'Sobrancelha - Ana Silva', data: hoje, fpag: 'Pix' },
+                    { id: 't2', tipo: 'saida', valor: 200, desc: 'Aluguel Semanal', data: hoje, fpag: 'Dinheiro' }
                 ];
                 save();
             }
@@ -736,7 +743,11 @@
             // Update active sidebar item
             document.querySelectorAll('.nav-item').forEach(el => {
                 el.classList.remove('active');
-                if (el.innerText.toLowerCase() === viewName) el.classList.add('active');
+                // Usando o atributo onclick ou comparando com um mapeamento para saber qual item ativar
+                const onClickAttr = el.getAttribute('onclick');
+                if (onClickAttr && onClickAttr.includes(`'${viewName}'`)) {
+                    el.classList.add('active');
+                }
             });
 
             const main = document.getElementById('main-content');
@@ -795,7 +806,14 @@
         // --- DASHBOARD ---
         function renderDashboard(container) {
             const studioName = state.config.nomeClinica || 'Bem-vinda';
-            const hoje = new Date().toISOString().split('T')[0];
+            
+            // Helper para pegar a data local YYYY-MM-DD
+            const getHojeLocal = () => {
+                const d = new Date();
+                return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+            };
+            
+            const hoje = getHojeLocal();
             const hojeMMDD = hoje.slice(5);
             
             const agendamentosHoje = state.agendamentos.filter(a => a.data === hoje);
@@ -1278,11 +1296,20 @@
 
             if (type === 'nova-transacao') {
                 editingTransacaoId = data ? data.id : null;
+                const trTipo = data ? data.tipo : 'saida';
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">${data ? 'Editar Saída' : 'Lançar Saída'}</h2>
+                    <h2 style="margin-bottom: 24px;">${data ? 'Editar Movimentação' : 'Lançar Movimentação'}</h2>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Tipo de Movimentação</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+                            <button class="btn ${trTipo === 'entrada' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-entrada" onclick="setTrTipo('entrada')" style="text-transform: none; padding: 10px;">Entrada</button>
+                            <button class="btn ${trTipo === 'saida' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-saida" onclick="setTrTipo('saida')" style="text-transform: none; padding: 10px;">Saída</button>
+                        </div>
+                        <input type="hidden" id="new-tr-tipo" value="${trTipo}">
+                    </div>
                     <div class="form-group">
                         <label>Descrição</label>
-                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Compra de materiais" value="${data ? data.desc : ''}">
+                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Venda de Produto..." value="${data ? data.desc : ''}">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -1291,10 +1318,10 @@
                         </div>
                         <div class="form-group">
                             <label>Data</label>
-                            <input type="date" id="new-tr-data" class="form-control" value="${data ? data.data : new Date().toISOString().split('T')[0]}">
+                            <input type="date" id="new-tr-data" class="form-control" value="${data ? data.data : new Date().toLocaleDateString('en-CA')}">
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">${data ? 'Salvar Alterações' : 'Lançar Movimentação'}</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">${data ? 'Salvar Alterações' : 'Lançar no Caixa'}</button>
                 `;
             }
 
@@ -1631,10 +1658,17 @@
 
         let editingTransacaoId = null;
         
+        function setTrTipo(tipo) {
+            document.getElementById('new-tr-tipo').value = tipo;
+            document.getElementById('btn-tr-entrada').className = tipo === 'entrada' ? 'btn btn-primary' : 'btn btn-outline';
+            document.getElementById('btn-tr-saida').className = tipo === 'saida' ? 'btn btn-primary' : 'btn btn-outline';
+        }
+
         function saveNovaTransacao() {
             const desc = document.getElementById('new-tr-desc').value;
             const valor = document.getElementById('new-tr-valor').value;
             const data = document.getElementById('new-tr-data').value;
+            const tipo = document.getElementById('new-tr-tipo').value;
 
             if (!desc || !valor) return alert('Preencha todos os campos!');
 
@@ -1644,19 +1678,20 @@
                     t.desc = desc;
                     t.valor = parseFloat(valor);
                     t.data = data;
+                    t.tipo = tipo;
                 }
                 editingTransacaoId = null;
-                toast('Saída atualizada com sucesso!');
+                toast('Movimentação atualizada!');
             } else {
                 state.transacoes.push({
                     id: 't' + Date.now(),
-                    tipo: 'saida',
+                    tipo: tipo,
                     valor: parseFloat(valor),
                     desc: desc,
                     data: data,
-                    fpag: 'Dinheiro'
+                    fpag: 'Outros'
                 });
-                toast('Saída lançada com sucesso!');
+                toast(tipo === 'entrada' ? 'Receita lançada!' : 'Despesa lançada!');
             }
             
             save();
