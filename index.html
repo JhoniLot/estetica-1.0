@@ -619,7 +619,7 @@
                 
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Financeiro</div>
                 <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Fluxo de Caixa</span></div>
-                <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="shopping-bag"></i><span>Lançar Venda</span></div>
+                <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="minus-circle"></i><span>Lançar Despesa</span></div>
                 <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Relatórios</span></div>
                 
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Negócio</div>
@@ -835,13 +835,13 @@
                         <div class="qa-icon" style="color: #D81B60;"><i data-lucide="user-plus"></i></div>
                         Novo<br>Cliente
                     </button>
-                    <button class="qa-btn" style="background: var(--pastel-green);" onclick="openModal('nova-transacao')">
-                        <div class="qa-icon" style="color: #43A047;"><i data-lucide="shopping-bag"></i></div>
-                        Lançar<br>Venda
+                    <button class="qa-btn" style="background: var(--pastel-green);" onclick="showView('caixa')">
+                        <div class="qa-icon" style="color: #43A047;"><i data-lucide="wallet"></i></div>
+                        Fluxo de<br>Caixa
                     </button>
                     <button class="qa-btn" style="background: var(--pastel-orange);" onclick="openModal('nova-transacao')">
-                        <div class="qa-icon" style="color: #F57C00;"><i data-lucide="dollar-sign"></i></div>
-                        Nova<br>Despesa
+                        <div class="qa-icon" style="color: #F57C00;"><i data-lucide="minus-circle"></i></div>
+                        Lançar<br>Despesa
                     </button>
                 </div>
 
