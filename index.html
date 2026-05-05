@@ -13,18 +13,23 @@
             --primary: #C9A84C;
             --primary-dark: #A68A3D;
             --primary-light: #E5D5A4;
-            --bg: #FDFBF7;
+            --bg: #FAFAFA;
             --surface: #FFFFFF;
-            --sidebar-bg: #1A1A1A;
+            --sidebar-bg: #FFFFFF;
             --text: #2D2D2D;
             --text-light: #7A7A7A;
+            --border: #EEEEEE;
             --success: #43A047;
             --danger: #D32F2F;
             --warning: #FFA000;
+            --pastel-blue: #E3F2FD;
+            --pastel-pink: #FCE4EC;
+            --pastel-green: #E8F5E9;
+            --pastel-orange: #FFF3E0;
             --radius: 16px;
-            --shadow: none; /* Removendo sombras conforme solicitado */
+            --shadow: 0 4px 20px rgba(0,0,0,0.03);
             --transition: all 0.3s ease;
-            --sidebar-width: 280px;
+            --sidebar-width: 260px;
         }
 
         * {
@@ -125,22 +130,22 @@
             padding: 14px 20px;
             border-radius: 14px;
             text-decoration: none;
-            color: #A0A0A0;
+            color: #666666;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .nav-item:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary);
+            background: #F9F9F9;
         }
 
         .nav-item.active {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 8px 20px rgba(201, 168, 76, 0.2);
+            background: rgba(201, 168, 76, 0.1);
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* Main Content */
@@ -155,9 +160,76 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
+        /* Topbar Clean */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: #F5F5F5;
+            padding: 10px 16px;
+            border-radius: 12px;
+            width: 300px;
+            gap: 10px;
+            color: var(--text-light);
+        }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .qa-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border-radius: var(--radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+            color: var(--text);
+            text-align: left;
+        }
+        .qa-btn:hover { transform: translateY(-3px); }
+        .qa-icon {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: white;
+        }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
@@ -537,13 +609,22 @@
                 <span id="sidebar-studio-name">BeautyFlow</span>
             </div>
             <nav>
-                <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
+                <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Visão Geral</span></div>
                 <div class="nav-item" onclick="showView('agenda')"><i data-lucide="calendar"></i><span>Agenda</span></div>
-                <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>Clientes</span></div>
-                <div class="nav-item" onclick="showView('servicos')"><i data-lucide="scissors"></i><span>Serviços</span></div>
-                <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Caixa</span></div>
-                <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Estoque</span></div>
-                <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Configurações</span></div>
+                
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Gestão</div>
+                <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>Meus Clientes</span></div>
+                <div class="nav-item" onclick="showView('servicos')"><i data-lucide="scissors"></i><span>Procedimentos</span></div>
+                <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Estoque & Materiais</span></div>
+                
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Financeiro</div>
+                <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Fluxo de Caixa</span></div>
+                <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="shopping-bag"></i><span>Lançar Venda</span></div>
+                <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Relatórios</span></div>
+                
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Negócio</div>
+                <div class="nav-item" onclick="showView('config')"><i data-lucide="building-2"></i><span>Minha Clínica</span></div>
+                <div class="nav-item" onclick="toast('Módulo Marketing em breve')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
             </nav>
         </aside>
 
@@ -719,49 +800,91 @@
             
             const agendamentosHoje = state.agendamentos.filter(a => a.data === hoje);
             const receitaHoje = state.transacoes.filter(t => t.data === hoje && t.tipo === 'entrada').reduce((acc, t) => acc + t.valor, 0);
+            const despesaHoje = state.transacoes.filter(t => t.data === hoje && t.tipo === 'saida').reduce((acc, t) => acc + t.valor, 0);
             
             const aniversariantes = state.clientes.filter(c => c.nascimento && c.nascimento.slice(5) === hojeMMDD);
-
             const estoqueBaixo = state.produtos.filter(p => p.qtd < p.min).length;
 
             container.innerHTML = `
-                <header>
-                    <div>
-                        <h1>Olá, ${studioName}! ✨</h1>
-                        <p style="color: var(--text-light); font-size: 14px;">Aqui está o resumo da sua clínica hoje.</p>
+                <!-- Topbar -->
+                <div class="topbar">
+                    <div class="search-bar">
+                        <i data-lucide="search" style="width: 18px;"></i>
+                        <input type="text" placeholder="Busque por clientes, serviços...">
                     </div>
-                </header>
-
-                <div class="stats-grid">
-                    <div class="card stat-card">
-                        <i data-lucide="dollar-sign" class="stat-icon"></i>
-                        <span class="stat-value">R$ ${receitaHoje.toFixed(2)}</span>
-                        <span class="stat-label">Receita Hoje</span>
-                    </div>
-                    <div class="card stat-card">
-                        <i data-lucide="cake" class="stat-icon" style="color: var(--primary)"></i>
-                        <span class="stat-value">${aniversariantes.length}</span>
-                        <span class="stat-label">Aniversariantes</span>
-                    </div>
-                    <div class="card stat-card" onclick="showView('estoque')" style="cursor:pointer">
-                        <i data-lucide="package" class="stat-icon" style="color: var(--warning)"></i>
-                        <span class="stat-value">${estoqueBaixo}</span>
-                        <span class="stat-label">Estoque Baixo</span>
+                    <div class="user-profile">
+                        <div class="avatar" style="width: 35px; height: 35px; margin: 0; font-size: 14px;">${studioName[0]}</div>
+                        <span style="display: none; @media(min-width: 768px){display: block;}">${studioName}</span>
                     </div>
                 </div>
 
-                <div class="dashboard-content" style="grid-template-columns: 1.5fr 1fr; display: grid; gap: 24px;">
+                <header style="margin-bottom: 24px;">
                     <div>
+                        <h1>Olá, ${studioName}! ✨</h1>
+                        <p style="color: var(--text-light); font-size: 14px;">Tenha um ótimo dia de atendimentos.</p>
+                    </div>
+                </header>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <button class="qa-btn" style="background: var(--pastel-blue);" onclick="openModal('novo-agendamento')">
+                        <div class="qa-icon" style="color: #1E88E5;"><i data-lucide="calendar-plus"></i></div>
+                        Novo<br>Agendamento
+                    </button>
+                    <button class="qa-btn" style="background: var(--pastel-pink);" onclick="openModal('novo-cliente')">
+                        <div class="qa-icon" style="color: #D81B60;"><i data-lucide="user-plus"></i></div>
+                        Novo<br>Cliente
+                    </button>
+                    <button class="qa-btn" style="background: var(--pastel-green);" onclick="openModal('nova-transacao')">
+                        <div class="qa-icon" style="color: #43A047;"><i data-lucide="shopping-bag"></i></div>
+                        Lançar<br>Venda
+                    </button>
+                    <button class="qa-btn" style="background: var(--pastel-orange);" onclick="openModal('nova-transacao')">
+                        <div class="qa-icon" style="color: #F57C00;"><i data-lucide="dollar-sign"></i></div>
+                        Nova<br>Despesa
+                    </button>
+                </div>
+
+                <div class="dashboard-content" style="grid-template-columns: 2fr 1fr; display: grid; gap: 24px;">
+                    
+                    <!-- Coluna Principal -->
+                    <div>
+                        <h3 style="margin-bottom: 16px; font-size: 16px;">Saúde do Negócio</h3>
+                        <div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 24px;">
+                            <div class="card stat-card" style="border-left: 4px solid var(--success);">
+                                <i data-lucide="trending-up" class="stat-icon" style="color: var(--success)"></i>
+                                <span class="stat-value" style="color: var(--success)">R$ ${receitaHoje.toFixed(2)}</span>
+                                <span class="stat-label">Receitas Hoje</span>
+                            </div>
+                            <div class="card stat-card" style="border-left: 4px solid var(--danger);">
+                                <i data-lucide="trending-down" class="stat-icon" style="color: var(--danger)"></i>
+                                <span class="stat-value" style="color: var(--danger)">R$ ${despesaHoje.toFixed(2)}</span>
+                                <span class="stat-label">Despesas Hoje</span>
+                            </div>
+                            <div class="card stat-card" style="border-left: 4px solid var(--primary);">
+                                <i data-lucide="clock" class="stat-icon" style="color: var(--primary)"></i>
+                                <span class="stat-value">${agendamentosHoje.length}</span>
+                                <span class="stat-label">Agendamentos Hoje</span>
+                            </div>
+                            <div class="card stat-card" onclick="showView('estoque')" style="cursor:pointer; border-left: 4px solid var(--warning);">
+                                <i data-lucide="package" class="stat-icon" style="color: var(--warning)"></i>
+                                <span class="stat-value">${estoqueBaixo}</span>
+                                <span class="stat-label">Itens com Estoque Baixo</span>
+                            </div>
+                        </div>
+
                         <div class="card" style="margin-bottom: 24px;">
-                            <h3 style="margin-bottom: 20px; color: var(--primary);">🏆 Performance de Serviços (Mês)</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h3 style="color: var(--text);">🏆 Performance de Serviços (Mês)</h3>
+                            </div>
                             <div style="overflow-x: auto;">
                                 <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                                     <thead>
-                                        <tr style="text-align: left; border-bottom: 1px solid #EEE; color: var(--text-light);">
-                                            <th style="padding: 10px 5px;">Serviço</th>
-                                            <th style="padding: 10px 5px; text-align: center;">Qtd</th>
-                                            <th style="padding: 10px 5px; text-align: right;">Custo</th>
-                                            <th style="padding: 10px 5px; text-align: right;">Lucro</th>
+                                        <tr style="text-align: left; border-bottom: 1px solid var(--border); color: var(--text-light);">
+                                            <th style="padding: 12px 5px;">Serviço</th>
+                                            <th style="padding: 12px 5px; text-align: center;">Qtd</th>
+                                            <th style="padding: 12px 5px; text-align: right;">Custo</th>
+                                            <th style="padding: 12px 5px; text-align: right;">Lucro</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -786,11 +909,11 @@
                                             });
                                             
                                             return Object.values(stats).sort((a,b) => b.count - a.count).map(s => `
-                                                <tr style="border-bottom: 1px solid #F9F9F9;">
-                                                    <td style="padding: 10px 5px; font-weight: 600;">${s.nome}</td>
-                                                    <td style="padding: 10px 5px; text-align: center;">${s.count}</td>
-                                                    <td style="padding: 10px 5px; text-align: right; color: var(--danger);">R$ ${s.custo.toFixed(2)}</td>
-                                                    <td style="padding: 10px 5px; text-align: right; color: var(--success); font-weight: 700;">R$ ${(s.receita - s.custo).toFixed(2)}</td>
+                                                <tr style="border-bottom: 1px solid #FAFAFA;">
+                                                    <td style="padding: 12px 5px; font-weight: 500;">${s.nome}</td>
+                                                    <td style="padding: 12px 5px; text-align: center;">${s.count}</td>
+                                                    <td style="padding: 12px 5px; text-align: right; color: var(--text-light);">R$ ${s.custo.toFixed(2)}</td>
+                                                    <td style="padding: 12px 5px; text-align: right; color: var(--success); font-weight: 600;">R$ ${(s.receita - s.custo).toFixed(2)}</td>
                                                 </tr>
                                             `).join('') || '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #999;">Sem dados este mês.</td></tr>';
                                         })()}
@@ -798,46 +921,48 @@
                                 </table>
                             </div>
                         </div>
-
-                        <div class="card">
-                            <h3 style="margin-bottom: 20px;">Agenda de Hoje</h3>
-                            <div class="data-list">
-                                ${agendamentosHoje.length ? agendamentosHoje.map(a => {
-                                    const c = state.clientes.find(cli => cli.id === a.clienteId);
-                                    const s = state.servicos.find(ser => ser.id === a.servicoId);
-                                    return `
-                                        <div class="data-item">
-                                            <div class="avatar">${c ? c.nome[0] : '?'}</div>
-                                            <div class="item-info">
-                                                <div class="item-title">${c ? c.nome : 'Cliente Removido'}</div>
-                                                <div class="item-subtitle">${a.hora} — ${s ? s.nome : 'Serviço'}</div>
-                                            </div>
-                                            <span class="badge badge-${a.status}">${a.status}</span>
-                                        </div>
-                                    `;
-                                }).join('') : '<p style="color: var(--text-light)">Nenhum agendamento para hoje.</p>'}
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="card">
-                        <h3 style="margin-bottom: 20px;">Aniversariantes do Dia 🎂</h3>
-                        <div class="data-list">
-                            ${aniversariantes.length ? aniversariantes.map(c => `
-                                <div class="data-item">
-                                    <div class="item-info">
-                                        <div class="item-title">${c.nome}</div>
-                                        <div class="item-subtitle">${c.whatsapp}</div>
-                                    </div>
-                                    <button class="btn btn-outline" style="padding: 8px 16px; font-size: 12px;" onclick="enviarWhats('${c.whatsapp}', 'aniversario', {nome: '${c.nome}'})">
-                                        Parabéns
-                                    </button>
+                    <!-- Coluna Direita -->
+                    <div>
+                        <div class="card" style="margin-bottom: 24px; padding: 20px;">
+                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="calendar" style="width: 18px; color: var(--primary);"></i> Calendário</h3>
+                            <div style="background: var(--bg); border-radius: 12px; padding: 15px; text-align: center; border: 1px solid var(--border);">
+                                <div style="font-weight: 600; margin-bottom: 15px; font-size: 14px;">${new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'}).toUpperCase()}</div>
+                                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-light); margin-bottom: 8px;">
+                                    <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
                                 </div>
-                            `).join('') : '<p style="color: var(--text-light)">Nenhum aniversariante hoje.</p>'}
+                                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 12px;">
+                                    ${Array.from({length: 31}, (_, i) => {
+                                        const isToday = (i+1) === new Date().getDate();
+                                        return `<div style="padding: 6px 0; border-radius: 6px; ${isToday ? 'background: var(--primary); color: white; font-weight: bold;' : 'color: var(--text);'}">${i+1}</div>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="cake" style="width: 18px; color: var(--pastel-pink);"></i> Aniversariantes do Mês</h3>
+                            <div class="data-list">
+                                ${state.clientes.filter(c => c.nascimento && c.nascimento.split('-')[1] === (new Date().getMonth() + 1).toString().padStart(2, '0')).map(c => {
+                                    const isToday = c.nascimento.slice(5) === hojeMMDD;
+                                    return `
+                                    <div class="data-item" style="padding: 12px 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent;">
+                                        <div class="item-info">
+                                            <div class="item-title" style="font-size: 13px;">${c.nome} ${isToday ? '🎉' : ''}</div>
+                                            <div class="item-subtitle" style="font-size: 11px;">Dia ${c.nascimento.split('-')[2]}</div>
+                                        </div>
+                                        <button class="btn btn-ghost" style="padding: 6px 10px; font-size: 11px; color: var(--primary);" onclick="enviarWhats('${c.whatsapp}', 'aniversario', {nome: '${c.nome}'})">
+                                            <i data-lucide="message-circle" style="width: 14px;"></i>
+                                        </button>
+                                    </div>
+                                `}).join('') || '<p style="color: var(--text-light); font-size: 13px;">Nenhum aniversariante neste mês.</p>'}
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
+            lucide.createIcons();
         }
 
         // --- AGENDA ---
