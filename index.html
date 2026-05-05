@@ -1150,6 +1150,12 @@
                                 <div style="font-weight: 700; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
                                     ${t.tipo === 'entrada' ? '+' : '-'} R$ ${t.valor.toFixed(2)}
                                 </div>
+                                <div style="display: flex; gap: 8px; margin-left: 16px;">
+                                    ${t.tipo === 'saida' ? `
+                                        <button class="btn btn-ghost" onclick="openModal('nova-transacao', ${JSON.stringify(t).replace(/"/g, '&quot;')})" style="padding: 5px; color: var(--primary)"><i data-lucide="edit" style="width: 16px;"></i></button>
+                                        <button class="btn btn-ghost" onclick="excluirTransacao('${t.id}')" style="padding: 5px; color: var(--danger)"><i data-lucide="trash-2" style="width: 16px;"></i></button>
+                                    ` : ''}
+                                </div>
                             </div>
                         `).join('')}
                     </div>
@@ -1271,23 +1277,24 @@
             }
 
             if (type === 'nova-transacao') {
+                editingTransacaoId = data ? data.id : null;
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">Lançar Saída</h2>
+                    <h2 style="margin-bottom: 24px;">${data ? 'Editar Saída' : 'Lançar Saída'}</h2>
                     <div class="form-group">
                         <label>Descrição</label>
-                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Compra de materiais">
+                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Compra de materiais" value="${data ? data.desc : ''}">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Valor (R$)</label>
-                            <input type="number" id="new-tr-valor" class="form-control" placeholder="0.00">
+                            <input type="number" id="new-tr-valor" class="form-control" placeholder="0.00" value="${data ? data.valor : ''}">
                         </div>
                         <div class="form-group">
                             <label>Data</label>
-                            <input type="date" id="new-tr-data" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                            <input type="date" id="new-tr-data" class="form-control" value="${data ? data.data : new Date().toISOString().split('T')[0]}">
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">Lançar Movimentação</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">${data ? 'Salvar Alterações' : 'Lançar Movimentação'}</button>
                 `;
             }
 
@@ -1622,6 +1629,8 @@
             toast('Agendamento criado!');
         }
 
+        let editingTransacaoId = null;
+        
         function saveNovaTransacao() {
             const desc = document.getElementById('new-tr-desc').value;
             const valor = document.getElementById('new-tr-valor').value;
@@ -1629,18 +1638,38 @@
 
             if (!desc || !valor) return alert('Preencha todos os campos!');
 
-            state.transacoes.push({
-                id: 't' + Date.now(),
-                tipo: 'saida',
-                valor: parseFloat(valor),
-                desc: desc,
-                data: data,
-                fpag: 'Dinheiro'
-            });
+            if (editingTransacaoId) {
+                const t = state.transacoes.find(item => item.id === editingTransacaoId);
+                if (t) {
+                    t.desc = desc;
+                    t.valor = parseFloat(valor);
+                    t.data = data;
+                }
+                editingTransacaoId = null;
+                toast('Saída atualizada com sucesso!');
+            } else {
+                state.transacoes.push({
+                    id: 't' + Date.now(),
+                    tipo: 'saida',
+                    valor: parseFloat(valor),
+                    desc: desc,
+                    data: data,
+                    fpag: 'Dinheiro'
+                });
+                toast('Saída lançada com sucesso!');
+            }
+            
             save();
             closeModal();
             showView('caixa');
-            toast('Saída lançada com sucesso!');
+        }
+
+        function excluirTransacao(id) {
+            if (!confirm('Tem certeza que deseja excluir esta movimentação?')) return;
+            state.transacoes = state.transacoes.filter(t => t.id !== id);
+            save();
+            showView('caixa');
+            toast('Movimentação removida!');
         }
 
         function saveNovoProduto() {
