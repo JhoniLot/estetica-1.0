@@ -87,6 +87,26 @@
             align-items: center;
         }
 
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: var(--text-muted-dark);
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 600;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-dark);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+        }
+
         .logo {
             display: flex;
             align-items: center;
@@ -859,6 +879,9 @@
             nav { padding: 15px 0; }
             .logo-text { font-size: 20px; }
             .btn { width: 100%; justify-content: center; }
+            .nav-links { gap: 12px; }
+            .nav-link { font-size: 12.5px; }
+            .nav-btn-cta { width: auto !important; padding: 8px 16px !important; font-size: 12px !important; white-space: nowrap; }
         }
 
         /* Seção de Preços (Stripe) */
@@ -1376,9 +1399,10 @@
                 </div>
                 <span class="logo-text">Lumi</span>
             </a>
-            <div style="display: flex; gap: 15px; align-items: center;">
-                <a href="#calculator" class="btn btn-outline" style="padding: 10px 20px; font-size: 13px;" id="nav-btn-calc">Calcular ROI</a>
-                <a href="app.html" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;" id="nav-btn-login">Acessar Painel</a>
+            <div class="nav-links">
+                <a href="#calculator" class="nav-link" id="nav-link-roi">Calcular ROI</a>
+                <a href="app.html?tab=login" class="nav-link" id="nav-link-login">Entrar</a>
+                <a href="app.html?tab=register" class="btn btn-primary nav-btn-cta" style="padding: 10px 20px; font-size: 13px;" id="nav-btn-register">Criar Conta</a>
             </div>
         </div>
     </nav>
