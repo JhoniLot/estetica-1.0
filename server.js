@@ -45,18 +45,7 @@ app.post('/api/checkout', async (req, res) => {
             payment_method_types: ['card'],
             line_items: [
                 {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: 'Lumi Premium — Beauty & Aesthetics Studio Management',
-                            description: 'Full unlimited access to Lumi: Smart Scheduling, Client Management, Cash Flow, Inventory, and Automated Messaging.',
-                            images: ['https://raw.githubusercontent.com/JhoniLot/estetica-1.0/main/logo.png'],
-                        },
-                        unit_amount: 1900, // $19.00 USD
-                        recurring: {
-                            interval: 'month',
-                        },
-                    },
+                    price: 'price_1Th9qyIIpPpxceA7z0ucGZOT',
                     quantity: 1,
                 },
             ],
