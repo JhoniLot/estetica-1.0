@@ -1704,10 +1704,6 @@
         }
 
         function save() {
-            if (state.session && state.session.isDemo) {
-                showDemoLockModal();
-                return false;
-            }
             localStorage.setItem('lumi_data', JSON.stringify(state));
             if (state.session && state.session.currentEmail) {
                 localStorage.setItem('lumi_user_' + state.session.currentEmail, JSON.stringify(state));
