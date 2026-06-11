@@ -4467,6 +4467,9 @@
             state.session.isDemo = true;
             state.config.isSubscribed = false;
             
+            save();
+            updateSidebarNav();
+            
             toast('Accessing in restricted demo mode...');
             
             // Desbloquear painel
