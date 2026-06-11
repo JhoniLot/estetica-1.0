@@ -1323,6 +1323,7 @@
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Business</div>
                 <div class="nav-item" onclick="showView('subscription')"><i data-lucide="gem"></i><span>Lumi Premium</span></div>
                 <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Settings</span></div>
+                <div class="nav-item" onclick="showView('tutoriais')"><i data-lucide="book-open"></i><span>Tutorials & Guides</span></div>
                 <div class="nav-item" onclick="showView('suporte')"><i data-lucide="help-circle"></i><span>Support & Help</span></div>
                 <div class="nav-item" onclick="toast('Marketing module coming soon')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
                 <div class="nav-item" onclick="handleAuthLogout()" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #EEE; padding-top: 15px;"><i data-lucide="log-out"></i><span>Sign Out</span></div>
@@ -1676,7 +1677,7 @@
         // --- UI ROUTING ---
         function showView(viewName) {
             // Paywall Lock: If not subscribed and not demo, force viewName to 'subscription'
-            if (!state.config.isSubscribed && (!state.session || !state.session.isDemo) && viewName !== 'suporte') {
+            if (!state.config.isSubscribed && (!state.session || !state.session.isDemo) && viewName !== 'suporte' && viewName !== 'tutoriais') {
                 viewName = 'subscription';
             }
             
@@ -1704,6 +1705,7 @@
             else if (viewName === 'config') renderConfig(main);
             else if (viewName === 'subscription') renderSubscriptionView(main);
             else if (viewName === 'suporte') renderSuporte(main);
+            else if (viewName === 'tutoriais') renderTutoriais(main);
 
             lucide.createIcons();
         }
@@ -3956,8 +3958,8 @@
                         return;
                     }
                     
-                    // Subscription and Support are always allowed
-                    if (onClickAttr.includes('subscription') || onClickAttr.includes('suporte')) {
+                    // Subscription, Support, and Tutorials are always allowed
+                    if (onClickAttr.includes('subscription') || onClickAttr.includes('suporte') || onClickAttr.includes('tutoriais')) {
                         el.style.display = 'flex';
                         el.style.opacity = '1';
                         el.style.pointerEvents = 'auto';
@@ -4149,6 +4151,143 @@
                 updateSidebarNav();
                 showView('subscription');
             }
+        }
+
+        }
+
+        // --- TUTORIALS VIEW ---
+        function renderTutoriais(container, activeCategory = 'dashboard') {
+            const categories = [
+                { id: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { id: 'agenda', label: 'Schedule', icon: 'calendar' },
+                { id: 'clientes', label: 'Clients', icon: 'users' },
+                { id: 'servicos', label: 'Services', icon: 'scissors' },
+                { id: 'estoque', label: 'Inventory', icon: 'package' },
+                { id: 'caixa', label: 'Finance', icon: 'wallet' },
+                { id: 'portal', label: 'Client Portal', icon: 'link' },
+                { id: 'config', label: 'Settings', icon: 'settings' }
+            ];
+
+            const tutorialContent = {
+                dashboard: {
+                    title: 'Dashboard Tutorial',
+                    desc: 'Understand the main indicators and quick action shortcuts of your business.',
+                    steps: [
+                        { title: '1. Financial Cards', desc: 'At the top, you see today\'s revenue (total transactions registered today), monthly billing, active appointments, and active clients.' },
+                        { title: '2. Today\'s Schedule Feed', desc: 'A feed of all appointments scheduled for today is displayed chronologically. You can click on any appointment to view details, confirm, cancel, or complete it.' },
+                        { title: '3. Alerts Panel', desc: 'Lumi automatically warns you about clients celebrating their birthdays today and inventory products that are below their minimum quantities.' },
+                        { title: '4. Quick Action Buttons', desc: 'Directly from the dashboard, you can launch a manual sale, record an expense, add a new client, or book a new appointment instantly.' }
+                    ]
+                },
+                agenda: {
+                    title: 'Schedule Tutorial',
+                    desc: 'Master the scheduling panel and manage daily or weekly slots easily.',
+                    steps: [
+                        { title: '1. Booking a Slot', desc: 'Click "New Appointment" or tap on a time slot in the Daily Agenda. Fill in the client, service, professional, date, and hour, then click "Confirm Booking".' },
+                        { title: '2. Daily vs. Weekly View', desc: 'At the top of the Schedule view, you can switch between "Daily Feed" and "Weekly Grid" to check your weekly staff availability in one screen.' },
+                        { title: '3. Appointment Statuses', desc: 'Manage booking states: **Pending** (requires review), **Confirmed** (ready), **Cancelled** (frees the slot), and **Completed** (automatically logs the revenue in your Cash Flow).' },
+                        { title: '4. Double Booking Warnings', desc: 'Lumi will alert you if you try to book an appointment for a professional at a time slot that is already occupied.' }
+                    ]
+                },
+                clientes: {
+                    title: 'Clients & Intake Forms Tutorial',
+                    desc: 'Manage your client profiles, track loyalty points, and review consultation forms.',
+                    steps: [
+                        { title: '1. Adding a Client', desc: 'Go to the "My Clients" tab, click "Add Client", enter their name, phone/WhatsApp, and details. A unique intake link is automatically generated for them.' },
+                        { title: '2. The Client Intake Portal', desc: 'Click on a client profile, select "Intake Link", and click "Send via WhatsApp". The client receives a link to fill out their details and allergy notes from their phone.' },
+                        { title: '3. Complete Profile Status', desc: 'Once a client completes their online intake form, their status changes to "Complete Profile" (Ficha Completa) and you can review their allergy notes.' },
+                        { title: '4. Loyalty Program', desc: 'Each client earns loyalty points automatically when an appointment is completed. You can view their accumulated points on the client list.' }
+                    ]
+                },
+                servicos: {
+                    title: 'Services & Rewards Tutorial',
+                    desc: 'Set up your service listings, pricing, and define loyalty point rewards.',
+                    steps: [
+                        { title: '1. Creating a Service', desc: 'Go to the "Services" tab, click "Add Service", fill in the service name, duration (minutes), price, and loyalty points awarded.' },
+                        { title: '2. Points Awarded', desc: 'Set the amount of points a client receives when this service is completed. For example, "Brow Design = 15 points".' },
+                        { title: '3. Duration rules', desc: 'Lumi uses service duration to allocate calendar slots, helping professionals avoid schedule overlaps.' }
+                    ]
+                },
+                estoque: {
+                    title: 'Inventory Management Tutorial',
+                    desc: 'Track materials, products, and receive automatic alerts on low stock levels.',
+                    steps: [
+                        { title: '1. Cataloging Products', desc: 'In the "Inventory" tab, click "Add Product". Fill in the product name, current quantity, unit (pcs, liters), category, and minimum stock level.' },
+                        { title: '2. Minimum Stock Trigger', desc: 'Set the "Minimum Alert Level" (e.g. 5 units). If your current stock goes below this number, a dashboard warning is triggered.' },
+                        { title: '3. Manual Adjustments', desc: 'Click "Edit" on a product card to manually adjust quantities or minimum levels when items are used or restocked.' }
+                    ]
+                },
+                caixa: {
+                    title: 'Cash Flow & Finance Tutorial',
+                    desc: 'Keep your bookkeeping organized, record sales, and monitor business profitability.',
+                    steps: [
+                        { title: '1. Automated Revenues', desc: 'When you mark any appointment as "Completed" in the schedule, the system automatically logs the service price as a new income transaction.' },
+                        { title: '2. Logging Manual Sales', desc: 'For product sales or non-scheduled services, click "Log Sale / Income" in Cash Flow, fill in the value, description, and payment method.' },
+                        { title: '3. Logging Expenses', desc: 'Click "Log Expense / Outflow" in Cash Flow, enter the value, description (e.g. rent, supplies), and payment method to update your current balance.' },
+                        { title: '4. Balance Calculation', desc: 'The top of the Cash Flow screen displays your total income, total expenses, and net balance instantly calculated.' }
+                    ]
+                },
+                portal: {
+                    title: 'Client Intake & Booking Portal Tutorial',
+                    desc: 'Learn how your customers self-schedule and complete forms online.',
+                    steps: [
+                        { title: '1. Sharing the Link', desc: 'Lumi creates a unique URL for each client. When you send it to them via WhatsApp, they don\'t need passwords or sign-ins.' },
+                        { title: '2. Submitting Intake Details', desc: 'The client clicks the link, enters their date of birth, Instagram handle, and detailed allergy or anamnese notes, and submits.' },
+                        { title: '3. Booking Appointments', desc: 'After completing their form, the client sees your list of services and can select a day, time, and professional to request a booking.' },
+                        { title: '4. Reviewing Requests', desc: 'Client requests show up in your agenda as "Pending" with a blue color code, letting you confirm or deny the slot.' }
+                    ]
+                },
+                config: {
+                    title: 'Settings & WhatsApp Automation Tutorial',
+                    desc: 'Customize your business details, operating hours, and message templates.',
+                    steps: [
+                        { title: '1. General Settings', desc: 'In the "Settings" tab, update your clinic name and business WhatsApp number. This updates the branding across the entire app.' },
+                        { title: '2. WhatsApp Auto-Text Templates', desc: 'Customize message template strings. You can write custom texts and use dynamic variables like `[nome]`, `[data]`, `[hora]`, and `[link]`.' },
+                        { title: '3. Automated Actions', desc: 'When sending a reminder or intake link, Lumi automatically opens WhatsApp Web or the WhatsApp desktop application with the pre-filled custom message.' }
+                    ]
+                }
+            };
+
+            const content = tutorialContent[activeCategory] || tutorialContent.dashboard;
+
+            container.innerHTML = `
+                <header>
+                    <h1>Tutorials & System Guides</h1>
+                    <p style="color: var(--text-light); font-size: 14px; margin-top: 4px;">Learn how to operate each feature of Lumi to scale your business.</p>
+                </header>
+
+                <!-- Navigation Tabs -->
+                <div style="display: flex; gap: 10px; margin-top: 24px; overflow-x: auto; padding-bottom: 10px; border-bottom: 1px solid var(--border);">
+                    ${categories.map(cat => `
+                        <button class="btn ${activeCategory === cat.id ? 'btn-primary' : 'btn-ghost'}" 
+                                style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; padding: 10px 18px; border-radius: 30px; white-space: nowrap;" 
+                                onclick="renderTutoriais(document.getElementById('main-content'), '${cat.id}')">
+                            <i data-lucide="${cat.icon}" style="width: 16px; height: 16px;"></i>
+                            <span>${cat.label}</span>
+                        </button>
+                    `).join('')}
+                </div>
+
+                <!-- Active Tutorial Content -->
+                <div class="dashboard-content" style="grid-template-columns: 1fr; gap: 24px; margin-top: 24px;">
+                    <div class="card" style="border: 1px solid var(--border); position: relative; overflow: hidden; padding: 30px;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #A68A3D, #C9A84C, #A68A3D);"></div>
+                        
+                        <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--text); margin-bottom: 8px; font-weight: 700;">${content.title}</h2>
+                        <p style="color: var(--text-light); font-size: 14px; margin-bottom: 30px; line-height: 1.5;">${content.desc}</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+                            ${content.steps.map(step => `
+                                <div style="background: rgba(201, 168, 76, 0.03); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px;">
+                                    <h4 style="font-size: 15px; font-weight: 700; color: var(--text);">${step.title}</h4>
+                                    <p style="font-size: 13px; color: #555; line-height: 1.6; margin: 0;">${step.desc}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons();
         }
 
         // --- CUSTOMER SUPPORT VIEW ---
