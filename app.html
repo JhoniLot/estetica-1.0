@@ -1419,6 +1419,50 @@
                 return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
             };
             const hoje = getHojeLocal();
+ 
+            // If the route is a customer intake portal, bypass authentication wall and load their specific tenant's data based on their link ID
+            if (window.location.hash.startsWith('#ficha')) {
+                const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+                const linkId = urlParams.get('id');
+                if (linkId) {
+                    try {
+                        const { data: clientData, error: clientErr } = await supabaseClient.from('clientes').select('*').eq('linkId', linkId);
+                        if (clientData && clientData.length > 0) {
+                            const c = clientData[0];
+                            state.clientes = [c];
+                            const prefix = c.id.split('_')[0] + '_';
+                            
+                            const [resSrv, resAge] = await Promise.all([
+                                supabaseClient.from('servicos').select('*').like('id', `${prefix}%`),
+                                supabaseClient.from('agendamentos').select('*').like('id', `${prefix}%`)
+                            ]);
+                            
+                            if (resSrv.data) {
+                                state.servicos = resSrv.data.map(s => ({
+                                    ...s,
+                                    permiteEncaixe: s.permiteEncaixe !== undefined ? s.permiteEncaixe : s.permite_encaixe
+                                }));
+                            }
+                            if (resAge.data) {
+                                state.agendamentos = resAge.data.map(a => ({
+                                    ...a,
+                                    clienteId: a.cliente_id || a.clienteId,
+                                    servicoId: a.servico_id || a.servicoId
+                                }));
+                            }
+                        }
+                    } catch (err) {
+                        console.error("Supabase client portal load error:", err);
+                    }
+                }
+                
+                // Hide auth wall and show client portal
+                document.getElementById('auth-wall').style.display = 'none';
+                document.getElementById('billing-gate').style.display = 'none';
+                document.getElementById('app').style.display = 'none';
+                document.getElementById('client-view').style.display = 'block';
+                return;
+            }
 
             // Carregar lista de usuários global
             const globalUsers = localStorage.getItem('lumi_users_list');
@@ -3453,7 +3497,7 @@
             }
         }
 
-        function saveFichaStep(step) {
+        async function saveFichaStep(step) {
             const c = state.clientes.find(cli => cli.id === fichaData.currentClient.id);
             if (step === 1) {
                 c.nascimento = document.getElementById('ficha-nasc').value;
@@ -3463,6 +3507,12 @@
                 c.alergias = document.getElementById('ficha-alergias').value;
                 c.fichaCompleta = true;
                 save();
+                await dbUpdate('clientes', c.id, {
+                    nascimento: c.nascimento,
+                    insta: c.insta,
+                    alergias: c.alergias,
+                    fichaCompleta: true
+                });
                 renderPortalCliente(c);
             }
         }
@@ -4271,8 +4321,8 @@
         }
 
         // --- INIT ---
-        window.onload = () => {
-            initData();
+        window.onload = async () => {
+            await initData();
             checkPaymentSuccess();
             updateSidebarLogo();
             checkClientRoute();
@@ -4281,8 +4331,9 @@
             }
         };
 
-        window.onhashchange = () => {
+        window.onhashchange = async () => {
             if (window.location.hash === '') window.location.reload();
+            await initData();
             checkClientRoute();
         };
 
