@@ -1323,6 +1323,7 @@
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Business</div>
                 <div class="nav-item" onclick="showView('subscription')"><i data-lucide="gem"></i><span>Lumi Premium</span></div>
                 <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Settings</span></div>
+                <div class="nav-item" onclick="showView('suporte')"><i data-lucide="help-circle"></i><span>Support & Help</span></div>
                 <div class="nav-item" onclick="toast('Marketing module coming soon')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
                 <div class="nav-item" onclick="handleAuthLogout()" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #EEE; padding-top: 15px;"><i data-lucide="log-out"></i><span>Sign Out</span></div>
             </nav>
@@ -1726,7 +1727,7 @@
         // --- UI ROUTING ---
         function showView(viewName) {
             // Paywall Lock: If not subscribed and not demo, force viewName to 'subscription'
-            if (!state.config.isSubscribed && (!state.session || !state.session.isDemo)) {
+            if (!state.config.isSubscribed && (!state.session || !state.session.isDemo) && viewName !== 'suporte') {
                 viewName = 'subscription';
             }
             
@@ -1753,6 +1754,7 @@
             else if (viewName === 'estoque') renderEstoque(main);
             else if (viewName === 'config') renderConfig(main);
             else if (viewName === 'subscription') renderSubscriptionView(main);
+            else if (viewName === 'suporte') renderSuporte(main);
 
             lucide.createIcons();
         }
@@ -4005,9 +4007,13 @@
                         return;
                     }
                     
-                    // Subscription is always allowed
-                    if (onClickAttr.includes('subscription')) {
+                    // Subscription and Support are always allowed
+                    if (onClickAttr.includes('subscription') || onClickAttr.includes('suporte')) {
                         el.style.display = 'flex';
+                        el.style.opacity = '1';
+                        el.style.pointerEvents = 'auto';
+                        const lock = el.querySelector('.lock-icon');
+                        if (lock) lock.remove();
                         return;
                     }
                     
@@ -4194,6 +4200,110 @@
                 updateSidebarNav();
                 showView('subscription');
             }
+        }
+
+        // --- CUSTOMER SUPPORT VIEW ---
+        function renderSuporte(container) {
+            const userEmail = state.session ? state.session.currentEmail : '';
+            container.innerHTML = `
+                <header>
+                    <h1>Support & Help</h1>
+                    <p style="color: var(--text-light); font-size: 14px; margin-top: 4px;">Get assistance or ask questions about your Lumi platform.</p>
+                </header>
+                <div class="dashboard-content" style="grid-template-columns: 1.2fr 0.8fr; gap: 24px; margin-top: 24px;">
+                    <!-- Support Form -->
+                    <div class="card" style="border: 1px solid var(--border); position: relative; overflow: hidden; padding: 30px;">
+                        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #A68A3D, #C9A84C, #A68A3D);"></div>
+                        
+                        <h3 style="margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text);">Contact Support</h3>
+                        
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block;">Subject / Assunto</label>
+                            <input type="text" id="support-subject" class="form-control" style="padding: 12px; border-radius: 8px;" placeholder="e.g. Billing Issue, Feature Request, Question...">
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 24px;">
+                            <label style="font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 6px; display: block;">Message / Mensagem</label>
+                            <textarea id="support-message" class="form-control" style="height: 160px; padding: 12px; border-radius: 8px; font-size: 14px; resize: vertical;" placeholder="Describe how we can help you today..."></textarea>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; font-size: 14px;" onclick="sendSupportEmail()">
+                            <i data-lucide="mail" style="width: 16px;"></i> Send Support Request
+                        </button>
+                    </div>
+                    
+                    <!-- Direct Contact & FAQ -->
+                    <div style="display: flex; flex-direction: column; gap: 24px;">
+                        <div class="card" style="padding: 24px;">
+                            <h3 style="margin-bottom: 16px; font-size: 16px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px;">
+                                <i data-lucide="message-square" style="color: var(--primary); width: 18px; height: 18px;"></i> Direct Support Email
+                            </h3>
+                            <p style="font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 16px;">
+                                You can also contact us directly by email. Simply click below to copy our support address.
+                            </p>
+                            
+                            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+                                <code style="font-size: 13px; color: var(--text); font-weight: 600;">softwares.primetech@gmail.com</code>
+                                <button class="btn btn-ghost" style="padding: 6px;" onclick="copySupportEmail()">
+                                    <i data-lucide="copy" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                                </button>
+                            </div>
+                            
+                            <div style="font-size: 12px; color: var(--text-light); display: grid; gap: 8px; border-top: 1px solid var(--border); padding-top: 16px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Expected Response:</span>
+                                    <strong style="color: var(--text);">Under 24 hours</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Operating Hours:</span>
+                                    <strong style="color: var(--text);">Mon - Fri, 9am - 6pm</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="padding: 24px; background: linear-gradient(135deg, #FAF6EE 0%, #FFFFFF 100%); border: 1px solid rgba(201, 168, 76, 0.25);">
+                            <h3 style="margin-bottom: 12px; font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
+                                <i data-lucide="sparkles" style="color: var(--primary); width: 16px; height: 16px;"></i> Quick Tip
+                            </h3>
+                            <p style="font-size: 12px; color: #666; line-height: 1.6;">
+                                Before sending a message, check if your settings (WhatsApp templates, business hours, and staff list) are correct under the <strong>Settings</strong> tab.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function sendSupportEmail() {
+            const subject = document.getElementById('support-subject').value.trim();
+            const message = document.getElementById('support-message').value.trim();
+            
+            if (!subject || !message) {
+                toast('Error: Please fill in all fields.');
+                return;
+            }
+            
+            const email = 'softwares.primetech@gmail.com';
+            const userEmail = state.session ? state.session.currentEmail : 'N/A';
+            const clinicName = state.config ? state.config.nomeClinica : 'N/A';
+            const isDemoStr = state.session && state.session.isDemo ? 'Yes' : 'No';
+            
+            const body = `Hello Lumi Support Team,\n\n${message}\n\n---\nUser Context:\n- Account Email: ${userEmail}\n- Clinic Name: ${clinicName}\n- In Demo Mode: ${isDemoStr}\n- Client Agent: Lumi App Platform`;
+            
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent('[Lumi Support] ' + subject)}&body=${encodeURIComponent(body)}`;
+            
+            window.location.href = mailtoLink;
+            toast('Opening your default email client...');
+            
+            // Clear fields
+            document.getElementById('support-subject').value = '';
+            document.getElementById('support-message').value = '';
+        }
+
+        function copySupportEmail() {
+            navigator.clipboard.writeText('softwares.primetech@gmail.com');
+            toast('Support email copied to clipboard!');
         }
 
         function showAuthWall() {
