@@ -1623,40 +1623,46 @@
                             state.config.subscriptionType = u.subscriptionType || '';
                         }
 
-                        // Save mock data to Supabase
-                        for (const c of state.clientes) {
-                            await dbInsert('clientes', {
-                                id: c.id, nome: c.nome, telefone: c.whatsapp, whatsapp: c.whatsapp,
-                                nascimento: c.nascimento, insta: c.insta || '', notas: c.alergias || '',
-                                fichaCompleta: c.fichaCompleta, ultimaVisita: c.ultimaVisita, totalVisitas: c.totalVisitas,
-                                pontos: c.pontos, linkId: c.linkId
-                            });
-                        }
-                        for (const s of state.servicos) {
-                            await dbInsert('servicos', {
-                                id: s.id, nome: s.nome, duracao: s.duracao, preco: s.preco, pontos: s.pontos,
-                                permiteEncaixe: s.permiteEncaixe, servicos_compativeis: s.servicos_compativeis
-                            });
-                        }
-                        for (const a of state.agendamentos) {
-                            await dbInsert('agendamentos', {
-                                id: a.id, cliente_id: a.clienteId, servico_id: a.servicoId,
-                                data: a.data, hora: a.hora, status: a.status, profissionalId: a.profissionalId
-                            });
-                        }
-                        for (const p of state.produtos) {
-                            await dbInsert('estoque', {
-                                id: p.id, nome: p.nome, qtd: p.qtd, min: p.min, custo: 0, valor: 0
-                            });
-                        }
-                        for (const t of state.transacoes) {
-                            await dbInsert('transacoes', t);
-                        }
-                        await dbInsert('config', {
-                            id: prefix + 'config',
-                            nome_clinica: state.config.nomeClinica,
-                            tema: JSON.stringify(state.config)
-                        });
+                        // Save mock data to Supabase (asynchronously in background)
+                        (async () => {
+                            try {
+                                for (const c of state.clientes) {
+                                    await dbInsert('clientes', {
+                                        id: c.id, nome: c.nome, telefone: c.whatsapp, whatsapp: c.whatsapp,
+                                        nascimento: c.nascimento, insta: c.insta || '', notas: c.alergias || '',
+                                        fichaCompleta: c.fichaCompleta, ultimaVisita: c.ultimaVisita, totalVisitas: c.totalVisitas,
+                                        pontos: c.pontos, linkId: c.linkId
+                                    });
+                                }
+                                for (const s of state.servicos) {
+                                    await dbInsert('servicos', {
+                                        id: s.id, nome: s.nome, duracao: s.duracao, preco: s.preco, pontos: s.pontos,
+                                        permiteEncaixe: s.permiteEncaixe, servicos_compativeis: s.servicos_compativeis
+                                    });
+                                }
+                                for (const a of state.agendamentos) {
+                                    await dbInsert('agendamentos', {
+                                        id: a.id, cliente_id: a.clienteId, servico_id: a.servicoId,
+                                        data: a.data, hora: a.hora, status: a.status, profissionalId: a.profissionalId
+                                    });
+                                }
+                                for (const p of state.produtos) {
+                                    await dbInsert('estoque', {
+                                        id: p.id, nome: p.nome, qtd: p.qtd, min: p.min, custo: 0, valor: 0
+                                    });
+                                }
+                                for (const t of state.transacoes) {
+                                    await dbInsert('transacoes', t);
+                                }
+                                await dbInsert('config', {
+                                    id: prefix + 'config',
+                                    nome_clinica: state.config.nomeClinica,
+                                    tema: JSON.stringify(state.config)
+                                });
+                            } catch (e) {
+                                console.error("Background mock data initialization failed:", e);
+                            }
+                        })();
                     }
                 } catch(err) {
                     console.error("Supabase initial load failed:", err);
@@ -4270,6 +4276,12 @@
                 toast('Error: This email is already registered!');
                 return;
             }
+
+            const btn = event.target.querySelector('button[type="submit"]');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span>Creating account...</span> <i data-lucide="loader" class="luxury-spinner" style="width: 14px; height: 14px; border-width: 2px;"></i>`;
+            if (window.lucide) lucide.createIcons();
 
             // Criar novo usuário
             const newUser = {
