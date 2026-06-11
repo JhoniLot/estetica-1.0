@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --primary: #C9A84C;
@@ -1338,6 +1339,36 @@
     <div id="toast">Operação realizada!</div>
 
     <script>
+        // --- SUPABASE CLIENT ---
+        const supabaseUrl = 'https://nnryehmxitcjsdgaohyb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ucnllaG14aXRjanNkZ2FvaHliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzExNjYsImV4cCI6MjA5NTgwNzE2Nn0.rimlx5UkKEM_HXBsmxxNFeYV_aGU2cr42en6-18_Gcg';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function dbInsert(table, data) {
+            try {
+                const { error } = await supabaseClient.from(table).insert([data]);
+                if (error) console.error(`[Supabase Insert Error] ${table}:`, error.message);
+            } catch(e) {
+                console.error(`[Supabase Insert Exception] ${table}:`, e);
+            }
+        }
+        async function dbDelete(table, id) {
+            try {
+                const { error } = await supabaseClient.from(table).delete().eq('id', id);
+                if (error) console.error(`[Supabase Delete Error] ${table}:`, error.message);
+            } catch(e) {
+                console.error(`[Supabase Delete Exception] ${table}:`, e);
+            }
+        }
+        async function dbUpdate(table, id, data) {
+            try {
+                const { error } = await supabaseClient.from(table).update(data).eq('id', id);
+                if (error) console.error(`[Supabase Update Error] ${table}:`, error.message);
+            } catch(e) {
+                console.error(`[Supabase Update Exception] ${table}:`, e);
+            }
+        }
+
         // --- TOAST HELPER ---
         function toast(text) {
             const toastEl = document.getElementById('toast');
@@ -1382,7 +1413,7 @@
         };
 
         // --- MOCK DATA INITIALIZATION ---
-        function initData() {
+        async function initData() {
             const getHojeLocal = () => {
                 const d = new Date();
                 return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
@@ -1421,61 +1452,166 @@
                 return;
             }
 
-            // Se houver sessão, mas não for demo, carregar os dados individuais do usuário
+            // Se houver sessão, mas não for demo, carregar os dados individuais do usuário do Supabase
             if (state.session.loggedIn && !state.session.isDemo) {
-                const userSavedData = localStorage.getItem('lumi_user_' + state.session.currentEmail);
-                if (userSavedData) {
-                    const parsedData = JSON.parse(userSavedData);
-                    parsedData.session = state.session;
-                    parsedData.users = state.users;
-                    if (!parsedData.config) parsedData.config = {};
-                    state = parsedData;
-                } else {
-                    // New user! Initialize with elegant mock data for onboarding
-                    state.clientes = [
-                        { id: 'c1', nome: 'Ana Silva', whatsapp: '5511988887777', fichaCompleta: true, ultimaVisita: '2024-04-10', totalVisitas: 5, alergias: 'None', linkId: 'ana123', pontos: 150, nascimento: '1995-04-23' },
-                        { id: 'c2', nome: 'Beatriz Costa', whatsapp: '5511977776666', fichaCompleta: false, ultimaVisita: '2024-03-15', totalVisitas: 2, linkId: 'bea456', pontos: 40, nascimento: '1990-10-12' },
-                        { id: 'c3', nome: 'Carla Souza', whatsapp: '5511966665555', fichaCompleta: true, ultimaVisita: '2024-01-20', totalVisitas: 12, linkId: 'car789', pontos: 320, nascimento: '1988-05-05' },
-                        { id: 'c4', nome: 'Daniela Lima', whatsapp: '5511955554444', fichaCompleta: false, ultimaVisita: '2024-04-20', totalVisitas: 1, linkId: 'dan012', pontos: 10, nascimento: '1992-12-25' }
-                    ];
-                    state.servicos = [
-                        { id: 's1', nome: 'Eyebrow Shaping', duracao: 30, preco: 13, pontos: 10 },
-                        { id: 's2', nome: 'Facial Cleansing', duracao: 60, preco: 35, pontos: 30 },
-                        { id: 's3', nome: 'Brow Design + Henna', duracao: 45, preco: 20, pontos: 15 }
-                    ];
-                    state.profissionais = [
-                        { id: 'p1', nome: 'Fernanda' },
-                        { id: 'p2', nome: 'Juliana' }
-                    ];
-                    state.agendamentos = [
-                        { id: 'a1', clienteId: 'c1', servicoId: 's1', data: hoje, hora: '09:00', status: 'realizado', profissionalId: 'p1' },
-                        { id: 'a2', clienteId: 'c2', servicoId: 's2', data: hoje, hora: '10:30', status: 'confirmado', profissionalId: 'p2' },
-                        { id: 'a3', clienteId: 'c4', servicoId: 's3', data: hoje, hora: '14:00', status: 'pendente', profissionalId: 'p1' }
-                    ];
-                    state.produtos = [
-                        { id: 'pr1', nome: 'Honey Wax', qtd: 5, min: 10, un: 'pcs', cat: 'Waxing' },
-                        { id: 'pr2', nome: 'Rubbing Alcohol', qtd: 2, min: 5, un: 'liters', cat: 'Sanitation' },
-                        { id: 'pr3', nome: 'Clay Mask', qtd: 15, min: 5, un: 'pcs', cat: 'Facial' }
-                    ];
-                    state.transacoes = [
-                        { id: 't1', tipo: 'entrada', valor: 13, desc: 'Eyebrow Shaping - Ana Silva', data: hoje, fpag: 'Zelle' },
-                        { id: 't2', tipo: 'saida', valor: 60, desc: 'Weekly Rent', data: hoje, fpag: 'Cash' }
-                    ];
-                    state.avaliacoes = [];
-                    
-                    const u = state.users.find(usr => usr.email === state.session.currentEmail);
-                    if (u) {
-                        if (!state.config) state.config = {};
-                        state.config.nomeClinica = u.nomeClinica || 'Lumi Beauty';
-                        state.config.whatsapp = u.whatsapp || '15559999999';
-                        state.config.isSubscribed = u.isSubscribed || false;
-                        state.config.subscriptionId = u.subscriptionId || '';
-                        state.config.subscriptionDate = u.subscriptionDate || '';
-                        state.config.subscriptionType = u.subscriptionType || '';
+                const prefix = state.session.currentEmail + '_';
+                
+                try {
+                    // Fetch all tables from Supabase filtered by prefix
+                    const [resCli, resSrv, resAge, resTra, resEst, resCfg] = await Promise.all([
+                        supabaseClient.from('clientes').select('*').like('id', `${prefix}%`),
+                        supabaseClient.from('servicos').select('*').like('id', `${prefix}%`),
+                        supabaseClient.from('agendamentos').select('*').like('id', `${prefix}%`),
+                        supabaseClient.from('transacoes').select('*').like('id', `${prefix}%`),
+                        supabaseClient.from('estoque').select('*').like('id', `${prefix}%`),
+                        supabaseClient.from('config').select('*').eq('id', `${prefix}config`)
+                    ]);
+
+                    let hasData = false;
+                    if (resCli.data && resCli.data.length > 0) {
+                        state.clientes = resCli.data;
+                        hasData = true;
+                    } else {
+                        state.clientes = [];
                     }
-                    localStorage.setItem('lumi_user_' + state.session.currentEmail, JSON.stringify(state));
+
+                    if (resSrv.data && resSrv.data.length > 0) {
+                        state.servicos = resSrv.data.map(s => ({
+                            ...s,
+                            permiteEncaixe: s.permiteEncaixe !== undefined ? s.permiteEncaixe : s.permite_encaixe
+                        }));
+                        hasData = true;
+                    } else {
+                        state.servicos = [];
+                    }
+
+                    if (resAge.data && resAge.data.length > 0) {
+                        state.agendamentos = resAge.data.map(a => ({
+                            ...a,
+                            clienteId: a.cliente_id || a.clienteId,
+                            servicoId: a.servico_id || a.servicoId
+                        }));
+                        hasData = true;
+                    } else {
+                        state.agendamentos = [];
+                    }
+
+                    if (resTra.data && resTra.data.length > 0) {
+                        state.transacoes = resTra.data;
+                        hasData = true;
+                    } else {
+                        state.transacoes = [];
+                    }
+
+                    if (resEst.data && resEst.data.length > 0) {
+                        state.produtos = resEst.data.map(p => ({
+                            ...p,
+                            un: p.un || 'pcs',
+                            cat: p.cat || 'Other'
+                        }));
+                        hasData = true;
+                    } else {
+                        state.produtos = [];
+                    }
+
+                    if (resCfg.data && resCfg.data.length > 0) {
+                        const dbCfg = resCfg.data[0];
+                        let parsedConfig = {};
+                        try {
+                            parsedConfig = JSON.parse(dbCfg.tema);
+                        } catch(e) {}
+                        state.config = {
+                            ...state.config,
+                            ...parsedConfig,
+                            nomeClinica: dbCfg.nome_clinica || parsedConfig.nomeClinica || state.config.nomeClinica
+                        };
+                        hasData = true;
+                    }
+
+                    if (!hasData) {
+                        // New user! Initialize with elegant mock data for onboarding
+                        state.clientes = [
+                            { id: prefix + 'c1', nome: 'Ana Silva', whatsapp: '5511988887777', fichaCompleta: true, ultimaVisita: '2024-04-10', totalVisitas: 5, alergias: 'None', linkId: 'ana123', pontos: 150, nascimento: '1995-04-23' },
+                            { id: prefix + 'c2', nome: 'Beatriz Costa', whatsapp: '5511977776666', fichaCompleta: false, ultimaVisita: '2024-03-15', totalVisitas: 2, linkId: 'bea456', pontos: 40, nascimento: '1990-10-12' },
+                            { id: prefix + 'c3', nome: 'Carla Souza', whatsapp: '5511966665555', fichaCompleta: true, ultimaVisita: '2024-01-20', totalVisitas: 12, linkId: 'car789', pontos: 320, nascimento: '1988-05-05' },
+                            { id: prefix + 'c4', nome: 'Daniela Lima', whatsapp: '5511955554444', fichaCompleta: false, ultimaVisita: '2024-04-20', totalVisitas: 1, linkId: 'dan012', pontos: 10, nascimento: '1992-12-25' }
+                        ];
+                        state.servicos = [
+                            { id: prefix + 's1', nome: 'Eyebrow Shaping', duracao: 30, preco: 13, pontos: 10, permiteEncaixe: false, servicos_compativeis: [] },
+                            { id: prefix + 's2', nome: 'Facial Cleansing', duracao: 60, preco: 35, pontos: 30, permiteEncaixe: false, servicos_compativeis: [] },
+                            { id: prefix + 's3', nome: 'Brow Design + Henna', duracao: 45, preco: 20, pontos: 15, permiteEncaixe: false, servicos_compativeis: [] }
+                        ];
+                        state.profissionais = [
+                            { id: 'p1', nome: 'Fernanda' },
+                            { id: 'p2', nome: 'Juliana' }
+                        ];
+                        state.agendamentos = [
+                            { id: prefix + 'a1', clienteId: prefix + 'c1', servicoId: prefix + 's1', data: hoje, hora: '09:00', status: 'realizado', profissionalId: 'p1' },
+                            { id: prefix + 'a2', clienteId: prefix + 'c2', servicoId: prefix + 's2', data: hoje, hora: '10:30', status: 'confirmado', profissionalId: 'p2' },
+                            { id: prefix + 'a3', clienteId: prefix + 'c4', servicoId: prefix + 's3', data: hoje, hora: '14:00', status: 'pendente', profissionalId: 'p1' }
+                        ];
+                        state.produtos = [
+                            { id: prefix + 'pr1', nome: 'Honey Wax', qtd: 5, min: 10, un: 'pcs', cat: 'Waxing' },
+                            { id: prefix + 'pr2', nome: 'Rubbing Alcohol', qtd: 2, min: 5, un: 'liters', cat: 'Sanitation' },
+                            { id: prefix + 'pr3', nome: 'Clay Mask', qtd: 15, min: 5, un: 'pcs', cat: 'Facial' }
+                        ];
+                        state.transacoes = [
+                            { id: prefix + 't1', tipo: 'entrada', valor: 13, desc: 'Eyebrow Shaping - Ana Silva', data: hoje, fpag: 'Zelle' },
+                            { id: prefix + 't2', tipo: 'saida', valor: 60, desc: 'Weekly Rent', data: hoje, fpag: 'Cash' }
+                        ];
+                        state.avaliacoes = [];
+                        
+                        const u = state.users.find(usr => usr.email === state.session.currentEmail);
+                        if (u) {
+                            if (!state.config) state.config = {};
+                            state.config.nomeClinica = u.nomeClinica || 'Lumi Beauty';
+                            state.config.whatsapp = u.whatsapp || '15559999999';
+                            state.config.isSubscribed = u.isSubscribed || false;
+                            state.config.subscriptionId = u.subscriptionId || '';
+                            state.config.subscriptionDate = u.subscriptionDate || '';
+                            state.config.subscriptionType = u.subscriptionType || '';
+                        }
+
+                        // Save mock data to Supabase
+                        for (const c of state.clientes) {
+                            await dbInsert('clientes', {
+                                id: c.id, nome: c.nome, telefone: c.whatsapp, whatsapp: c.whatsapp,
+                                nascimento: c.nascimento, insta: c.insta || '', alergias: c.alergias || '',
+                                fichaCompleta: c.fichaCompleta, ultimaVisita: c.ultimaVisita, totalVisitas: c.totalVisitas,
+                                pontos: c.pontos, linkId: c.linkId
+                            });
+                        }
+                        for (const s of state.servicos) {
+                            await dbInsert('servicos', {
+                                id: s.id, nome: s.nome, duracao: s.duracao, preco: s.preco, pontos: s.pontos,
+                                permiteEncaixe: s.permiteEncaixe, servicos_compativeis: s.servicos_compativeis
+                            });
+                        }
+                        for (const a of state.agendamentos) {
+                            await dbInsert('agendamentos', {
+                                id: a.id, cliente_id: a.clienteId, servico_id: a.servicoId,
+                                data: a.data, hora: a.hora, status: a.status, profissionalId: a.profissionalId
+                            });
+                        }
+                        for (const p of state.produtos) {
+                            await dbInsert('estoque', {
+                                id: p.id, nome: p.nome, qtd: p.qtd, min: p.min, custo: 0, valor: 0
+                            });
+                        }
+                        for (const t of state.transacoes) {
+                            await dbInsert('transacoes', t);
+                        }
+                        await dbInsert('config', {
+                            id: prefix + 'config',
+                            nome_clinica: state.config.nomeClinica,
+                            tema: JSON.stringify(state.config)
+                        });
+                    }
+                } catch(err) {
+                    console.error("Supabase initial load failed:", err);
                 }
             }
+        }
 
             // Validar qual tela deve estar visível
             if (state.config.isSubscribed || state.session.isDemo) {
@@ -1889,9 +2025,12 @@
                                 </div>
                                 <div class="item-info">
                                     <div class="item-title">${s.nome}</div>
-                                    <div class="item-subtitle">${s.duracao} min • $ ${s.preco.toFixed(2)}</div>
+                                    <div class="item-subtitle">${s.duracao} min • $ ${s.preco.toFixed(2)}${s.permiteEncaixe ? ' <span style="color:var(--primary); font-size:11px; margin-left:5px; font-weight:600;">[Double Booking]</span>' : ''}</div>
                                 </div>
                                 <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-ghost" onclick="openModal('editar-servico', '${s.id}')" style="padding: 6px;">
+                                        <i data-lucide="edit"></i>
+                                    </button>
                                     <button class="btn btn-ghost" onclick="excluirServico('${s.id}')" style="color: var(--danger)">
                                         <i data-lucide="trash-2"></i>
                                     </button>
@@ -2226,11 +2365,17 @@
                         <label>Points Awarded (Loyalty Program)</label>
                         <input type="number" id="new-srv-pts" class="form-control" placeholder="10">
                     </div>
+                    <div class="form-group" style="margin-top: 10px; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="new-srv-encaixe" onchange="toggleListaEncaixes('new-srv-encaixe', 'lista-encaixes-novo')" style="width: 16px; height: 16px; accent-color: var(--primary);">
+                        <label for="new-srv-encaixe" style="margin: 0; font-size: 14px; cursor: pointer;">Allow simultaneous booking (double booking) for this service?</label>
+                    </div>
+                    <div id="lista-encaixes-novo" style="display:none; margin-bottom: 12px;"></div>
                     <div style="display: flex; gap: 12px; margin-top: 12px;">
                         <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancel</button>
                         <button class="btn btn-primary" onclick="saveNovoServico()" style="flex: 2">Save Service</button>
                     </div>
                 `;
+                setTimeout(() => renderCheckboxEncaixes('lista-encaixes-novo', null, []), 50);
             }
 
             if (type === 'novo-agendamento') {
@@ -2260,6 +2405,56 @@
                     </div>
                     <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoAgendamento()">Confirm Appointment</button>
                 `;
+            }
+
+            if (type === 'editar-cliente') {
+                const c = state.clientes.find(cli => cli.id === data);
+                if (!c) return;
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Edit Client</h2>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="edit-cli-nome" class="form-control" value="${c.nome}">
+                        <input type="hidden" id="edit-cli-id" value="${c.id}">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp</label>
+                        <input type="text" id="edit-cli-whats" class="form-control" value="${c.whatsapp || ''}">
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="salvarEdicaoCliente()">Save Changes</button>
+                `;
+            }
+
+            if (type === 'editar-servico') {
+                const s = state.servicos.find(ser => ser.id === data);
+                if (!s) return;
+                content.innerHTML = `
+                    <h2 style="margin-bottom: 24px;">Edit Service</h2>
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input type="text" id="edit-srv-nome" class="form-control" value="${s.nome}">
+                        <input type="hidden" id="edit-srv-id" value="${s.id}">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price ($)</label>
+                            <input type="number" id="edit-srv-preco" class="form-control" value="${s.preco}">
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (min)</label>
+                            <input type="number" id="edit-srv-duracao" class="form-control" value="${s.duracao}">
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-top: 10px;">
+                        <input type="checkbox" id="edit-srv-encaixe" ${s.permiteEncaixe === true ? 'checked' : ''} onchange="toggleListaEncaixes('edit-srv-encaixe', 'lista-encaixes-edit')" style="width: 18px; height: 18px; accent-color: var(--primary);">
+                        <label for="edit-srv-encaixe" style="margin: 0; font-weight: normal; cursor: pointer;">Allow simultaneous booking (double booking) for this service?</label>
+                    </div>
+                    <div id="lista-encaixes-edit" style="display:${s.permiteEncaixe === true ? 'block' : 'none'}; margin-bottom: 12px;"></div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="salvarEdicaoServico()">Save Changes</button>
+                `;
+                setTimeout(() => {
+                    renderCheckboxEncaixes('lista-encaixes-edit', s.id, s.servicos_compativeis || []);
+                }, 50);
             }
 
             if (type === 'detalhe-agendamento') {
@@ -2292,11 +2487,15 @@
                 if (!c.fotos) c.fotos = [];
 
                 content.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; position: relative;">
                         <div class="avatar" style="width: 60px; height: 60px; font-size: 24px;">${c.nome[0]}</div>
                         <div>
                             <h2>${c.nome}</h2>
                             <p style="color: var(--text-light)">${c.whatsapp} • ${c.insta || 'No Instagram'}</p>
+                        </div>
+                        <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
+                            <button class="btn btn-ghost" onclick="openModal('editar-cliente', '${c.id}')" style="padding: 6px;"><i data-lucide="edit"></i></button>
+                            <button class="btn btn-ghost" onclick="excluirCliente('${c.id}')" style="padding: 6px; color: var(--danger);"><i data-lucide="trash-2"></i></button>
                         </div>
                     </div>
                     
@@ -2412,8 +2611,47 @@
             reader.readAsDataURL(file);
         }
 
+        // --- Helper for Double Bookings (Encaixes) ---
+        function toggleListaEncaixes(checkboxId, containerId) {
+            const isChecked = document.getElementById(checkboxId).checked;
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.style.display = isChecked ? 'block' : 'none';
+            }
+        }
+
+        function renderCheckboxEncaixes(containerId, serviceIdToExclude = null, preSelecionados = []) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let html = '<div style="margin-top:8px; padding: 12px; background: #FDFBF7; border-radius: 8px; border: 1px solid #EEE;">';
+            html += '<label style="font-size:12px; margin-bottom:8px; display:block; font-weight:600;">Select compatible services for simultaneous booking:</label>';
+            html += '<div style="display: flex; flex-direction: column; gap: 8px; max-height: 150px; overflow-y: auto; padding-right: 4px;">';
+            
+            let hasOptions = false;
+            state.servicos.forEach(s => {
+                if (s.id !== serviceIdToExclude) {
+                    hasOptions = true;
+                    const isChecked = preSelecionados.includes(s.id) ? 'checked' : '';
+                    html += `
+                        <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; margin:0;">
+                            <input type="checkbox" class="${containerId}-chk" value="${s.id}" ${isChecked} style="width: 16px; height: 16px; accent-color: var(--primary);">
+                            <span style="font-size: 13px;">${s.nome} (${s.duracao} min)</span>
+                        </label>
+                    `;
+                }
+            });
+            
+            if (!hasOptions) {
+                html += '<span style="font-size:12px; color:var(--text-light);">No other services registered.</span>';
+            }
+            
+            html += '</div></div>';
+            container.innerHTML = html;
+        }
+
         // --- ACTIONS ---
-        function saveNovoCliente() {
+        async function saveNovoCliente() {
             const nome = document.getElementById('new-cli-nome').value;
             const tel = document.getElementById('new-cli-tel').value;
             const nasc = document.getElementById('new-cli-nasc').value;
@@ -2421,8 +2659,9 @@
 
             if (!nome || !tel) return alert('Please fill in Name and WhatsApp!');
             
+            const prefix = state.session.currentEmail + '_';
             const novo = {
-                id: 'c' + Date.now(),
+                id: prefix + 'c' + Date.now(),
                 nome: nome,
                 whatsapp: tel.replace(/\D/g, ''),
                 nascimento: nasc,
@@ -2436,12 +2675,51 @@
             };
             state.clientes.push(novo);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbInsert('clientes', {
+                    id: novo.id, nome: novo.nome, telefone: novo.whatsapp, whatsapp: novo.whatsapp,
+                    nascimento: novo.nascimento, insta: novo.insta || '', alergias: '',
+                    fichaCompleta: novo.fichaCompleta, ultimaVisita: novo.ultimaVisita, totalVisitas: novo.totalVisitas,
+                    pontos: novo.pontos, linkId: novo.linkId
+                });
+            }
             closeModal();
             showView('clientes');
             toast('Client registered!');
         }
 
-        function saveNovoServico() {
+        async function excluirCliente(id) {
+            if (!confirm('Are you sure you want to delete this client? This will also delete all of their history.')) return;
+            state.clientes = state.clientes.filter(c => c.id !== id);
+            state.agendamentos = state.agendamentos.filter(a => a.clienteId !== id);
+            save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbDelete('clientes', id);
+            }
+            closeModal();
+            showView('clientes');
+            toast('Client deleted!');
+        }
+
+        async function salvarEdicaoCliente() {
+            const id = document.getElementById('edit-cli-id').value;
+            const nome = document.getElementById('edit-cli-nome').value;
+            const whats = document.getElementById('edit-cli-whats').value;
+            const c = state.clientes.find(cli => cli.id === id);
+            if (c) {
+                c.nome = nome;
+                c.whatsapp = whats;
+                save();
+                if (state.session.loggedIn && !state.session.isDemo) {
+                    await dbUpdate('clientes', id, { nome: nome, whatsapp: whats, telefone: whats });
+                }
+                closeModal();
+                showView('clientes');
+                toast('Client updated!');
+            }
+        }
+
+        async function saveNovoServico() {
             const nome = document.getElementById('new-srv-nome').value;
             const dur = document.getElementById('new-srv-dur').value;
             const preco = document.getElementById('new-srv-preco').value;
@@ -2450,33 +2728,93 @@
 
             if (!nome || !dur || !preco) return alert('Please fill in all fields!');
 
+            const prefix = state.session.currentEmail + '_';
+            const permiteEncaixe = document.getElementById('new-srv-encaixe') ? document.getElementById('new-srv-encaixe').checked : false;
+            const compativeis = [];
+            if (permiteEncaixe) {
+                document.querySelectorAll('.lista-encaixes-novo-chk:checked').forEach(cb => compativeis.push(cb.value));
+            }
+
             const novo = {
-                id: 's' + Date.now(),
+                id: prefix + 's' + Date.now(),
                 nome: nome,
                 duracao: parseInt(dur),
                 preco: parseFloat(preco),
                 custo: parseFloat(custo),
-                pontos: parseInt(pts)
+                pontos: parseInt(pts),
+                permiteEncaixe: permiteEncaixe,
+                servicos_compativeis: compativeis
             };
             state.servicos.push(novo);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbInsert('servicos', {
+                    id: novo.id, nome: novo.nome, duracao: novo.duracao, preco: novo.preco, pontos: novo.pontos,
+                    permite_encaixe: novo.permiteEncaixe, servicos_compativeis: novo.servicos_compativeis
+                });
+            }
             closeModal();
             showView('servicos');
             toast('Service added!');
         }
 
-        function excluirServico(id) {
+        async function excluirServico(id) {
             if (!confirm('Are you sure you want to delete this service?')) return;
             state.servicos = state.servicos.filter(s => s.id !== id);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbDelete('servicos', id);
+            }
             showView('servicos');
             toast('Service deleted!');
         }
 
-        function salvarConfigGeral() {
+        async function salvarEdicaoServico() {
+            const id = document.getElementById('edit-srv-id').value;
+            const nome = document.getElementById('edit-srv-nome').value;
+            const preco = parseFloat(document.getElementById('edit-srv-preco').value);
+            const duracao = parseInt(document.getElementById('edit-srv-duracao').value);
+            const encaixe = document.getElementById('edit-srv-encaixe').checked;
+            
+            const compativeis = [];
+            if (encaixe) {
+                document.querySelectorAll('.lista-encaixes-edit-chk:checked').forEach(cb => compativeis.push(cb.value));
+            }
+            
+            const s = state.servicos.find(ser => ser.id === id);
+            if (s) {
+                s.nome = nome;
+                s.preco = preco;
+                s.duracao = duracao;
+                s.permiteEncaixe = encaixe;
+                s.servicos_compativeis = compativeis;
+                save();
+                if (state.session.loggedIn && !state.session.isDemo) {
+                    await dbUpdate('servicos', id, {
+                        nome: nome,
+                        preco: preco,
+                        duracao: duracao,
+                        permite_encaixe: encaixe,
+                        servicos_compativeis: compativeis
+                    });
+                }
+                closeModal();
+                showView('servicos');
+                toast('Service updated!');
+            }
+        }
+
+        async function salvarConfigGeral() {
             state.config.nomeClinica = document.getElementById('cfg-nome').value;
             state.config.whatsapp = document.getElementById('cfg-whats').value;
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                const prefix = state.session.currentEmail + '_';
+                await dbUpdate('config', prefix + 'config', {
+                    nome_clinica: state.config.nomeClinica,
+                    tema: JSON.stringify(state.config)
+                });
+            }
             updateSidebarLogo();
             toast('Settings saved!');
         }
@@ -2502,14 +2840,15 @@
             }
         }
 
-        function saveNovoAgendamento() {
+        async function saveNovoAgendamento() {
             const cliId = document.getElementById('new-age-cli').value;
             const srvId = document.getElementById('new-age-srv').value;
             const hora = document.getElementById('new-age-hora').value;
             const data = document.getElementById('new-age-data').value;
 
+            const prefix = state.session.currentEmail + '_';
             const novo = {
-                id: 'a' + Date.now(),
+                id: prefix + 'a' + Date.now(),
                 clienteId: cliId,
                 servicoId: srvId,
                 hora: hora,
@@ -2519,9 +2858,27 @@
             };
             state.agendamentos.push(novo);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbInsert('agendamentos', {
+                    id: novo.id, cliente_id: novo.clienteId, servico_id: novo.servicoId,
+                    data: novo.data, hora: novo.hora, status: novo.status, profissionalId: novo.profissionalId
+                });
+            }
             closeModal();
             showView('agenda');
             toast('Appointment scheduled!');
+        }
+
+        async function excluirAgendamento(id) {
+            if (!confirm('Are you sure you want to cancel this appointment?')) return;
+            state.agendamentos = state.agendamentos.filter(a => a.id !== id);
+            save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbDelete('agendamentos', id);
+            }
+            closeModal();
+            showView('agenda');
+            toast('Appointment cancelled!');
         }
 
         let editingTransacaoId = null;
@@ -2532,7 +2889,7 @@
             document.getElementById('btn-tr-saida').className = tipo === 'saida' ? 'btn btn-primary' : 'btn btn-outline';
         }
 
-        function saveNovaTransacao() {
+        async function saveNovaTransacao() {
             const desc = document.getElementById('new-tr-desc').value;
             const valor = document.getElementById('new-tr-valor').value;
             const data = document.getElementById('new-tr-data').value;
@@ -2540,6 +2897,7 @@
 
             if (!desc || !valor) return alert('Please fill in all fields!');
 
+            const prefix = state.session.currentEmail + '_';
             if (editingTransacaoId) {
                 const t = state.transacoes.find(item => item.id === editingTransacaoId);
                 if (t) {
@@ -2547,60 +2905,83 @@
                     t.valor = parseFloat(valor);
                     t.data = data;
                     t.tipo = tipo;
+                    save();
+                    if (state.session.loggedIn && !state.session.isDemo) {
+                        await dbUpdate('transacoes', t.id, {
+                            tipo: t.tipo, valor: t.valor, desc: t.desc, data: t.data, fpag: t.fpag
+                        });
+                    }
                 }
                 editingTransacaoId = null;
                 toast('Transaction updated!');
             } else {
-                state.transacoes.push({
-                    id: 't' + Date.now(),
+                const nova = {
+                    id: prefix + 't' + Date.now(),
                     tipo: tipo,
                     valor: parseFloat(valor),
                     desc: desc,
                     data: data,
                     fpag: 'Other'
-                });
+                };
+                state.transacoes.push(nova);
+                save();
+                if (state.session.loggedIn && !state.session.isDemo) {
+                    await dbInsert('transacoes', nova);
+                }
                 toast(tipo === 'entrada' ? 'Income logged!' : 'Expense logged!');
             }
             
-            save();
             closeModal();
             showView('caixa');
         }
 
-        function excluirTransacao(id) {
+        async function excluirTransacao(id) {
             if (!confirm('Are you sure you want to delete this transaction?')) return;
             state.transacoes = state.transacoes.filter(t => t.id !== id);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbDelete('transacoes', id);
+            }
             showView('caixa');
             toast('Transaction deleted!');
         }
 
-        function saveNovoProduto() {
+        async function saveNovoProduto() {
             const nome = document.getElementById('new-pr-nome').value;
             const qtd = document.getElementById('new-pr-qtd').value;
             const min = document.getElementById('new-pr-min').value;
 
             if (!nome) return alert('Please fill in the product name!');
 
-            state.produtos.push({
-                id: 'pr' + Date.now(),
+            const prefix = state.session.currentEmail + '_';
+            const novo = {
+                id: prefix + 'pr' + Date.now(),
                 nome: nome,
                 qtd: parseInt(qtd),
                 min: parseInt(min),
                 un: 'pcs',
                 cat: 'Other'
-            });
+            };
+            state.produtos.push(novo);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbInsert('estoque', {
+                    id: novo.id, nome: novo.nome, qtd: novo.qtd, min: novo.min, custo: 0, valor: 0
+                });
+            }
             closeModal();
             showView('estoque');
             toast('Product registered!');
         }
 
-        function darBaixaEstoque(id) {
+        async function darBaixaEstoque(id) {
             const p = state.produtos.find(item => item.id === id);
             if (p && p.qtd > 0) {
                 p.qtd--;
                 save();
+                if (state.session.loggedIn && !state.session.isDemo) {
+                    await dbUpdate('estoque', p.id, { qtd: p.qtd });
+                }
                 showView('estoque');
                 toast('Stock reduced!');
             } else {
@@ -2608,17 +2989,20 @@
             }
         }
 
-        function reporEstoque(id) {
+        async function reporEstoque(id) {
             const p = state.produtos.find(item => item.id === id);
             if (p) {
                 p.qtd++;
                 save();
+                if (state.session.loggedIn && !state.session.isDemo) {
+                    await dbUpdate('estoque', p.id, { qtd: p.qtd });
+                }
                 showView('estoque');
                 toast('Stock replenished!');
             }
         }
 
-        function marcarComoRealizado(id) {
+        async function marcarComoRealizado(id) {
             const a = state.agendamentos.find(item => item.id === id);
             const s = state.servicos.find(ser => ser.id === a.servicoId);
             const c = state.clientes.find(cli => cli.id === a.clienteId);
@@ -2627,33 +3011,41 @@
             c.ultimaVisita = a.data;
             c.totalVisitas++;
             
-            // Fidelidade
             if (s && s.pontos) {
                 c.pontos = (c.pontos || 0) + s.pontos;
             }
 
-            // Lançar no caixa
-            state.transacoes.push({
-                id: 't' + Date.now(),
+            const prefix = state.session.currentEmail + '_';
+            const novaTransacao = {
+                id: prefix + 't' + Date.now(),
                 tipo: 'entrada',
                 valor: s ? s.preco : 0,
                 desc: `${s ? s.nome : 'Service'} - ${c.nome}`,
                 data: a.data,
                 fpag: 'Pix'
-            });
+            };
+            state.transacoes.push(novaTransacao);
 
             save();
 
-            // Opção de Avaliação
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbUpdate('agendamentos', a.id, { status: 'realizado' });
+                await dbUpdate('clientes', c.id, {
+                    ultimaVisita: c.ultimaVisita, totalVisitas: c.totalVisitas, pontos: c.pontos
+                });
+                await dbInsert('transacoes', novaTransacao);
+            }
+
             const estrelas = prompt("Completed! Client rating (1-5 stars):", "5");
             if (estrelas) {
-                state.avaliacoes.push({
-                    id: 'v' + Date.now(),
+                const aval = {
+                    id: prefix + 'v' + Date.now(),
                     clienteId: c.id,
                     profissionalId: a.profissionalId,
                     estrelas: parseInt(estrelas),
                     data: new Date().toISOString()
-                });
+                };
+                state.avaliacoes.push(aval);
                 save();
             }
 
@@ -2907,9 +3299,25 @@
             if (!date || !srvId) return;
  
             const baseSlots = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
-            const bookedSlots = state.agendamentos.filter(a => a.data === date && a.status !== 'cancelado').map(a => a.hora);
+            const agendamentosNoDia = state.agendamentos.filter(a => a.data === date && a.status !== 'cancelado');
             
-            const freeSlots = baseSlots.filter(s => !bookedSlots.includes(s));
+            const freeSlots = baseSlots.filter(s => {
+                const ocupados = agendamentosNoDia.filter(a => a.hora === s);
+                if (ocupados.length === 0) return true;
+                if (ocupados.length >= 2) return false;
+                
+                const appt = ocupados[0];
+                const existingSrv = state.servicos.find(ser => ser.id === appt.servicoId);
+                const newSrv = state.servicos.find(ser => ser.id === srvId);
+                
+                if (existingSrv && existingSrv.permiteEncaixe === true && existingSrv.servicos_compativeis && existingSrv.servicos_compativeis.includes(srvId)) {
+                    return true;
+                }
+                if (newSrv && newSrv.permiteEncaixe === true && newSrv.servicos_compativeis && newSrv.servicos_compativeis.includes(appt.servicoId)) {
+                    return true;
+                }
+                return false;
+            });
  
             container.innerHTML = freeSlots.map(s => `
                 <div class="slot-btn" onclick="selectSlot(this, '${s}')" style="padding: 10px; border: 1px solid #EEE; border-radius: 10px; text-align: center; font-size: 13px; cursor:pointer; background: white;">${s}</div>
@@ -2932,15 +3340,16 @@
             document.getElementById('btn-self-confirm').style.display = 'block';
         }
  
-        function confirmSelfBooking(cliId) {
+        async function confirmSelfBooking(cliId) {
             const srvId = document.getElementById('self-srv').value;
             const date = document.getElementById('self-date').value;
             const s = state.servicos.find(ser => ser.id === srvId);
  
             if (!selectedSlot) return;
  
+            const prefix = state.session.currentEmail + '_';
             const novo = {
-                id: 'a' + Date.now(),
+                id: prefix + 'a' + Date.now(),
                 clienteId: cliId,
                 servicoId: srvId,
                 hora: selectedSlot,
@@ -2952,6 +3361,12 @@
  
             state.agendamentos.push(novo);
             save();
+            if (state.session.loggedIn && !state.session.isDemo) {
+                await dbInsert('agendamentos', {
+                    id: novo.id, cliente_id: novo.clienteId, servico_id: novo.servicoId,
+                    data: novo.data, hora: novo.hora, status: novo.status, profissionalId: novo.profissionalId
+                });
+            }
             
             alert(`All set! Your appointment for ${s.nome} has been scheduled for ${new Date(date).toLocaleDateString('en-US')} at ${selectedSlot}.✨`);
             renderPortalCliente(state.clientes.find(cli => cli.id === cliId), 'historico');
