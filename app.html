@@ -1311,6 +1311,7 @@
                 <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Reports</span></div>
                 
                 <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Business</div>
+                <div class="nav-item" onclick="showView('subscription')"><i data-lucide="gem"></i><span>Lumi Premium</span></div>
                 <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Settings</span></div>
                 <div class="nav-item" onclick="toast('Marketing module coming soon')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
                 <div class="nav-item" onclick="handleAuthLogout()" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #EEE; padding-top: 15px;"><i data-lucide="log-out"></i><span>Sign Out</span></div>
@@ -1657,7 +1658,7 @@
             }
 
             // Validar qual tela deve estar visível
-            if (state.config.isSubscribed || state.session.isDemo) {
+            if (state.session && state.session.loggedIn) {
                 document.getElementById('auth-wall').style.display = 'none';
                 document.getElementById('billing-gate').style.display = 'none';
                 document.getElementById('app').style.display = 'flex';
@@ -1669,8 +1670,14 @@
                     document.getElementById('demo-banner-wrapper').style.display = 'none';
                     document.body.classList.remove('has-demo-banner');
                 }
+                
+                updateSidebarNav();
+                
+                if (!state.config.isSubscribed && !state.session.isDemo) {
+                    showView('subscription');
+                }
             } else {
-                showBillingGate();
+                showAuthWall();
             }
         }
 
@@ -1700,6 +1707,11 @@
 
         // --- UI ROUTING ---
         function showView(viewName) {
+            // Paywall Lock: If not subscribed and not demo, force viewName to 'subscription'
+            if (!state.config.isSubscribed && (!state.session || !state.session.isDemo)) {
+                viewName = 'subscription';
+            }
+            
             state.view = viewName;
             
             // Update active sidebar item
@@ -1722,6 +1734,7 @@
             else if (viewName === 'caixa') renderCaixa(main);
             else if (viewName === 'estoque') renderEstoque(main);
             else if (viewName === 'config') renderConfig(main);
+            else if (viewName === 'subscription') renderSubscriptionView(main);
 
             lucide.createIcons();
         }
@@ -3540,7 +3553,7 @@
         });
 
         // --- STRIPE SUCCESS INTERCEPTOR & PREMIUM WELCOME MODAL ---
-        function checkPaymentSuccess() {
+        async function checkPaymentSuccess() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('payment') === 'success') {
                 // Ativar assinatura premium no estado
@@ -3551,7 +3564,16 @@
                 state.config.subscriptionDate = new Date().toISOString();
                 state.config.subscriptionType = 'Stripe Premium Active';
                 save();
+                
+                if (state.session && state.session.currentEmail && !state.session.isDemo) {
+                    const prefix = state.session.currentEmail + '_';
+                    await dbUpdate('config', prefix + 'config', {
+                        tema: JSON.stringify(state.config)
+                    });
+                }
+                
                 updateSidebarLogo();
+                updateSidebarNav();
                 
                 // Limpar URL de forma limpa e elegante
                 const cleanURL = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.hash;
@@ -3951,7 +3973,209 @@
         }
 
         // --- B2B SAAS AUTHENTICATION & BILLING ENGINE ---
-        
+
+        function updateSidebarNav() {
+            const isSubscribed = state.config.isSubscribed || (state.session && state.session.isDemo);
+            
+            document.querySelectorAll('.nav-item').forEach(el => {
+                const onClickAttr = el.getAttribute('onclick');
+                if (onClickAttr) {
+                    // Sign Out is always allowed
+                    if (onClickAttr.includes('handleAuthLogout')) {
+                        return;
+                    }
+                    
+                    // Subscription is always allowed
+                    if (onClickAttr.includes('subscription')) {
+                        el.style.display = 'flex';
+                        return;
+                    }
+                    
+                    // Other tabs
+                    if (!isSubscribed) {
+                        el.style.opacity = '0.4';
+                        el.style.pointerEvents = 'none';
+                        
+                        // Replace or append a lock icon
+                        if (!el.querySelector('.lock-icon')) {
+                            const lock = document.createElement('i');
+                            lock.setAttribute('data-lucide', 'lock');
+                            lock.className = 'lock-icon';
+                            lock.style.marginLeft = 'auto';
+                            lock.style.width = '12px';
+                            lock.style.height = '12px';
+                            lock.style.opacity = '0.7';
+                            el.appendChild(lock);
+                        }
+                    } else {
+                        el.style.opacity = '1';
+                        el.style.pointerEvents = 'auto';
+                        const lock = el.querySelector('.lock-icon');
+                        if (lock) lock.remove();
+                    }
+                }
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function renderSubscriptionView(container) {
+            const isSubscribed = state.config.isSubscribed && (!state.session || !state.session.isDemo);
+            
+            if (!isSubscribed) {
+                // Unsubscribed Paywall screen
+                container.innerHTML = `
+                    <div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+                        <div class="card" style="border: 1px solid rgba(201, 168, 76, 0.3); background: linear-gradient(135deg, #FFFFFF, #FAF6EE); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(201, 168, 76, 0.05); text-align: center; position: relative; overflow: hidden;">
+                            <!-- Top Decorative Line -->
+                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, #A68A3D, #C9A84C, #A68A3D);"></div>
+                            
+                            <div style="display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.1); color: #C9A84C; margin-bottom: 24px;">
+                                <i data-lucide="gem" style="width: 32px; height: 32px;"></i>
+                            </div>
+                            
+                            <h1 style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #2D2D2D; margin-bottom: 12px;">Activate Your Lumi Subscription</h1>
+                            <p style="font-size: 16px; color: #666; max-width: 600px; margin: 0 auto 30px; line-height: 1.6;">
+                                Unlock the complete premium workspace. Grow your beauty salon or aesthetic studio with smart scheduling, digital intake forms, and cash flow tools.
+                            </p>
+                            
+                            <div style="background: #FFFFFF; border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 16px; padding: 30px; max-width: 450px; margin: 0 auto 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center;">
+                                <span style="font-size: 12px; text-transform: uppercase; color: #7A7A7A; font-weight: 700; letter-spacing: 1px;">Lumi Premium Plan</span>
+                                <div style="font-family: 'Playfair Display', serif; font-size: 42px; color: #2D2D2D; margin: 10px 0; font-weight: 700;">
+                                    $19<span style="font-size: 18px; font-weight: 500; color: #7A7A7A;">/month</span>
+                                </div>
+                                <span style="font-size: 12px; color: #A68A3D; font-weight: 600;">Flat rate • All features included • Cancel anytime</span>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; max-width: 600px; margin: 0 auto 40px; text-align: left;">
+                                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #444;">
+                                    <i data-lucide="check-circle-2" style="width: 18px; color: #C9A84C; flex-shrink: 0;"></i>
+                                    <span>Interactive schedule & automated queues</span>
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #444;">
+                                    <i data-lucide="check-circle-2" style="width: 18px; color: #C9A84C; flex-shrink: 0;"></i>
+                                    <span>Unlimited digital client consultation forms</span>
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #444;">
+                                    <i data-lucide="check-circle-2" style="width: 18px; color: #C9A84C; flex-shrink: 0;"></i>
+                                    <span>Automated WhatsApp reminders & greetings</span>
+                                </div>
+                                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #444;">
+                                    <i data-lucide="check-circle-2" style="width: 18px; color: #C9A84C; flex-shrink: 0;"></i>
+                                    <span>Full cash flow bookkeeping & low stock alerts</span>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 450px; margin: 0 auto;">
+                                <button class="btn btn-primary btn-lg" style="width: 100%; padding: 16px; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="handlePaywallCheckout()">
+                                    <span>Subscribe to Lumi Premium</span>
+                                    <i data-lucide="credit-card" style="width: 18px;"></i>
+                                </button>
+                                
+                                <a onclick="enterRestrictedDemo()" style="font-size: 13px; color: #A68A3D; font-weight: 600; text-decoration: none; cursor: pointer; transition: color 0.2s;">
+                                    Enter Demo Mode (Restricted)
+                                </a>
+                                
+                                <div style="margin-top: 15px; border-top: 1px solid rgba(0, 0, 0, 0.05); padding-top: 15px;">
+                                    <a onclick="handleAuthLogout()" style="font-size: 13px; color: #7A7A7A; text-decoration: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="log-out" style="width:14px;"></i> Log Out
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Subscribed Premium Info screen
+                const subDate = state.config.subscriptionDate ? new Date(state.config.subscriptionDate).toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Active';
+                const nextBilling = state.config.subscriptionDate ? new Date(new Date(state.config.subscriptionDate).getTime() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Next Month';
+                
+                container.innerHTML = `
+                    <div style="max-width: 800px; margin: 40px auto; padding: 20px;">
+                        <header style="margin-bottom: 24px;">
+                            <h1>Lumi Premium Subscription</h1>
+                            <p style="color: var(--text-light); font-size: 14px;">Manage your premium account and billing status.</p>
+                        </header>
+                        
+                        <div class="card" style="border: 1px solid rgba(201, 168, 76, 0.3); background: linear-gradient(135deg, #FFFFFF, #FAF6EE); padding: 30px; border-radius: 16px; margin-bottom: 24px; position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #A68A3D, #C9A84C, #A68A3D);"></div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                        <span style="font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #2D2D2D;">Lumi Premium Active</span>
+                                        <span class="badge badge-confirmado" style="background: rgba(67, 160, 71, 0.1); color: #43A047; border: 1px solid rgba(67, 160, 71, 0.2); font-weight: 700;">ACTIVE</span>
+                                    </div>
+                                    <p style="font-size: 13px; color: #7A7A7A;">Thank you for partnering with Lumi! Your business has full system access.</p>
+                                </div>
+                                <div style="display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: rgba(201, 168, 76, 0.1); color: #C9A84C;">
+                                    <i data-lucide="gem" style="width: 24px; height: 24px;"></i>
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; border-top: 1px solid rgba(201,168,76,0.15); padding-top: 20px;">
+                                <div>
+                                    <span style="font-size: 11px; text-transform: uppercase; color: #7A7A7A; font-weight: 700;">Plan Price</span>
+                                    <div style="font-size: 18px; font-weight: 700; color: #2D2D2D; margin-top: 4px;">$19.00 / month</div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 11px; text-transform: uppercase; color: #7A7A7A; font-weight: 700;">Billing Cycle</span>
+                                    <div style="font-size: 15px; font-weight: 500; color: #2D2D2D; margin-top: 4px;">Monthly Auto-renewal</div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 11px; text-transform: uppercase; color: #7A7A7A; font-weight: 700;">Activated On</span>
+                                    <div style="font-size: 15px; font-weight: 500; color: #2D2D2D; margin-top: 4px;">${subDate}</div>
+                                </div>
+                                <div>
+                                    <span style="font-size: 11px; text-transform: uppercase; color: #7A7A7A; font-weight: 700;">Next Payment</span>
+                                    <div style="font-size: 15px; font-weight: 500; color: #2D2D2D; margin-top: 4px;">${nextBilling}</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px; font-size: 11px; color: #999; display: flex; align-items: center; gap: 5px;">
+                                <i data-lucide="shield-check" style="width:14px; color: #43A047;"></i>
+                                <span>Secured by Stripe Billing System. ID: ${state.config.subscriptionId || 'N/A'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card" style="padding: 24px; border-radius: 12px;">
+                            <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 700; color: var(--text);">Manage Subscription</h3>
+                            <p style="font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 20px;">
+                                Need to take a break or update your credit card? You can cancel your subscription at any time. If you cancel, your data will be preserved but access to the workspace will be locked at the end of your billing cycle.
+                            </p>
+                            
+                            <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="cancelSubscriptionConfirm()">
+                                <i data-lucide="slash" style="width: 14px; margin-right: 6px;"></i> Cancel Subscription
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            if (window.lucide) lucide.createIcons();
+        }
+
+        async function cancelSubscriptionConfirm() {
+            if (confirm("Are you sure you want to cancel your Lumi Premium subscription? You will lose access to the studio management features immediately.")) {
+                state.config.isSubscribed = false;
+                state.config.subscriptionId = '';
+                state.config.subscriptionDate = '';
+                state.config.subscriptionType = '';
+                
+                toast("Subscription cancelled successfully.");
+                
+                save();
+                
+                if (state.session && state.session.currentEmail && !state.session.isDemo) {
+                    const prefix = state.session.currentEmail + '_';
+                    await dbUpdate('config', prefix + 'config', {
+                        tema: JSON.stringify(state.config)
+                    });
+                }
+                
+                updateSidebarNav();
+                showView('subscription');
+            }
+        }
+
         function showAuthWall() {
             // Esconder o painel principal e o billing gate
             document.getElementById('app').style.display = 'none';
@@ -4073,8 +4297,8 @@
 
             toast('Account created successfully!');
             
-            // Proceed to the Billing Paywall
-            showBillingGate();
+            // Reinicializar dados do usuário e carregar app
+            initData();
         }
 
         function showBillingGate() {
@@ -4282,7 +4506,7 @@
             closeSimulatedStripeModal();
             toast('Processing Stripe simulation...');
             
-            setTimeout(() => {
+            setTimeout(async () => {
                 state.config.isSubscribed = true;
                 state.config.subscriptionId = 'sub_simulated_' + Math.random().toString(36).substr(2, 9);
                 state.config.subscriptionDate = new Date().toISOString();
@@ -4291,7 +4515,16 @@
                 state.session.isDemo = false;
                 
                 save();
+                
+                if (state.session && state.session.currentEmail) {
+                    const prefix = state.session.currentEmail + '_';
+                    await dbUpdate('config', prefix + 'config', {
+                        tema: JSON.stringify(state.config)
+                    });
+                }
+                
                 updateSidebarLogo();
+                updateSidebarNav();
                 
                 showPremiumWelcomeModal();
                 
@@ -4327,7 +4560,12 @@
             updateSidebarLogo();
             checkClientRoute();
             if (!window.location.hash.startsWith('#ficha')) {
-                showView('dashboard');
+                const isSubscribed = state.config.isSubscribed || (state.session && state.session.isDemo);
+                if (!isSubscribed) {
+                    showView('subscription');
+                } else {
+                    showView('dashboard');
+                }
             }
         };
 
