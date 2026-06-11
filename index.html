@@ -1433,6 +1433,7 @@
                         <source src="lumi-demo.mp4" type="video/mp4">
                     </video>
                     <img id="lumi-system-gif" src="lumi-demo.gif" alt="Lumi SaaS Demo" style="width: 100%; height: 100%; object-fit: cover; display: none;" onerror="this.style.display='none';">
+                    <img id="lumi-system-img" src="lumi-demo.png" alt="Lumi SaaS Dashboard" style="width: 100%; height: 100%; object-fit: cover; display: none;" onerror="this.style.display='none';">
                     
                     <!-- Elegant interactive fallback if demo file hasn't been added yet -->
                     <div id="lumi-demo-fallback" style="position: absolute; inset: 0; background: radial-gradient(circle at center, #1C1E26 0%, #0A0B0E 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; color: #FFF;">
@@ -1863,17 +1864,25 @@
         // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Detect and load the real system demo video/gif if available
+        // Detect and load the real system demo video/gif/image if available
         (function() {
             const video = document.getElementById('lumi-system-demo');
             const gif = document.getElementById('lumi-system-gif');
+            const img = document.getElementById('lumi-system-img');
             const fallback = document.getElementById('lumi-demo-fallback');
             
-            if (video && gif && fallback) {
+            if (video && gif && img && fallback) {
+                // If the static image exists, default to it first
+                img.addEventListener('load', function() {
+                    img.style.display = 'block';
+                    fallback.style.display = 'none';
+                });
+                
                 video.addEventListener('canplay', function() {
                     video.style.display = 'block';
                     fallback.style.display = 'none';
                     gif.style.display = 'none';
+                    img.style.display = 'none';
                 });
                 
                 video.addEventListener('error', function() {
@@ -1884,7 +1893,14 @@
                     gif.style.display = 'block';
                     fallback.style.display = 'none';
                     video.style.display = 'none';
+                    img.style.display = 'none';
                 });
+                
+                // Trigger image load manually to make sure it runs if cached
+                if (img.complete) {
+                    img.style.display = 'block';
+                    fallback.style.display = 'none';
+                }
                 
                 video.load();
             }
