@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-// Carregar .env se existir localmente para desenvolvimento privado
+// Load .env if it exists locally for private development
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
     try {
@@ -17,13 +17,13 @@ if (fs.existsSync(envPath)) {
                 }
             }
         });
-        console.log('[Lumi Backend] Arquivo .env carregado localmente.');
+        console.log('[Lumi Backend] Local .env file loaded successfully.');
     } catch (err) {
-        console.error('[Lumi Backend] Falha ao carregar .env:', err);
+        console.error('[Lumi Backend] Failed to load .env:', err);
     }
 }
 
-// Inicializar Stripe com chave do ambiente (Render) ou .env local
+// Initialize Stripe with key from environment (Render) or local .env
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY || 'rk_test_placeholder');
 
 const app = express();
@@ -32,27 +32,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Servir arquivos estáticos do Lumi
+// Serve static files
 app.use(express.static(path.join(__dirname)));
 
-// Endpoint do Checkout Seguro do Stripe
+// Secure Stripe Checkout Endpoint
 app.post('/api/checkout', async (req, res) => {
     try {
-        console.log('[Lumi Backend] Iniciando sessão do Stripe Checkout...');
+        console.log('[Lumi Backend] Creating Stripe Checkout session...');
         
-        // Criar uma sessão de assinatura de R$ 47/mês dinamicamente com a chave restrita live do Stripe
+        // Create a $19/month subscription session using the live restricted Stripe key
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
                 {
                     price_data: {
-                        currency: 'brl',
+                        currency: 'usd',
                         product_data: {
-                            name: 'Lumi Premium — Gestão de Salão & Estúdio',
-                            description: 'Acesso total e ilimitado à plataforma Lumi: Agenda, Controle de Clientes, Fluxo de Caixa, Estoque e Mensagens Automatizadas.',
+                            name: 'Lumi Premium — Beauty & Aesthetics Studio Management',
+                            description: 'Full unlimited access to Lumi: Smart Scheduling, Client Management, Cash Flow, Inventory, and Automated Messaging.',
                             images: ['https://raw.githubusercontent.com/JhoniLot/estetica-1.0/main/logo.png'],
                         },
-                        unit_amount: 4700, // R$ 47.00
+                        unit_amount: 1900, // $19.00 USD
                         recurring: {
                             interval: 'month',
                         },
@@ -65,25 +65,25 @@ app.post('/api/checkout', async (req, res) => {
             cancel_url: `${req.headers.origin || 'http://localhost:3000'}/index.html#pricing`,
         });
 
-        console.log('[Lumi Backend] Sessão Stripe Checkout criada com sucesso! URL:', session.url);
+        console.log('[Lumi Backend] Stripe Checkout session created! URL:', session.url);
         res.json({ url: session.url });
     } catch (error) {
-        console.error('[Lumi Backend] Erro ao processar Stripe Checkout:', error);
+        console.error('[Lumi Backend] Error processing Stripe Checkout:', error);
         res.status(500).json({ error: error.message });
     }
 });
 
-// Fallback para index.html nas rotas desconhecidas
+// Fallback to index.html for unknown routes
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Porta
+// Port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`\n======================================================`);
-    console.log(`💎  Lumi SaaS — Servidor de Produção Ativo  💎`);
-    console.log(`🚀  Acesse localmente em: http://localhost:${PORT}`);
-    console.log(`🔒  Checkout Stripe configurado com chave restrita.`);
+    console.log(`💎  Lumi SaaS — Production Server Active  💎`);
+    console.log(`🚀  Running locally at: http://localhost:${PORT}`);
+    console.log(`🔒  Stripe Checkout configured with restricted live key (USD $19/month).`);
     console.log(`======================================================\n`);
 });

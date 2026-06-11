@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumi — Gestão de Beleza</title>
+    <title>Lumi — Premium Beauty & Aesthetics Studio Management</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -1098,8 +1098,8 @@
     <!-- Demo Banner -->
     <div id="demo-banner-wrapper" style="display: none;">
         <div class="demo-banner">
-            <span>✨ Você está no <strong>Modo de Demonstração (Restrito)</strong>. Seus dados não serão salvos de forma permanente.</span>
-            <button class="demo-banner-btn" onclick="handlePaywallCheckout()">Ativar Lumi Premium</button>
+            <span>✨ You are in <strong>Demo Mode (Restricted)</strong>. Your data will not be saved permanently.</span>
+            <button class="demo-banner-btn" onclick="handlePaywallCheckout()">Activate Lumi Premium</button>
         </div>
     </div>
 
@@ -1116,67 +1116,67 @@
                 <span style="font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: #2D2D2D;">Lumi B2B</span>
             </div>
             
-            <h2 class="auth-title" id="auth-card-title">Acesse sua Conta</h2>
-            <p class="auth-subtitle" id="auth-card-subtitle">Entre para gerenciar seu salão de forma inteligente</p>
+            <h2 class="auth-title" id="auth-card-title">Sign In to Your Account</h2>
+            <p class="auth-subtitle" id="auth-card-subtitle">Sign in to manage your studio intelligently</p>
             
             <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Entrar</button>
-                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Criar Conta</button>
+                <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
             </div>
             
             <!-- Login Form -->
             <form id="form-login" onsubmit="handleLogin(event)">
                 <div class="auth-form-group">
-                    <label class="auth-label">E-mail Comercial</label>
+                    <label class="auth-label">Business Email</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="mail"></i>
-                        <input type="email" id="login-email" class="auth-input" placeholder="seuemail@exemplo.com" required autocomplete="username">
+                        <input type="email" id="login-email" class="auth-input" placeholder="yourname@example.com" required autocomplete="username">
                     </div>
                 </div>
                 <div class="auth-form-group">
-                    <label class="auth-label">Senha</label>
+                    <label class="auth-label">Password</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="lock"></i>
                         <input type="password" id="login-password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
                     </div>
                 </div>
                 <button type="submit" class="auth-btn">
-                    <span>Entrar no Painel</span> <i data-lucide="arrow-right"></i>
+                    <span>Sign In to Dashboard</span> <i data-lucide="arrow-right"></i>
                 </button>
             </form>
             
             <!-- Register Form -->
             <form id="form-register" onsubmit="handleRegister(event)" style="display: none;">
                 <div class="auth-form-group">
-                    <label class="auth-label">E-mail Comercial</label>
+                    <label class="auth-label">Business Email</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="mail"></i>
-                        <input type="email" id="reg-email" class="auth-input" placeholder="contato@salao.com" required autocomplete="username">
+                        <input type="email" id="reg-email" class="auth-input" placeholder="contact@studio.com" required autocomplete="username">
                     </div>
                 </div>
                 <div class="auth-form-group">
-                    <label class="auth-label">Senha</label>
+                    <label class="auth-label">Password</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="lock"></i>
-                        <input type="password" id="reg-password" class="auth-input" placeholder="Mínimo 6 caracteres" required autocomplete="new-password">
+                        <input type="password" id="reg-password" class="auth-input" placeholder="Min. 6 characters" required autocomplete="new-password">
                     </div>
                 </div>
                 <div class="auth-form-group">
-                    <label class="auth-label">Nome do seu Negócio / Salão</label>
+                    <label class="auth-label">Studio / Salon Name</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="store"></i>
-                        <input type="text" id="reg-salon" class="auth-input" placeholder="Ex: Studio D'Beauté" required>
+                        <input type="text" id="reg-salon" class="auth-input" placeholder="e.g. Studio D'Beauté" required>
                     </div>
                 </div>
                 <div class="auth-form-group">
-                    <label class="auth-label">WhatsApp Comercial</label>
+                    <label class="auth-label">WhatsApp Number</label>
                     <div class="auth-input-wrapper">
                         <i data-lucide="phone"></i>
-                        <input type="tel" id="reg-whatsapp" class="auth-input" placeholder="Ex: 11999999999" required>
+                        <input type="tel" id="reg-whatsapp" class="auth-input" placeholder="e.g. 15551234567" required>
                     </div>
                 </div>
                 <button type="submit" class="auth-btn">
-                    <span>Criar Conta & Avançar</span> <i data-lucide="sparkles"></i>
+                    <span>Create Account & Continue</span> <i data-lucide="sparkles"></i>
                 </button>
             </form>
         </div>
@@ -1198,46 +1198,46 @@
             <div class="billing-progress">
                 <div class="billing-step completed">
                     <div class="billing-step-dot">✓</div>
-                    <span class="billing-step-text">Conta</span>
+                    <span class="billing-step-text">Account</span>
                 </div>
                 <div class="billing-step active">
                     <div class="billing-step-dot">2</div>
-                    <span class="billing-step-text">Ativação</span>
+                    <span class="billing-step-text">Activation</span>
                 </div>
                 <div class="billing-step">
                     <div class="billing-step-dot">3</div>
-                    <span class="billing-step-text">Brilhar</span>
+                    <span class="billing-step-text">Shine</span>
                 </div>
             </div>
             
-            <h2 class="auth-title">Ative sua Assinatura</h2>
-            <p class="auth-subtitle">Desbloqueie o poder completo do Lumi Premium para o seu negócio.</p>
+            <h2 class="auth-title">Activate Your Subscription</h2>
+            <p class="auth-subtitle">Unlock the full power of Lumi Premium for your business.</p>
             
             <div class="billing-tag-price">
-                <div class="price-title">Plano Único Completo</div>
-                <div class="price-val">R$ 47<span style="font-size: 16px; font-weight: 500;">/mês</span></div>
-                <div class="price-subtitle">Sem fidelidade • Cancele quando quiser</div>
+                <div class="price-title">Flat Rate All-Inclusive</div>
+                <div class="price-val">$19<span style="font-size: 16px; font-weight: 500;">/month</span></div>
+                <div class="price-subtitle">No contract • Cancel anytime</div>
             </div>
             
             <div class="billing-features-list">
-                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Agenda interativa e intuitiva</span></div>
-                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Fichas de Anamnese ilimitadas</span></div>
-                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Mensagens de WhatsApp automatizadas</span></div>
-                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Fluxo de Caixa e Controle de Estoque</span></div>
-                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Migração Grátis de outros sistemas</span></div>
+                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Interactive & intuitive schedule</span></div>
+                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Unlimited digital consultation forms</span></div>
+                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Automated WhatsApp notifications</span></div>
+                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Full bookkeeping & inventory control</span></div>
+                <div class="billing-feature-item"><i data-lucide="check-circle-2"></i> <span>Free 1-click migration from other systems</span></div>
             </div>
             
             <button class="auth-btn" onclick="handlePaywallCheckout()">
-                <span>Ativar Lumi Premium</span> <i data-lucide="credit-card"></i>
+                <span>Activate Lumi Premium</span> <i data-lucide="credit-card"></i>
             </button>
             
             <a class="demo-link-btn" onclick="enterRestrictedDemo()">
-                Entrar em Modo de Demonstração (Restrito)
+                Enter Demo Mode (Restricted)
             </a>
             
             <div style="margin-top: 25px; border-top: 1px solid rgba(201, 168, 76, 0.15); padding-top: 15px;">
                 <a onclick="handleAuthLogout()" style="font-size: 12px; color: #7A7A7A; text-decoration: none; cursor: pointer;">
-                    <i data-lucide="log-out" style="width:12px; display:inline-block; vertical-align:middle;"></i> Sair da Conta
+                    <i data-lucide="log-out" style="width:12px; display:inline-block; vertical-align:middle;"></i> Log Out
                 </a>
             </div>
         </div>
@@ -1249,18 +1249,18 @@
             <div class="premium-lock-icon-circle" style="width: 60px; height: 60px; margin: 0 auto 20px;">
                 <i data-lucide="lock" style="width: 32px; height: 32px;"></i>
             </div>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #2D2D2D; margin-bottom: 12px; font-weight: 700;">Funcionalidade Premium 🔒</h2>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #2D2D2D; margin-bottom: 12px; font-weight: 700;">Premium Feature 🔒</h2>
             <p style="font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 24px;">
-                A gravação de novos agendamentos, clientes ou lançamentos de caixa está desativada no Modo de Demonstração.
+                Saving new appointments, clients, or financial transactions is disabled in Demo Mode.
                 <br><br>
-                Assine o <strong>Lumi Premium por apenas R$ 47/mês</strong> para salvar seus dados com segurança e decolar o faturamento do seu estúdio!
+                Subscribe to <strong>Lumi Premium for only $19/month</strong> to save your data securely and boost your studio's revenue!
             </p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 <button class="auth-btn" style="margin-top: 0;" onclick="closeDemoLockModal(); handlePaywallCheckout()">
-                    Ativar Meu Lumi Premium — R$ 47/mês
+                    Activate My Lumi Premium — $19/month
                 </button>
                 <button class="btn btn-outline" style="border-radius: 12px; padding: 12px; border: 1px solid #CCC; background: white;" onclick="closeDemoLockModal()">
-                    Continuar Experimentando
+                    Continue Trying
                 </button>
             </div>
         </div>
@@ -1295,24 +1295,24 @@
                 <span id="sidebar-studio-name">Lumi</span>
             </div>
             <nav>
-                <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Visão Geral</span></div>
-                <div class="nav-item" onclick="showView('agenda')"><i data-lucide="calendar"></i><span>Agenda</span></div>
+                <div class="nav-item active" onclick="showView('dashboard')"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></div>
+                <div class="nav-item" onclick="showView('agenda')"><i data-lucide="calendar"></i><span>Schedule</span></div>
                 
-                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Gestão</div>
-                <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>Meus Clientes</span></div>
-                <div class="nav-item" onclick="showView('servicos')"><i data-lucide="scissors"></i><span>Procedimentos</span></div>
-                <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Estoque & Materiais</span></div>
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Management</div>
+                <div class="nav-item" onclick="showView('clientes')"><i data-lucide="users"></i><span>My Clients</span></div>
+                <div class="nav-item" onclick="showView('servicos')"><i data-lucide="scissors"></i><span>Services</span></div>
+                <div class="nav-item" onclick="showView('estoque')"><i data-lucide="package"></i><span>Inventory & Materials</span></div>
                 
-                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Financeiro</div>
-                <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Fluxo de Caixa</span></div>
-                <div class="nav-item" onclick="openModal('nova-transacao', {tipo: 'entrada'})"><i data-lucide="shopping-bag"></i><span>Vendas (Manual)</span></div>
-                <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="minus-circle"></i><span>Lançar Despesa</span></div>
-                <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Relatórios</span></div>
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Financial</div>
+                <div class="nav-item" onclick="showView('caixa')"><i data-lucide="wallet"></i><span>Cash Flow</span></div>
+                <div class="nav-item" onclick="openModal('nova-transacao', {tipo: 'entrada'})"><i data-lucide="shopping-bag"></i><span>Sales (Manual)</span></div>
+                <div class="nav-item" onclick="openModal('nova-transacao')"><i data-lucide="minus-circle"></i><span>Log Expense</span></div>
+                <div class="nav-item" onclick="gerarRelatorioMes()"><i data-lucide="pie-chart"></i><span>Reports</span></div>
                 
-                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Negócio</div>
-                <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Configurações</span></div>
-                <div class="nav-item" onclick="toast('Módulo Marketing em breve')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
-                <div class="nav-item" onclick="handleAuthLogout()" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #EEE; padding-top: 15px;"><i data-lucide="log-out"></i><span>Sair da Conta</span></div>
+                <div style="margin: 15px 0 5px 20px; font-size: 11px; text-transform: uppercase; color: #BBB; font-weight: 700; letter-spacing: 1px;">Business</div>
+                <div class="nav-item" onclick="showView('config')"><i data-lucide="settings"></i><span>Settings</span></div>
+                <div class="nav-item" onclick="toast('Marketing module coming soon')"><i data-lucide="megaphone"></i><span>Marketing</span></div>
+                <div class="nav-item" onclick="handleAuthLogout()" style="color: var(--danger); margin-top: 20px; border-top: 1px solid #EEE; padding-top: 15px;"><i data-lucide="log-out"></i><span>Sign Out</span></div>
             </nav>
         </aside>
 
@@ -1366,17 +1366,17 @@
             users: [], // Lista de usuários registrados
             session: null, // Sessão ativa: { loggedIn: false, currentEmail: '', isDemo: false }
             config: {
-                nomeClinica: 'Lumi Beleza',
-                whatsapp: '5511999999999',
+                nomeClinica: 'Lumi Beauty',
+                whatsapp: '15559999999',
                 apiWebhook: '',
-                horarios: '08:00 - 20:00',
-                isSubscribed: false, // Assinatura desativada por padrão para novos cadastros
+                horarios: '08:00 AM - 08:00 PM',
+                isSubscribed: false, // Subscription disabled by default for new registrations
                 templates: {
-                    confirmacao: "Olá [nome]! 😊 Seu agendamento foi confirmado para [dia] às [hora] — [servico]. Te esperamos! 💖",
-                    aniversario: "Parabéns, [nome]! 🎂✨ No seu mês, você ganhou um presente especial: 15% de desconto em qualquer procedimento! Vamos agendar?",
-                    lembrete: "Olá [nome]! Passando para lembrar do seu horário amanhã às [hora]. Até logo! 😊",
-                    avaliacao: "Olá [nome]! Adoramos te atender. Conte-nos o que achou da sua experiência: [link]",
-                    ficha: "Olá [nome]! ✨ Para agilizarmos seu atendimento, poderia preencher sua ficha de anamnese rapidinho neste link? [link]"
+                    confirmacao: "Hello [nome]! 😊 Your appointment has been confirmed for [dia] at [hora] — [servico]. We look forward to seeing you! 💖",
+                    aniversario: "Happy Birthday, [nome]! 🎂✨ To celebrate, you've received a special gift: 15% off any procedure this month! Shall we schedule?",
+                    lembrete: "Hello [nome]! Just reminding you of your appointment tomorrow at [hora]. See you soon! 😊",
+                    avaliacao: "Hello [nome]! We loved serving you. Please let us know how your experience was: [link]",
+                    ficha: "Hello [nome]! ✨ To speed up your check-in, could you please fill out your consultation form at this link? [link]"
                 }
             }
         };
@@ -1407,14 +1407,14 @@
                         }
                     };
                 } catch (e) {
-                    console.error("Erro ao carregar lumi_data:", e);
+                    console.error("Error loading lumi_data:", e);
                 }
             }
 
-            // Sincronizar lista de usuários no estado
+            // Synchronize user list in state
             state.users = globalUsers ? JSON.parse(globalUsers) : [];
 
-            // Se não houver sessão ativa
+            // If there is no active session
             if (!state.session || !state.session.loggedIn) {
                 state.session = { loggedIn: false, currentEmail: '', isDemo: false };
                 showAuthWall();
@@ -1431,17 +1431,17 @@
                     if (!parsedData.config) parsedData.config = {};
                     state = parsedData;
                 } else {
-                    // Usuário novo! Inicializar com mock data elegante para onboarding
+                    // New user! Initialize with elegant mock data for onboarding
                     state.clientes = [
-                        { id: 'c1', nome: 'Ana Silva', whatsapp: '5511988887777', fichaCompleta: true, ultimaVisita: '2024-04-10', totalVisitas: 5, alergias: 'Nenhuma', linkId: 'ana123', pontos: 150, nascimento: '1995-04-23' },
+                        { id: 'c1', nome: 'Ana Silva', whatsapp: '5511988887777', fichaCompleta: true, ultimaVisita: '2024-04-10', totalVisitas: 5, alergias: 'None', linkId: 'ana123', pontos: 150, nascimento: '1995-04-23' },
                         { id: 'c2', nome: 'Beatriz Costa', whatsapp: '5511977776666', fichaCompleta: false, ultimaVisita: '2024-03-15', totalVisitas: 2, linkId: 'bea456', pontos: 40, nascimento: '1990-10-12' },
                         { id: 'c3', nome: 'Carla Souza', whatsapp: '5511966665555', fichaCompleta: true, ultimaVisita: '2024-01-20', totalVisitas: 12, linkId: 'car789', pontos: 320, nascimento: '1988-05-05' },
                         { id: 'c4', nome: 'Daniela Lima', whatsapp: '5511955554444', fichaCompleta: false, ultimaVisita: '2024-04-20', totalVisitas: 1, linkId: 'dan012', pontos: 10, nascimento: '1992-12-25' }
                     ];
                     state.servicos = [
-                        { id: 's1', nome: 'Sobrancelha', duracao: 30, preco: 45, pontos: 10 },
-                        { id: 's2', nome: 'Limpeza de Pele', duracao: 60, preco: 120, pontos: 30 },
-                        { id: 's3', nome: 'Design + Henna', duracao: 45, preco: 70, pontos: 15 }
+                        { id: 's1', nome: 'Eyebrow Shaping', duracao: 30, preco: 13, pontos: 10 },
+                        { id: 's2', nome: 'Facial Cleansing', duracao: 60, preco: 35, pontos: 30 },
+                        { id: 's3', nome: 'Brow Design + Henna', duracao: 45, preco: 20, pontos: 15 }
                     ];
                     state.profissionais = [
                         { id: 'p1', nome: 'Fernanda' },
@@ -1453,21 +1453,21 @@
                         { id: 'a3', clienteId: 'c4', servicoId: 's3', data: hoje, hora: '14:00', status: 'pendente', profissionalId: 'p1' }
                     ];
                     state.produtos = [
-                        { id: 'pr1', nome: 'Cera Mel', qtd: 5, min: 10, un: 'un', cat: 'Depilação' },
-                        { id: 'pr2', nome: 'Álcool 70%', qtd: 2, min: 5, un: 'litros', cat: 'Higiene' },
-                        { id: 'pr3', nome: 'Máscara Argila', qtd: 15, min: 5, un: 'un', cat: 'Limpeza' }
+                        { id: 'pr1', nome: 'Honey Wax', qtd: 5, min: 10, un: 'pcs', cat: 'Waxing' },
+                        { id: 'pr2', nome: 'Rubbing Alcohol', qtd: 2, min: 5, un: 'liters', cat: 'Sanitation' },
+                        { id: 'pr3', nome: 'Clay Mask', qtd: 15, min: 5, un: 'pcs', cat: 'Facial' }
                     ];
                     state.transacoes = [
-                        { id: 't1', tipo: 'entrada', valor: 45, desc: 'Sobrancelha - Ana Silva', data: hoje, fpag: 'Pix' },
-                        { id: 't2', tipo: 'saida', valor: 200, desc: 'Aluguel Semanal', data: hoje, fpag: 'Dinheiro' }
+                        { id: 't1', tipo: 'entrada', valor: 13, desc: 'Eyebrow Shaping - Ana Silva', data: hoje, fpag: 'Zelle' },
+                        { id: 't2', tipo: 'saida', valor: 60, desc: 'Weekly Rent', data: hoje, fpag: 'Cash' }
                     ];
                     state.avaliacoes = [];
                     
                     const u = state.users.find(usr => usr.email === state.session.currentEmail);
                     if (u) {
                         if (!state.config) state.config = {};
-                        state.config.nomeClinica = u.nomeClinica || 'Lumi Beleza';
-                        state.config.whatsapp = u.whatsapp || '5511999999999';
+                        state.config.nomeClinica = u.nomeClinica || 'Lumi Beauty';
+                        state.config.whatsapp = u.whatsapp || '15559999999';
                         state.config.isSubscribed = u.isSubscribed || false;
                         state.config.subscriptionId = u.subscriptionId || '';
                         state.config.subscriptionDate = u.subscriptionDate || '';
@@ -1561,8 +1561,8 @@
 
             container.innerHTML = `
                 <header>
-                    <h1>Agenda Semanal</h1>
-                    <button class="btn btn-primary" onclick="showView('agenda')">Voltar p/ Diária</button>
+                    <h1>Weekly Schedule</h1>
+                    <button class="btn btn-primary" onclick="showView('agenda')">Back to Daily</button>
                 </header>
                 <div class="card" style="overflow-x: auto;">
                     <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; min-width: 800px;">
@@ -1572,7 +1572,7 @@
                             return `
                                 <div style="border-right: 1px solid #EEE; padding-right: 10px;">
                                     <div style="text-align: center; font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid var(--primary);">
-                                        ${d.toLocaleDateString('pt-BR', {weekday: 'short'})}<br>
+                                        ${d.toLocaleDateString('en-US', {weekday: 'short'})}<br>
                                         <span style="font-size: 12px; color: var(--text-light)">${d.getDate()}</span>
                                     </div>
                                     <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -1588,7 +1588,7 @@
 
         // --- DASHBOARD ---
         function renderDashboard(container) {
-            const studioName = state.config.nomeClinica || 'Bem-vinda';
+            const studioName = state.config.nomeClinica || 'Welcome';
             
             // Helper para pegar a data local YYYY-MM-DD
             const getHojeLocal = () => {
@@ -1611,7 +1611,7 @@
                 <div class="topbar">
                     <div class="search-bar">
                         <i data-lucide="search" style="width: 18px;"></i>
-                        <input type="text" placeholder="Busque por clientes, serviços...">
+                        <input type="text" placeholder="Search clients, services...">
                     </div>
                     <div class="user-profile">
                         <div class="avatar" style="width: 35px; height: 35px; margin: 0; font-size: 14px;">${studioName[0]}</div>
@@ -1621,8 +1621,8 @@
 
                 <header style="margin-bottom: 24px;">
                     <div>
-                        <h1>Olá, ${studioName}! ✨</h1>
-                        <p style="color: var(--text-light); font-size: 14px;">Tenha um ótimo dia de atendimentos.</p>
+                        <h1>Hello, ${studioName}! ✨</h1>
+                        <p style="color: var(--text-light); font-size: 14px;">Have a great day of appointments.</p>
                     </div>
                 </header>
 
@@ -1630,19 +1630,19 @@
                 <div class="quick-actions">
                     <button class="qa-btn" style="background: var(--pastel-blue);" onclick="openModal('novo-agendamento')">
                         <div class="qa-icon" style="color: #1E88E5;"><i data-lucide="calendar-plus"></i></div>
-                        Novo<br>Agendamento
+                        New<br>Appointment
                     </button>
                     <button class="qa-btn" style="background: var(--pastel-pink);" onclick="openModal('novo-cliente')">
                         <div class="qa-icon" style="color: #D81B60;"><i data-lucide="user-plus"></i></div>
-                        Novo<br>Cliente
+                        New<br>Client
                     </button>
                     <button class="qa-btn" style="background: var(--pastel-green);" onclick="showView('caixa')">
                         <div class="qa-icon" style="color: #43A047;"><i data-lucide="wallet"></i></div>
-                        Fluxo de<br>Caixa
+                        Cash<br>Flow
                     </button>
                     <button class="qa-btn" style="background: var(--pastel-orange);" onclick="openModal('nova-transacao')">
                         <div class="qa-icon" style="color: #F57C00;"><i data-lucide="minus-circle"></i></div>
-                        Lançar<br>Despesa
+                        Log<br>Expense
                     </button>
                 </div>
 
@@ -1650,42 +1650,42 @@
                     
                     <!-- Coluna Principal -->
                     <div>
-                        <h3 style="margin-bottom: 16px; font-size: 16px;">Saúde do Negócio</h3>
+                        <h3 style="margin-bottom: 16px; font-size: 16px;">Business Health</h3>
                         <div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 24px;">
                             <div class="card stat-card" style="border-left: 4px solid var(--success);">
                                 <i data-lucide="trending-up" class="stat-icon" style="color: var(--success)"></i>
-                                <span class="stat-value" style="color: var(--success)">R$ ${receitaHoje.toFixed(2)}</span>
-                                <span class="stat-label">Receitas Hoje</span>
+                                <span class="stat-value" style="color: var(--success)">$ ${receitaHoje.toFixed(2)}</span>
+                                <span class="stat-label">Today's Revenue</span>
                             </div>
                             <div class="card stat-card" style="border-left: 4px solid var(--danger);">
                                 <i data-lucide="trending-down" class="stat-icon" style="color: var(--danger)"></i>
-                                <span class="stat-value" style="color: var(--danger)">R$ ${despesaHoje.toFixed(2)}</span>
-                                <span class="stat-label">Despesas Hoje</span>
+                                <span class="stat-value" style="color: var(--danger)">$ ${despesaHoje.toFixed(2)}</span>
+                                <span class="stat-label">Today's Expenses</span>
                             </div>
                             <div class="card stat-card" style="border-left: 4px solid var(--primary);">
                                 <i data-lucide="clock" class="stat-icon" style="color: var(--primary)"></i>
                                 <span class="stat-value">${agendamentosHoje.length}</span>
-                                <span class="stat-label">Agendamentos Hoje</span>
+                                <span class="stat-label">Today's Appointments</span>
                             </div>
                             <div class="card stat-card" onclick="showView('estoque')" style="cursor:pointer; border-left: 4px solid var(--warning);">
                                 <i data-lucide="package" class="stat-icon" style="color: var(--warning)"></i>
                                 <span class="stat-value">${estoqueBaixo}</span>
-                                <span class="stat-label">Itens com Estoque Baixo</span>
+                                <span class="stat-label">Low Stock Items</span>
                             </div>
                         </div>
 
                         <div class="card" style="margin-bottom: 24px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                <h3 style="color: var(--text);">🏆 Performance de Serviços (Mês)</h3>
+                                <h3 style="color: var(--text);">🏆 Service Performance (Month)</h3>
                             </div>
                             <div style="overflow-x: auto;">
                                 <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                                     <thead>
                                         <tr style="text-align: left; border-bottom: 1px solid var(--border); color: var(--text-light);">
-                                            <th style="padding: 12px 5px;">Serviço</th>
-                                            <th style="padding: 12px 5px; text-align: center;">Qtd</th>
-                                            <th style="padding: 12px 5px; text-align: right;">Custo</th>
-                                            <th style="padding: 12px 5px; text-align: right;">Lucro</th>
+                                            <th style="padding: 12px 5px;">Service</th>
+                                            <th style="padding: 12px 5px; text-align: center;">Qty</th>
+                                            <th style="padding: 12px 5px; text-align: right;">Cost</th>
+                                            <th style="padding: 12px 5px; text-align: right;">Profit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1713,10 +1713,10 @@
                                                 <tr style="border-bottom: 1px solid #FAFAFA;">
                                                     <td style="padding: 12px 5px; font-weight: 500;">${s.nome}</td>
                                                     <td style="padding: 12px 5px; text-align: center;">${s.count}</td>
-                                                    <td style="padding: 12px 5px; text-align: right; color: var(--text-light);">R$ ${s.custo.toFixed(2)}</td>
-                                                    <td style="padding: 12px 5px; text-align: right; color: var(--success); font-weight: 600;">R$ ${(s.receita - s.custo).toFixed(2)}</td>
+                                                    <td style="padding: 12px 5px; text-align: right; color: var(--text-light);">$ ${s.custo.toFixed(2)}</td>
+                                                    <td style="padding: 12px 5px; text-align: right; color: var(--success); font-weight: 600;">$ ${(s.receita - s.custo).toFixed(2)}</td>
                                                 </tr>
-                                            `).join('') || '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #999;">Sem dados este mês.</td></tr>';
+                                            `).join('') || '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #999;">No data this month.</td></tr>';
                                         })()}
                                     </tbody>
                                 </table>
@@ -1727,11 +1727,11 @@
                     <!-- Coluna Direita -->
                     <div>
                         <div class="card" style="margin-bottom: 24px; padding: 20px;">
-                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="calendar" style="width: 18px; color: var(--primary);"></i> Calendário</h3>
+                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="calendar" style="width: 18px; color: var(--primary);"></i> Calendar</h3>
                             <div style="background: var(--bg); border-radius: 12px; padding: 15px; text-align: center; border: 1px solid var(--border);">
-                                <div style="font-weight: 600; margin-bottom: 15px; font-size: 14px;">${new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'}).toUpperCase()}</div>
+                                <div style="font-weight: 600; margin-bottom: 15px; font-size: 14px;">${new Date().toLocaleDateString('en-US', {month:'long', year:'numeric'}).toUpperCase()}</div>
                                 <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-light); margin-bottom: 8px;">
-                                    <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+                                    <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
                                 </div>
                                 <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 12px;">
                                     ${Array.from({length: 31}, (_, i) => {
@@ -1743,7 +1743,7 @@
                         </div>
 
                         <div class="card">
-                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="cake" style="width: 18px; color: var(--pastel-pink);"></i> Aniversariantes do Mês</h3>
+                            <h3 style="margin-bottom: 16px; font-size: 15px; display: flex; align-items: center; gap: 8px;"><i data-lucide="cake" style="width: 18px; color: var(--pastel-pink);"></i> Birthdays of the Month</h3>
                             <div class="data-list">
                                 ${state.clientes.filter(c => c.nascimento && c.nascimento.split('-')[1] === (new Date().getMonth() + 1).toString().padStart(2, '0')).map(c => {
                                     const isToday = c.nascimento.slice(5) === hojeMMDD;
@@ -1751,13 +1751,13 @@
                                     <div class="data-item" style="padding: 12px 0; border-bottom: 1px solid var(--border); border-radius: 0; background: transparent;">
                                         <div class="item-info">
                                             <div class="item-title" style="font-size: 13px;">${c.nome} ${isToday ? '🎉' : ''}</div>
-                                            <div class="item-subtitle" style="font-size: 11px;">Dia ${c.nascimento.split('-')[2]}</div>
+                                            <div class="item-subtitle" style="font-size: 11px;">Day ${c.nascimento.split('-')[2]}</div>
                                         </div>
                                         <button class="btn btn-ghost" style="padding: 6px 10px; font-size: 11px; color: var(--primary);" onclick="enviarWhats('${c.whatsapp}', 'aniversario', {nome: '${c.nome}'})">
                                             <i data-lucide="message-circle" style="width: 14px;"></i>
                                         </button>
                                     </div>
-                                `}).join('') || '<p style="color: var(--text-light); font-size: 13px;">Nenhum aniversariante neste mês.</p>'}
+                                `}).join('') || '<p style="color: var(--text-light); font-size: 13px;">No birthdays this month.</p>'}
                             </div>
                         </div>
                     </div>
@@ -1774,17 +1774,17 @@
             
             container.innerHTML = `
                 <header>
-                    <h1>Agenda Diária</h1>
+                    <h1>Daily Schedule</h1>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline" onclick="showView('agenda-semanal')"><i data-lucide="columns"></i> Semanal</button>
-                        <button class="btn btn-primary" onclick="openModal('novo-agendamento')"><i data-lucide="plus"></i> Novo Horário</button>
+                        <button class="btn btn-outline" onclick="showView('agenda-semanal')"><i data-lucide="columns"></i> Weekly</button>
+                        <button class="btn btn-primary" onclick="openModal('novo-agendamento')"><i data-lucide="plus"></i> New Appointment</button>
                     </div>
                 </header>
 
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <button class="btn btn-ghost" onclick="mudarData(-1)"><i data-lucide="chevron-left"></i></button>
-                        <span style="font-weight: 700;">${agendaData.toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'})}</span>
+                        <span style="font-weight: 700;">${agendaData.toLocaleDateString('en-US', {day:'numeric', month:'long', year:'numeric'})}</span>
                         <button class="btn btn-ghost" onclick="mudarData(1)"><i data-lucide="chevron-right"></i></button>
                     </div>
 
@@ -1813,7 +1813,7 @@
                 block.className = 'appointment-block';
                 block.style.top = top + 'px';
                 block.style.height = duracao + 'px';
-                block.innerHTML = `<strong>${a.hora}</strong> ${c ? c.nome : 'Cli'} - ${s ? s.nome : 'Srv'}`;
+                block.innerHTML = `<strong>${a.hora}</strong> ${c ? c.nome : 'Client'} - ${s ? s.nome : 'Service'}`;
                 block.onclick = (e) => { e.stopPropagation(); openModal('detalhe-agendamento', a); };
                 slots.appendChild(block);
             });
@@ -1829,14 +1829,14 @@
         function renderClientes(container) {
             container.innerHTML = `
                 <header>
-                    <h1>Clientes</h1>
-                    <button class="btn btn-primary" onclick="openModal('novo-cliente')"><i data-lucide="user-plus"></i> Novo Cadastro</button>
+                    <h1>Clients</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-cliente')"><i data-lucide="user-plus"></i> Add Client</button>
                 </header>
 
                 <div class="card" style="margin-bottom: 24px;">
                     <div style="display: flex; gap: 12px; align-items: center;">
                         <i data-lucide="search" style="color: var(--text-light)"></i>
-                        <input type="text" class="form-control" placeholder="Buscar por nome ou WhatsApp..." onkeyup="filterClientes(this.value)" style="border: none;">
+                        <input type="text" class="form-control" placeholder="Search by name or WhatsApp..." onkeyup="filterClientes(this.value)" style="border: none;">
                     </div>
                 </div>
 
@@ -1860,12 +1860,12 @@
                         <div class="item-info">
                             <div class="item-title">
                                 ${c.nome} 
-                                ${isAtrasado ? '<span style="color: var(--danger); font-size: 10px;">🔴 +60 dias</span>' : ''}
+                                ${isAtrasado ? '<span style="color: var(--danger); font-size: 10px;">🔴 +60 days</span>' : ''}
                             </div>
-                            <div class="item-subtitle">${c.whatsapp} • ${c.totalVisitas} visitas</div>
+                            <div class="item-subtitle">${c.whatsapp} • ${c.totalVisitas} visits</div>
                         </div>
                         <div>
-                            ${c.fichaCompleta ? '<span class="badge badge-done">Ficha OK</span>' : '<span class="badge badge-pending">Incompleta</span>'}
+                            ${c.fichaCompleta ? '<span class="badge badge-done">Profile OK</span>' : '<span class="badge badge-pending">Incomplete</span>'}
                         </div>
                     </div>
                 `;
@@ -1876,8 +1876,8 @@
         function renderServicos(container) {
             container.innerHTML = `
                 <header>
-                    <h1>Serviços</h1>
-                    <button class="btn btn-primary" onclick="openModal('novo-servico')"><i data-lucide="plus"></i> Novo Serviço</button>
+                    <h1>Services</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-servico')"><i data-lucide="plus"></i> New Service</button>
                 </header>
 
                 <div class="card">
@@ -1889,7 +1889,7 @@
                                 </div>
                                 <div class="item-info">
                                     <div class="item-title">${s.nome}</div>
-                                    <div class="item-subtitle">${s.duracao} min • R$ ${s.preco.toFixed(2)}</div>
+                                    <div class="item-subtitle">${s.duracao} min • $ ${s.preco.toFixed(2)}</div>
                                 </div>
                                 <div style="display: flex; gap: 8px;">
                                     <button class="btn btn-ghost" onclick="excluirServico('${s.id}')" style="color: var(--danger)">
@@ -1910,55 +1910,61 @@
 
             container.innerHTML = `
                 <header>
-                    <h1>Caixa</h1>
+                    <h1>Finance</h1>
                     <div style="display: flex; gap: 12px;">
-                        <button class="btn btn-outline" onclick="gerarRelatorioMes()"><i data-lucide="file-text"></i> Relatório do Mês</button>
-                        <button class="btn btn-primary" onclick="openModal('nova-transacao')"><i data-lucide="plus"></i> Movimentação</button>
+                        <button class="btn btn-outline" onclick="gerarRelatorioMes()"><i data-lucide="file-text"></i> Monthly Report</button>
+                        <button class="btn btn-primary" onclick="openModal('nova-transacao')"><i data-lucide="plus"></i> Transaction</button>
                     </div>
                 </header>
 
                 <div class="stats-grid">
                     <div class="card stat-card" style="border-left-color: var(--success)">
-                        <span class="stat-label">Saldo Atual</span>
-                        <span class="stat-value" style="color: var(--success)">R$ ${(entradas - saidas).toFixed(2)}</span>
+                        <span class="stat-label">Current Balance</span>
+                        <span class="stat-value" style="color: var(--success)">$ ${(entradas - saidas).toFixed(2)}</span>
                     </div>
                     <div class="card stat-card">
-                        <span class="stat-label">Entradas (Mês)</span>
-                        <span class="stat-value">R$ ${entradas.toFixed(2)}</span>
+                        <span class="stat-label">Income (Month)</span>
+                        <span class="stat-value">$ ${entradas.toFixed(2)}</span>
                     </div>
                     <div class="card stat-card">
-                        <span class="stat-label">Saídas (Mês)</span>
-                        <span class="stat-value" style="color: var(--danger)">R$ ${saidas.toFixed(2)}</span>
+                        <span class="stat-label">Expenses (Month)</span>
+                        <span class="stat-value" style="color: var(--danger)">$ ${saidas.toFixed(2)}</span>
                     </div>
                     <div class="card stat-card">
-                        <span class="stat-label">Ticket Médio</span>
-                        <span class="stat-value">R$ ${state.agendamentos.filter(a => a.status === 'realizado').length ? (entradas / state.agendamentos.filter(a => a.status === 'realizado').length).toFixed(2) : '0.00'}</span>
+                        <span class="stat-label">Average Ticket</span>
+                        <span class="stat-value">$ ${state.agendamentos.filter(a => a.status === 'realizado').length ? (entradas / state.agendamentos.filter(a => a.status === 'realizado').length).toFixed(2) : '0.00'}</span>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3>Movimentações Recentes</h3>
+                    <h3>Recent Transactions</h3>
                     <div class="data-list">
-                        ${state.transacoes.sort((a,b) => new Date(b.data) - new Date(a.data)).map(t => `
-                            <div class="data-item">
-                                <div style="margin-right: 16px; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
-                                    <i data-lucide="${t.tipo === 'entrada' ? 'arrow-up-circle' : 'arrow-down-circle'}"></i>
+                        ${state.transacoes.sort((a,b) => new Date(b.data) - new Date(a.data)).map(t => {
+                            let methodDisplay = t.fpag;
+                            if (methodDisplay === 'Dinheiro') methodDisplay = 'Cash';
+                            else if (methodDisplay === 'Pix') methodDisplay = 'Zelle';
+                            else if (methodDisplay === 'Outros') methodDisplay = 'Other';
+                            return `
+                                <div class="data-item">
+                                    <div style="margin-right: 16px; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
+                                        <i data-lucide="${t.tipo === 'entrada' ? 'arrow-up-circle' : 'arrow-down-circle'}"></i>
+                                    </div>
+                                    <div class="item-info">
+                                        <div class="item-title">${t.desc}</div>
+                                        <div class="item-subtitle">${new Date(t.data).toLocaleDateString('en-US')} • ${methodDisplay}</div>
+                                    </div>
+                                    <div style="font-weight: 700; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
+                                        ${t.tipo === 'entrada' ? '+' : '-'} $ ${t.valor.toFixed(2)}
+                                    </div>
+                                    <div style="display: flex; gap: 8px; margin-left: 16px;">
+                                        ${t.tipo === 'saida' ? `
+                                            <button class="btn btn-ghost" onclick="openModal('nova-transacao', ${JSON.stringify(t).replace(/"/g, '&quot;')})" style="padding: 5px; color: var(--primary)"><i data-lucide="edit" style="width: 16px;"></i></button>
+                                            <button class="btn btn-ghost" onclick="excluirTransacao('${t.id}')" style="padding: 5px; color: var(--danger)"><i data-lucide="trash-2" style="width: 16px;"></i></button>
+                                        ` : ''}
+                                    </div>
                                 </div>
-                                <div class="item-info">
-                                    <div class="item-title">${t.desc}</div>
-                                    <div class="item-subtitle">${new Date(t.data).toLocaleDateString('pt-BR')} • ${t.fpag}</div>
-                                </div>
-                                <div style="font-weight: 700; color: ${t.tipo === 'entrada' ? 'var(--success)' : 'var(--danger)'}">
-                                    ${t.tipo === 'entrada' ? '+' : '-'} R$ ${t.valor.toFixed(2)}
-                                </div>
-                                <div style="display: flex; gap: 8px; margin-left: 16px;">
-                                    ${t.tipo === 'saida' ? `
-                                        <button class="btn btn-ghost" onclick="openModal('nova-transacao', ${JSON.stringify(t).replace(/"/g, '&quot;')})" style="padding: 5px; color: var(--primary)"><i data-lucide="edit" style="width: 16px;"></i></button>
-                                        <button class="btn btn-ghost" onclick="excluirTransacao('${t.id}')" style="padding: 5px; color: var(--danger)"><i data-lucide="trash-2" style="width: 16px;"></i></button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -1968,8 +1974,8 @@
         function renderEstoque(container) {
             container.innerHTML = `
                 <header>
-                    <h1>Estoque</h1>
-                    <button class="btn btn-primary" onclick="openModal('novo-produto')"><i data-lucide="plus"></i> Novo Produto</button>
+                    <h1>Inventory</h1>
+                    <button class="btn btn-primary" onclick="openModal('novo-produto')"><i data-lucide="plus"></i> New Product</button>
                 </header>
 
                 <div class="card">
@@ -1982,11 +1988,11 @@
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                                         <div class="item-info">
                                             <div class="item-title">${p.nome} <span class="badge" style="background: #EEE; color: #666; margin-left: 8px;">${p.cat}</span></div>
-                                            <div class="item-subtitle">${p.qtd} ${p.un} no estoque (mín: ${p.min})</div>
+                                            <div class="item-subtitle">${p.qtd} ${p.un} in stock (min: ${p.min})</div>
                                         </div>
                                         <div style="display: flex; gap: 8px;">
-                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px; border-color: var(--success); color: var(--success);" onclick="reporEstoque('${p.id}')">Repor</button>
-                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="darBaixaEstoque('${p.id}')">Dar Baixa</button>
+                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px; border-color: var(--success); color: var(--success);" onclick="reporEstoque('${p.id}')">Restock</button>
+                                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="darBaixaEstoque('${p.id}')">Reduce</button>
                                         </div>
                                     </div>
                                     <div class="stock-bar-bg">
@@ -2003,35 +2009,35 @@
         // --- CONFIGURAÇÕES ---
         function renderConfig(container) {
             container.innerHTML = `
-                <header><h1>Configurações</h1></header>
+                <header><h1>Settings</h1></header>
                 <div class="dashboard-content" style="grid-template-columns: 1fr 1fr">
                     <div class="card">
-                        <h3 style="margin-bottom: 20px;">Meu Negócio</h3>
+                        <h3 style="margin-bottom: 20px;">My Business</h3>
                         <div class="form-group">
-                            <label>Nome da Clínica</label>
+                            <label>Clinic / Salon Name</label>
                             <input type="text" class="form-control" id="cfg-nome" value="${state.config.nomeClinica}">
                         </div>
                         <div class="form-group">
-                            <label>WhatsApp Comercial</label>
+                            <label>Business WhatsApp</label>
                             <input type="text" class="form-control" id="cfg-whats" value="${state.config.whatsapp}">
                         </div>
-                        <button class="btn btn-primary" onclick="salvarConfigGeral()">Salvar Mudanças</button>
+                        <button class="btn btn-primary" onclick="salvarConfigGeral()">Save Changes</button>
                     </div>
 
                     <div class="card">
-                        <h3 style="margin-bottom: 20px;">Templates de Mensagem 💬</h3>
+                        <h3 style="margin-bottom: 20px;">Message Templates 💬</h3>
                         ${Object.keys(state.config.templates).map(key => `
                             <div class="form-group">
                                 <label style="text-transform: capitalize;">${key}</label>
                                 <textarea class="form-control" id="tpl-${key}" style="height: 80px; font-size: 13px;">${state.config.templates[key]}</textarea>
                             </div>
                         `).join('')}
-                        <button class="btn btn-outline" style="width: 100%" onclick="salvarTemplates()">Salvar Templates</button>
+                        <button class="btn btn-outline" style="width: 100%" onclick="salvarTemplates()">Save Templates</button>
                     </div>
 
                     <div class="card">
                         <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="credit-card" style="color: var(--primary);"></i> Assinatura Lumi
+                            <i data-lucide="credit-card" style="color: var(--primary);"></i> Lumi Subscription
                         </h3>
                         <div style="background: ${state.config.isSubscribed ? 'linear-gradient(135deg, rgba(201, 168, 76, 0.1), rgba(166, 138, 61, 0.05))' : '#FFF'}; border: 1px solid ${state.config.isSubscribed ? '#C9A84C' : '#EEE'}; border-radius: 12px; padding: 20px; margin-bottom: 20px; position: relative; overflow: hidden;">
                             ${state.config.isSubscribed ? `
@@ -2039,17 +2045,17 @@
                                 <h4 style="font-size: 16px; font-weight: 700; color: #2D2D2D; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
                                     Lumi Premium 💎
                                 </h4>
-                                <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Seu plano premium está ativo e com acesso ilimitado desbloqueado!</p>
+                                <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Your premium plan is active and unlimited access is unlocked!</p>
                                 <div style="font-size: 12px; color: #555; display: grid; gap: 6px;">
-                                    <div><strong>Método:</strong> ${state.config.subscriptionType || 'Stripe Checkout'}</div>
-                                    <div><strong>Valor:</strong> R$ 47,00/mês</div>
+                                    <div><strong>Method:</strong> ${state.config.subscriptionType || 'Stripe Checkout'}</div>
+                                    <div><strong>Price:</strong> $ 19.00/month</div>
                                     <div><strong>ID:</strong> <code style="font-size: 10px; background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px;">${state.config.subscriptionId}</code></div>
                                 </div>
                             ` : `
                                 <h4 style="font-size: 16px; font-weight: 700; color: #2D2D2D; margin-bottom: 8px;">Lumi Standard / Demo</h4>
-                                <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Seu acesso é demonstrativo. Assine o plano completo por apenas R$ 47/mês para desbloquear todos os recursos e migração gratuita.</p>
+                                <p style="font-size: 13px; color: #666; margin-bottom: 12px;">Your access is for demonstration. Subscribe to the full plan for only $19/month to unlock all features and free migration.</p>
                                 <a href="index.html#pricing" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px; text-decoration: none;">
-                                    <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i> Assinar Lumi Premium
+                                    <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i> Subscribe to Lumi Premium
                                 </a>
                             `}
                         </div>
@@ -2057,49 +2063,49 @@
 
                     <div class="card" style="margin-top: 32px; grid-column: span 2;">
                         <h3 style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                            <i data-lucide="refresh-cw" style="color: var(--primary);"></i> Migração de Dados de Concorrentes 🚀
+                            <i data-lucide="refresh-cw" style="color: var(--primary);"></i> Competitor Data Migration 🚀
                         </h3>
                         <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
-                            Migre do <strong>Trinks</strong>, <strong>Avec</strong>, <strong>Simples Agenda</strong> ou de uma planilha Excel personalizada em segundos. 
-                            Exporte a lista de clientes em formato CSV no seu sistema anterior e faça o upload abaixo.
+                            Migrate from <strong>Vagaro</strong>, <strong>Mindbody</strong>, <strong>Fresha</strong>, or a custom Excel spreadsheet in seconds.
+                            Export the client list in CSV format from your previous system and upload it below.
                         </p>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; background: rgba(0,0,0,0.02); border: 1px dashed rgba(201, 168, 76, 0.3); border-radius: 12px; padding: 20px;">
                             <div>
-                                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 13px;">1. Sistema de Origem</label>
+                                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 13px;">1. Source System</label>
                                 <select class="form-control" id="migration-source" style="width: 100%;" onchange="updateMigrationGuide()">
-                                    <option value="generic">Planilha Genérica (Excel / CSV)</option>
-                                    <option value="trinks">Trinks</option>
-                                    <option value="avec">Avec</option>
-                                    <option value="simples">Simples Agenda</option>
+                                    <option value="generic">Generic Spreadsheet (Excel / CSV)</option>
+                                    <option value="trinks">Vagaro</option>
+                                    <option value="avec">Mindbody</option>
+                                    <option value="simples">Fresha</option>
                                 </select>
                                 <div id="migration-guide-box" style="margin-top: 12px; font-size: 12px; color: #666; line-height: 1.4;">
-                                    Selecione colunas: Nome, WhatsApp, Nascimento, Alergias na sua planilha CSV.
+                                    Select columns: Name, WhatsApp, Date of Birth, Allergies in your CSV file.
                                 </div>
                             </div>
                             <div>
-                                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 13px;">2. Selecionar Arquivo CSV de Clientes</label>
+                                <label style="display: block; font-weight: 700; margin-bottom: 8px; font-size: 13px;">2. Select Client CSV File</label>
                                 <div style="display: flex; gap: 10px; align-items: center;">
                                     <input type="file" id="migration-file-input" accept=".csv" class="form-control" style="flex: 1; padding: 6px;">
-                                    <button class="btn btn-primary" onclick="processDataMigration()"><i data-lucide="upload-cloud" style="width:16px; height:16px; margin-right:4px;"></i> Importar</button>
+                                    <button class="btn btn-primary" onclick="processDataMigration()"><i data-lucide="upload-cloud" style="width:16px; height:16px; margin-right:4px;"></i> Import</button>
                                 </div>
                                 <div style="margin-top: 8px; display: flex; gap: 15px; font-size: 11px; color: #888;">
-                                    <span>💡 Apenas arquivos <strong>.CSV</strong> são aceitos.</span>
-                                    <a href="#" onclick="downloadSampleMigrationCSV(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 700;">📥 Baixar Planilha Modelo</a>
+                                    <span>💡 Only <strong>.CSV</strong> files are accepted.</span>
+                                    <a href="#" onclick="downloadSampleMigrationCSV(); return false;" style="color: var(--primary); text-decoration: none; font-weight: 700;">📥 Download Template CSV</a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="card" style="margin-top: 32px; grid-column: span 2;">
-                        <h3 style="margin-bottom: 12px;">Integração WhatsApp (Automático)</h3>
+                        <h3 style="margin-bottom: 12px;">WhatsApp Integration (Automated)</h3>
                         <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
-                            Para enviar mensagens automáticas, integre com uma API (Evolution API ou Z-API).
+                            To send automated messages, integrate with an API (Evolution API or Z-API).
                         </p>
                         <div class="form-group">
                             <label>Webhook URL</label>
-                            <input type="text" class="form-control" placeholder="https://sua-api.com/webhook" value="${state.config.apiWebhook}">
+                            <input type="text" class="form-control" placeholder="https://your-api.com/webhook" value="${state.config.apiWebhook}">
                         </div>
-                        <button class="btn btn-primary" onclick="toast('Integração em desenvolvimento...')">Testar Conexão</button>
+                        <button class="btn btn-primary" onclick="toast('Integration in development...')">Test Connection</button>
                     </div>
                 </div>
             `;
@@ -2117,28 +2123,28 @@
 
             if (type === 'novo-cliente') {
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">Cadastrar Cliente</h2>
+                    <h2 style="margin-bottom: 24px;">Register Client</h2>
                     <div class="form-group">
-                        <label>Nome Completo *</label>
-                        <input type="text" id="new-cli-nome" class="form-control" placeholder="Ex: Maria Oliveira">
+                        <label>Full Name *</label>
+                        <input type="text" id="new-cli-nome" class="form-control" placeholder="e.g. Mary Smith">
                     </div>
                     <div class="form-group">
-                        <label>WhatsApp (com DDD) *</label>
-                        <input type="text" id="new-cli-tel" class="form-control" placeholder="Ex: 11988887777">
+                        <label>WhatsApp (with Country Code) *</label>
+                        <input type="text" id="new-cli-tel" class="form-control" placeholder="e.g. 15551234567">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Aniversário (Opcional)</label>
+                            <label>Birthday (Optional)</label>
                             <input type="date" id="new-cli-nasc" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label>Instagram (Opcional)</label>
-                            <input type="text" id="new-cli-insta" class="form-control" placeholder="@usuario">
+                            <label>Instagram (Optional)</label>
+                            <input type="text" id="new-cli-insta" class="form-control" placeholder="@username">
                         </div>
                     </div>
                     <div style="display: flex; gap: 12px; margin-top: 32px;">
-                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
-                        <button class="btn btn-primary" onclick="saveNovoCliente()" style="flex: 2">Salvar Cadastro</button>
+                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveNovoCliente()" style="flex: 2">Save Client</button>
                     </div>
                 `;
             }
@@ -2147,112 +2153,112 @@
                 editingTransacaoId = data ? data.id : null;
                 const trTipo = data ? data.tipo : 'saida';
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">${data ? 'Editar Movimentação' : 'Lançar Movimentação'}</h2>
+                    <h2 style="margin-bottom: 24px;">${data ? 'Edit Transaction' : 'Log Transaction'}</h2>
                     <div class="form-group" style="margin-bottom: 20px;">
-                        <label>Tipo de Movimentação</label>
+                        <label>Transaction Type</label>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
-                            <button class="btn ${trTipo === 'entrada' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-entrada" onclick="setTrTipo('entrada')" style="text-transform: none; padding: 10px;">Entrada</button>
-                            <button class="btn ${trTipo === 'saida' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-saida" onclick="setTrTipo('saida')" style="text-transform: none; padding: 10px;">Saída</button>
+                            <button class="btn ${trTipo === 'entrada' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-entrada" onclick="setTrTipo('entrada')" style="text-transform: none; padding: 10px;">Income</button>
+                            <button class="btn ${trTipo === 'saida' ? 'btn-primary' : 'btn-outline'}" id="btn-tr-saida" onclick="setTrTipo('saida')" style="text-transform: none; padding: 10px;">Expense</button>
                         </div>
                         <input type="hidden" id="new-tr-tipo" value="${trTipo}">
                     </div>
                     <div class="form-group">
-                        <label>Descrição</label>
-                        <input type="text" id="new-tr-desc" class="form-control" placeholder="Ex: Aluguel, Venda de Produto..." value="${data ? data.desc : ''}">
+                        <label>Description</label>
+                        <input type="text" id="new-tr-desc" class="form-control" placeholder="e.g. Rent, Product Sale..." value="${data ? data.desc : ''}">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Valor (R$)</label>
+                            <label>Amount ($)</label>
                             <input type="number" id="new-tr-valor" class="form-control" placeholder="0.00" value="${data ? data.valor : ''}">
                         </div>
                         <div class="form-group">
-                            <label>Data</label>
+                            <label>Date</label>
                             <input type="date" id="new-tr-data" class="form-control" value="${data ? data.data : new Date().toLocaleDateString('en-CA')}">
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">${data ? 'Salvar Alterações' : 'Lançar no Caixa'}</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovaTransacao()">${data ? 'Save Changes' : 'Log Transaction'}</button>
                 `;
             }
 
             if (type === 'novo-produto') {
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">Novo Produto</h2>
+                    <h2 style="margin-bottom: 24px;">New Product</h2>
                     <div class="form-group">
-                        <label>Nome do Produto</label>
-                        <input type="text" id="new-pr-nome" class="form-control" placeholder="Ex: Cera Mel">
+                        <label>Product Name</label>
+                        <input type="text" id="new-pr-nome" class="form-control" placeholder="e.g. Honey Wax">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Qtd Atual</label>
+                            <label>Current Qty</label>
                             <input type="number" id="new-pr-qtd" class="form-control" value="0">
                         </div>
                         <div class="form-group">
-                            <label>Mínimo</label>
+                            <label>Minimum</label>
                             <input type="number" id="new-pr-min" class="form-control" value="5">
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoProduto()">Cadastrar Produto</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoProduto()">Register Product</button>
                 `;
             }
 
             if (type === 'novo-servico') {
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">Adicionar Serviço</h2>
+                    <h2 style="margin-bottom: 24px;">Add Service</h2>
                     <div class="form-group">
-                        <label>Nome do Serviço *</label>
-                        <input type="text" id="new-srv-nome" class="form-control" placeholder="Ex: Microagulhamento">
+                        <label>Service Name *</label>
+                        <input type="text" id="new-srv-nome" class="form-control" placeholder="e.g. Eyebrow Shaping">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Duração (minutos) *</label>
+                            <label>Duration (minutes) *</label>
                             <input type="number" id="new-srv-dur" class="form-control" placeholder="45">
                         </div>
                         <div class="form-group">
-                            <label>Preço (R$) *</label>
+                            <label>Price ($) *</label>
                             <input type="number" id="new-srv-preco" class="form-control" placeholder="150">
                         </div>
                         <div class="form-group">
-                            <label>Custo Mat. (R$)</label>
+                            <label>Material Cost ($)</label>
                             <input type="number" id="new-srv-custo" class="form-control" placeholder="30.00">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>Pontos Gerados (Programa Fidelidade)</label>
+                        <label>Points Awarded (Loyalty Program)</label>
                         <input type="number" id="new-srv-pts" class="form-control" placeholder="10">
                     </div>
                     <div style="display: flex; gap: 12px; margin-top: 12px;">
-                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancelar</button>
-                        <button class="btn btn-primary" onclick="saveNovoServico()" style="flex: 2">Salvar Serviço</button>
+                        <button class="btn btn-ghost" onclick="closeModal()" style="flex: 1">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveNovoServico()" style="flex: 2">Save Service</button>
                     </div>
                 `;
             }
 
             if (type === 'novo-agendamento') {
                 content.innerHTML = `
-                    <h2 style="margin-bottom: 24px;">Novo Agendamento</h2>
+                    <h2 style="margin-bottom: 24px;">New Appointment</h2>
                     <div class="form-group">
-                        <label>Cliente</label>
+                        <label>Client</label>
                         <select id="new-age-cli" class="form-control">
                             ${state.clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('')}
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Serviço</label>
+                        <label>Service</label>
                         <select id="new-age-srv" class="form-control">
-                            ${state.servicos.map(s => `<option value="${s.id}">${s.nome} (R$ ${s.preco})</option>`).join('')}
+                            ${state.servicos.map(s => `<option value="${s.id}">${s.nome} ($ ${s.preco})</option>`).join('')}
                         </select>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Hora</label>
+                            <label>Time</label>
                             <input type="time" id="new-age-hora" class="form-control" value="${data && data.hora ? data.hora : '08:00'}">
                         </div>
                         <div class="form-group">
-                            <label>Data</label>
+                            <label>Date</label>
                             <input type="date" id="new-age-data" class="form-control" value="${new Date().toISOString().split('T')[0]}">
                         </div>
                     </div>
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoAgendamento()">Confirmar Horário</button>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveNovoAgendamento()">Confirm Appointment</button>
                 `;
             }
 
@@ -2262,20 +2268,20 @@
                 content.innerHTML = `
                     <div style="text-align: center; margin-bottom: 24px;">
                         <span class="badge badge-${data.status}">${data.status}</span>
-                        <h2 style="margin-top: 12px;">${c ? c.nome : 'Cliente'}</h2>
-                        <p style="color: var(--text-light)">${s ? s.nome : 'Serviço'} • ${data.hora}</p>
+                        <h2 style="margin-top: 12px;">${c ? c.nome : 'Client'}</h2>
+                        <p style="color: var(--text-light)">${s ? s.nome : 'Service'} • ${data.hora}</p>
                     </div>
                     <div style="display: grid; gap: 12px;">
                         ${data.status !== 'realizado' ? `
                             <button class="btn btn-primary" onclick="marcarComoRealizado('${data.id}')" style="justify-content: center;">
-                                <i data-lucide="check"></i> Marcar como Realizado
+                                <i data-lucide="check"></i> Mark as Completed
                             </button>
                         ` : ''}
                         <button class="btn btn-outline" onclick="enviarWhats('${c.whatsapp}', 'confirmacao', {nome: '${c.nome}', servico: '${s.nome}', hora: '${data.hora}'})" style="justify-content: center;">
-                            <i data-lucide="message-circle"></i> Enviar Confirmação
+                            <i data-lucide="message-circle"></i> Send Confirmation
                         </button>
                         <button class="btn btn-ghost" onclick="excluirAgendamento('${data.id}')" style="justify-content: center; color: var(--danger)">
-                            <i data-lucide="trash-2"></i> Cancelar Agendamento
+                            <i data-lucide="trash-2"></i> Cancel Appointment
                         </button>
                     </div>
                 `;
@@ -2290,36 +2296,36 @@
                         <div class="avatar" style="width: 60px; height: 60px; font-size: 24px;">${c.nome[0]}</div>
                         <div>
                             <h2>${c.nome}</h2>
-                            <p style="color: var(--text-light)">${c.whatsapp} • ${c.insta || 'Sem Instagram'}</p>
+                            <p style="color: var(--text-light)">${c.whatsapp} • ${c.insta || 'No Instagram'}</p>
                         </div>
                     </div>
                     
                     <div class="stats-grid" style="grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
                         <div class="card stat-card" style="padding: 15px; border-left-color: var(--primary)">
-                            <span class="stat-label" style="font-size: 10px;">Saldo Fidelidade</span>
+                            <span class="stat-label" style="font-size: 10px;">Loyalty Balance</span>
                             <span class="stat-value" style="font-size: 20px;">${c.pontos || 0} pts</span>
                         </div>
                         <div class="card stat-card" style="padding: 15px;">
-                            <span class="stat-label" style="font-size: 10px;">Total Visitas</span>
+                            <span class="stat-label" style="font-size: 10px;">Total Visits</span>
                             <span class="stat-value" style="font-size: 20px;">${c.totalVisitas || 0}</span>
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid #EEE;">
-                        <div id="tab-resumo" style="padding: 10px; color: var(--primary); border-bottom: 2px solid var(--primary); cursor:pointer">Resumo</div>
-                        <div id="tab-fotos" style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toggleClientTab('fotos', '${c.id}')">Fotos (Antes/Depois)</div>
+                        <div id="tab-resumo" style="padding: 10px; color: var(--primary); border-bottom: 2px solid var(--primary); cursor:pointer">Summary</div>
+                        <div id="tab-fotos" style="padding: 10px; color: var(--text-light); cursor:pointer" onclick="toggleClientTab('fotos', '${c.id}')">Photos (Before/After)</div>
                     </div>
 
                     <div id="perfil-tab-content">
                         <div class="card" style="background: var(--bg); box-shadow: none; padding: 20px;">
-                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Alergias:</strong> ${c.alergias || 'Nenhuma informada'}</p>
-                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Aniversário:</strong> ${c.nascimento || 'Não informado'}</p>
-                            <p style="font-size: 14px;"><strong>Última Visita:</strong> ${c.ultimaVisita || 'Nunca'}</p>
+                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Allergies:</strong> ${c.alergias || 'None reported'}</p>
+                            <p style="font-size: 14px; margin-bottom: 8px;"><strong>Birthday:</strong> ${c.nascimento || 'Not reported'}</p>
+                            <p style="font-size: 14px;"><strong>Last Visit:</strong> ${c.ultimaVisita || 'Never'}</p>
                         </div>
                     </div>
 
                     <div style="margin-top: 24px; padding: 16px; background: #FDFBF7; border-radius: 12px; border: 1px solid #EEE;">
-                        <label style="font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Link do Portal / Ficha</label>
+                        <label style="font-size: 11px; color: var(--text-light); text-transform: uppercase; font-weight: 700;">Portal / Intake Link</label>
                         <div style="display: flex; gap: 8px; margin-top: 8px;">
                             <input type="text" id="portal-link-${c.id}" class="form-control" readonly value="${window.location.href.split('#')[0]}#ficha?id=${c.linkId}" style="font-size: 12px; height: 38px;">
                             <button class="btn btn-primary" style="padding: 0 15px; height: 38px;" onclick="copiarLinkPortal('${c.id}')">
@@ -2330,9 +2336,9 @@
 
                     <div style="display: grid; gap: 12px; margin-top: 24px;">
                         <button class="btn btn-primary" style="justify-content: center" onclick="enviarWhats('${c.whatsapp}', 'ficha', {nome: '${c.nome}', linkId: '${c.linkId}'})">
-                            <i data-lucide="message-circle"></i> Enviar pelo WhatsApp
+                            <i data-lucide="message-circle"></i> Send via WhatsApp
                         </button>
-                        <button class="btn btn-outline" style="justify-content: center" onclick="closeModal(); openModal('novo-agendamento')">Novo Agendamento</button>
+                        <button class="btn btn-outline" style="justify-content: center" onclick="closeModal(); openModal('novo-agendamento')">New Appointment</button>
                     </div>
                 `;
             }
@@ -2366,7 +2372,7 @@
                                             <div style="font-size: 12px; color: var(--text-light)">${new Date(a.data).toLocaleDateString()}</div>
                                         </div>
                                         <button class="btn btn-ghost" style="padding: 5px 10px; font-size: 10px; color: var(--primary)" onclick="document.getElementById('upload-${a.id}').click()">
-                                            <i data-lucide="plus"></i> Foto
+                                            <i data-lucide="plus"></i> Photo
                                         </button>
                                         <input type="file" id="upload-${a.id}" style="display: none" accept="image/*" onchange="uploadFotoAtendimento('${a.id}', '${c.id}')">
                                     </div>
@@ -2376,11 +2382,11 @@
                                                 <img src="${f}" style="width: 100%; height: 100%; object-fit: cover;">
                                             </div>
                                         `).join('')}
-                                        ${fotos.length === 0 ? '<p style="grid-column: span 3; font-size: 11px; color: #BBB; text-align: center; padding: 10px;">Sem fotos nesta sessão.</p>' : ''}
+                                        ${fotos.length === 0 ? '<p style="grid-column: span 3; font-size: 11px; color: #BBB; text-align: center; padding: 10px;">No photos in this session.</p>' : ''}
                                     </div>
                                 </div>
                             `;
-                        }).join('') || '<p style="text-align: center; color: #999; padding: 20px;">Finalize um atendimento para anexar fotos.</p>'}
+                        }).join('') || '<p style="text-align: center; color: #999; padding: 20px;">Complete an appointment to attach photos.</p>'}
                     </div>
                 `;
                 lucide.createIcons();
@@ -2401,7 +2407,7 @@
                 a.fotos.push(e.target.result);
                 save();
                 toggleClientTab('fotos', cliId);
-                toast('Foto anexada à sessão!');
+                toast('Photo attached to session!');
             };
             reader.readAsDataURL(file);
         }
@@ -2413,7 +2419,7 @@
             const nasc = document.getElementById('new-cli-nasc').value;
             const insta = document.getElementById('new-cli-insta').value;
 
-            if (!nome || !tel) return alert('Preencha nome e WhatsApp!');
+            if (!nome || !tel) return alert('Please fill in Name and WhatsApp!');
             
             const novo = {
                 id: 'c' + Date.now(),
@@ -2432,7 +2438,7 @@
             save();
             closeModal();
             showView('clientes');
-            toast('Cliente cadastrado!');
+            toast('Client registered!');
         }
 
         function saveNovoServico() {
@@ -2442,7 +2448,7 @@
             const custo = document.getElementById('new-srv-custo').value || 0;
             const pts = document.getElementById('new-srv-pts').value || 0;
 
-            if (!nome || !dur || !preco) return alert('Preencha todos os campos!');
+            if (!nome || !dur || !preco) return alert('Please fill in all fields!');
 
             const novo = {
                 id: 's' + Date.now(),
@@ -2456,15 +2462,15 @@
             save();
             closeModal();
             showView('servicos');
-            toast('Serviço adicionado!');
+            toast('Service added!');
         }
 
         function excluirServico(id) {
-            if (!confirm('Tem certeza que deseja excluir este serviço?')) return;
+            if (!confirm('Are you sure you want to delete this service?')) return;
             state.servicos = state.servicos.filter(s => s.id !== id);
             save();
             showView('servicos');
-            toast('Serviço removido!');
+            toast('Service deleted!');
         }
 
         function salvarConfigGeral() {
@@ -2472,7 +2478,7 @@
             state.config.whatsapp = document.getElementById('cfg-whats').value;
             save();
             updateSidebarLogo();
-            toast('Configurações salvas!');
+            toast('Settings saved!');
         }
 
         function updateSidebarLogo() {
@@ -2515,7 +2521,7 @@
             save();
             closeModal();
             showView('agenda');
-            toast('Agendamento criado!');
+            toast('Appointment scheduled!');
         }
 
         let editingTransacaoId = null;
@@ -2532,7 +2538,7 @@
             const data = document.getElementById('new-tr-data').value;
             const tipo = document.getElementById('new-tr-tipo').value;
 
-            if (!desc || !valor) return alert('Preencha todos os campos!');
+            if (!desc || !valor) return alert('Please fill in all fields!');
 
             if (editingTransacaoId) {
                 const t = state.transacoes.find(item => item.id === editingTransacaoId);
@@ -2543,7 +2549,7 @@
                     t.tipo = tipo;
                 }
                 editingTransacaoId = null;
-                toast('Movimentação atualizada!');
+                toast('Transaction updated!');
             } else {
                 state.transacoes.push({
                     id: 't' + Date.now(),
@@ -2551,9 +2557,9 @@
                     valor: parseFloat(valor),
                     desc: desc,
                     data: data,
-                    fpag: 'Outros'
+                    fpag: 'Other'
                 });
-                toast(tipo === 'entrada' ? 'Receita lançada!' : 'Despesa lançada!');
+                toast(tipo === 'entrada' ? 'Income logged!' : 'Expense logged!');
             }
             
             save();
@@ -2562,11 +2568,11 @@
         }
 
         function excluirTransacao(id) {
-            if (!confirm('Tem certeza que deseja excluir esta movimentação?')) return;
+            if (!confirm('Are you sure you want to delete this transaction?')) return;
             state.transacoes = state.transacoes.filter(t => t.id !== id);
             save();
             showView('caixa');
-            toast('Movimentação removida!');
+            toast('Transaction deleted!');
         }
 
         function saveNovoProduto() {
@@ -2574,20 +2580,20 @@
             const qtd = document.getElementById('new-pr-qtd').value;
             const min = document.getElementById('new-pr-min').value;
 
-            if (!nome) return alert('Preencha o nome do produto!');
+            if (!nome) return alert('Please fill in the product name!');
 
             state.produtos.push({
                 id: 'pr' + Date.now(),
                 nome: nome,
                 qtd: parseInt(qtd),
                 min: parseInt(min),
-                un: 'un',
-                cat: 'Diversos'
+                un: 'pcs',
+                cat: 'Other'
             });
             save();
             closeModal();
             showView('estoque');
-            toast('Produto cadastrado!');
+            toast('Product registered!');
         }
 
         function darBaixaEstoque(id) {
@@ -2596,9 +2602,9 @@
                 p.qtd--;
                 save();
                 showView('estoque');
-                toast('Baixa realizada!');
+                toast('Stock reduced!');
             } else {
-                toast('Estoque zerado!');
+                toast('Stock is empty!');
             }
         }
 
@@ -2608,7 +2614,7 @@
                 p.qtd++;
                 save();
                 showView('estoque');
-                toast('Estoque reposto!');
+                toast('Stock replenished!');
             }
         }
 
@@ -2631,7 +2637,7 @@
                 id: 't' + Date.now(),
                 tipo: 'entrada',
                 valor: s ? s.preco : 0,
-                desc: `${s ? s.nome : 'Serviço'} - ${c.nome}`,
+                desc: `${s ? s.nome : 'Service'} - ${c.nome}`,
                 data: a.data,
                 fpag: 'Pix'
             });
@@ -2639,7 +2645,7 @@
             save();
 
             // Opção de Avaliação
-            const estrelas = prompt("Finalizado! Avaliação da cliente (1-5 estrelas):", "5");
+            const estrelas = prompt("Completed! Client rating (1-5 stars):", "5");
             if (estrelas) {
                 state.avaliacoes.push({
                     id: 'v' + Date.now(),
@@ -2653,9 +2659,9 @@
 
             closeModal();
             showView('dashboard');
-            toast('Atendimento finalizado com sucesso!');
+            toast('Appointment completed successfully!');
 
-            if (confirm("Deseja enviar a mensagem de agradecimento com link de avaliação?")) {
+            if (confirm("Do you want to send the thank you message with the review link?")) {
                 enviarWhats(c.whatsapp, 'avaliacao', { nome: c.nome });
             }
         }
@@ -2670,7 +2676,7 @@
                 if (el) state.config.templates[key] = el.value;
             });
             save();
-            toast('Templates salvos!');
+            toast('Templates saved!');
         }
 
         function gerarRelatorioMes() {
@@ -2697,7 +2703,7 @@
             printWindow.document.write(`
                 <html>
                 <head>
-                    <title>Relatório Mensal - Lumi</title>
+                    <title>Monthly Report - Lumi</title>
                     <style>
                         body { font-family: 'Inter', sans-serif; padding: 40px; color: #1A1A1A; }
                         .header { border-bottom: 2px solid #C9A84C; padding-bottom: 20px; margin-bottom: 40px; }
@@ -2710,24 +2716,24 @@
                 </head>
                 <body>
                     <div class="header">
-                        <h1>Relatório Financeiro Mensal</h1>
+                        <h1>Monthly Financial Report</h1>
                         <p>${state.config.nomeClinica}</p>
                     </div>
                     <div class="stat-box">
                         <div class="stat">
-                            <div>Total de Atendimentos</div>
+                            <div>Total Appointments</div>
                             <div class="stat-val">${atendimentos.length}</div>
                         </div>
                         <div class="stat">
-                            <div>Receita Bruta</div>
-                            <div class="stat-val">R$ ${receita.toFixed(2)}</div>
+                            <div>Gross Revenue</div>
+                            <div class="stat-val">$ ${receita.toFixed(2)}</div>
                         </div>
                         <div class="stat">
-                            <div>Ticket Médio</div>
-                            <div class="stat-val">R$ ${atendimentos.length ? (receita / atendimentos.length).toFixed(2) : '0.00'}</div>
+                            <div>Average Ticket</div>
+                            <div class="stat-val">$ ${atendimentos.length ? (receita / atendimentos.length).toFixed(2) : '0.00'}</div>
                         </div>
                     </div>
-                    <div class="footer">Gerado automaticamente por Lumi em ${new Date().toLocaleString()}</div>
+                    <div class="footer">Generated automatically by Lumi on ${new Date().toLocaleString()}</div>
                     <script>window.print();<\/script>
                 </body>
                 </html>
@@ -2740,13 +2746,13 @@
             copyText.select();
             copyText.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(copyText.value);
-            toast('Link copiado para a área de transferência!');
+            toast('Link copied to clipboard!');
         }
 
         function enviarWhats(tel, templateKey, data = {}) {
             let msg = state.config.templates[templateKey] || "";
             msg = msg.replace(/\[nome\]/g, data.nome || "");
-            msg = msg.replace(/\[dia\]/g, data.dia || "hoje");
+            msg = msg.replace(/\[dia\]/g, data.dia || "today");
             msg = msg.replace(/\[hora\]/g, data.hora || "");
             msg = msg.replace(/\[servico\]/g, data.servico || "");
             
@@ -2775,7 +2781,7 @@
                         renderFichaStep(1, c);
                     }
                 } else {
-                    document.getElementById('client-steps-container').innerHTML = '<h2>Link Inválido</h2>';
+                    document.getElementById('client-steps-container').innerHTML = '<h2>Invalid Link</h2>';
                 }
             }
         }
@@ -2791,57 +2797,57 @@
                         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
                             <div class="avatar" style="margin:0; border: 2px solid var(--primary);">${c.nome[0]}</div>
                             <div>
-                                <h2 style="margin:0; color: var(--primary);">Olá, ${c.nome.split(' ')[0]}!</h2>
-                                <p style="font-size: 13px; opacity: 0.7;">Seu espaço exclusivo Lumi</p>
+                                <h2 style="margin:0; color: var(--primary);">Hello, ${c.nome.split(' ')[0]}!</h2>
+                                <p style="font-size: 13px; opacity: 0.7;">Your exclusive Lumi space</p>
                             </div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
-                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Fidelidade Acumulada</span>
-                            <div style="font-size: 28px; font-weight: 700; color: var(--primary); margin-top: 5px;">${c.pontos || 0} <span style="font-size: 14px; font-weight: 400;">pontos</span></div>
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">Loyalty Points Accumulated</span>
+                            <div style="font-size: 28px; font-weight: 700; color: var(--primary); margin-top: 5px;">${c.pontos || 0} <span style="font-size: 14px; font-weight: 400;">points</span></div>
                         </div>
                     </div>
 
                     <!-- Tabs Nav -->
                     <div style="display: flex; background: white; border-bottom: 1px solid #EEE; overflow-x: auto;">
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'resumo')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'resumo' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'resumo' ? 'var(--primary)' : 'transparent'}">Resumo</div>
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'agendar' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'agendar' ? 'var(--primary)' : 'transparent'}">Agendar</div>
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'historico')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'historico' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'historico' ? 'var(--primary)' : 'transparent'}">Histórico</div>
-                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'galeria')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'galeria' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'galeria' ? 'var(--primary)' : 'transparent'}">Galeria</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'resumo')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'resumo' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'resumo' ? 'var(--primary)' : 'transparent'}">Summary</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'agendar' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'agendar' ? 'var(--primary)' : 'transparent'}">Book</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'historico')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'historico' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'historico' ? 'var(--primary)' : 'transparent'}">History</div>
+                        <div onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'galeria')" style="flex: 1; min-width: 80px; padding: 15px; text-align: center; font-size: 12px; font-weight: 600; cursor:pointer; color: ${activeTab === 'galeria' ? 'var(--primary)' : '#999'}; border-bottom: 3px solid ${activeTab === 'galeria' ? 'var(--primary)' : 'transparent'}">Gallery</div>
                     </div>
-
+ 
                     <!-- Tab Content -->
                     <div style="padding: 30px; min-height: 350px; background: #FDFBF7;">
                         ${activeTab === 'resumo' ? `
-                            <h3 style="font-size: 16px; margin-bottom: 15px;">Suas Informações</h3>
+                            <h3 style="font-size: 16px; margin-bottom: 15px;">Your Information</h3>
                             <div class="card" style="padding: 20px; box-shadow: none; border: 1px solid #EEE;">
-                                <div style="margin-bottom: 12px; font-size: 14px;"><strong>Próximo Aniversário:</strong> ${c.nascimento ? new Date(c.nascimento).toLocaleDateString('pt-BR', {day:'numeric', month:'long'}) : 'Não informado'}</div>
+                                <div style="margin-bottom: 12px; font-size: 14px;"><strong>Next Birthday:</strong> ${c.nascimento ? new Date(c.nascimento).toLocaleDateString('en-US', {day:'numeric', month:'long'}) : 'Not provided'}</div>
                                 <div style="margin-bottom: 12px; font-size: 14px;"><strong>Instagram:</strong> ${c.insta || '-'}</div>
-                                <div style="font-size: 14px;"><strong>Alergias/Observações:</strong><br><span style="color: var(--text-light)">${c.alergias || 'Nenhuma informada.'}</span></div>
+                                <div style="font-size: 14px;"><strong>Allergies/Medical Notes:</strong><br><span style="color: var(--text-light)">${c.alergias || 'None reported.'}</span></div>
                             </div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')">Agendar Novo Horário</button>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="renderPortalCliente(state.clientes.find(cli => cli.id === '${c.id}'), 'agendar')">Book New Appointment</button>
                         ` : ''}
-
+ 
                         ${activeTab === 'agendar' ? `
                             <div style="display: flex; flex-direction: column; gap: 15px;">
-                                <h3 style="font-size: 16px;">Novo Agendamento</h3>
+                                <h3 style="font-size: 16px;">New Appointment</h3>
                                 <div class="form-group">
-                                    <label>Escolha o Serviço</label>
+                                    <label>Choose Service</label>
                                     <select id="self-srv" class="form-control" onchange="updateAvailableSlots()">
-                                        <option value="">Selecione...</option>
-                                        ${state.servicos.map(s => `<option value="${s.id}">${s.nome} — R$ ${s.preco.toFixed(2)}</option>`).join('')}
+                                        <option value="">Select...</option>
+                                        ${state.servicos.map(s => `<option value="${s.id}">${s.nome} — $ ${s.preco.toFixed(2)}</option>`).join('')}
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Escolha a Data</label>
+                                    <label>Choose Date</label>
                                     <input type="date" id="self-date" class="form-control" min="${new Date().toISOString().split('T')[0]}" onchange="updateAvailableSlots()">
                                 </div>
                                 <div id="self-slots-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-                                    <p style="grid-column: span 3; font-size: 12px; color: #999; text-align: center;">Selecione o serviço e a data acima.</p>
+                                    <p style="grid-column: span 3; font-size: 12px; color: #999; text-align: center;">Select a service and date above.</p>
                                 </div>
-                                <button id="btn-self-confirm" class="btn btn-primary" style="width: 100%; margin-top: 10px; display: none;" onclick="confirmSelfBooking('${c.id}')">Confirmar Horário</button>
+                                <button id="btn-self-confirm" class="btn btn-primary" style="width: 100%; margin-top: 10px; display: none;" onclick="confirmSelfBooking('${c.id}')">Confirm Appointment</button>
                             </div>
                         ` : ''}
-
+ 
                         ${activeTab === 'historico' ? `
                             <div style="display: flex; flex-direction: column; gap: 15px;">
                                 ${atendimentos.map(a => {
@@ -2850,17 +2856,17 @@
                                         <div class="card" style="padding: 15px; box-shadow: none; border: 1px solid #EEE;">
                                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                                 <div>
-                                                    <div style="font-weight: 700; font-size: 15px;">${s ? s.nome : 'Serviço'}</div>
+                                                    <div style="font-weight: 700; font-size: 15px;">${s ? s.nome : 'Service'}</div>
                                                     <div style="font-size: 12px; color: var(--text-light)">${new Date(a.data).toLocaleDateString()}</div>
                                                 </div>
                                                 <div style="font-weight: 700; color: var(--primary)">+${s ? s.pontos : 0} pts</div>
                                             </div>
                                         </div>
                                     `;
-                                }).join('') || '<p style="text-align: center; color: #999;">Ainda não há atendimentos realizados.</p>'}
+                                }).join('') || '<p style="text-align: center; color: #999;">No completed appointments yet.</p>'}
                             </div>
                         ` : ''}
-
+ 
                         ${activeTab === 'galeria' ? `
                             <div style="display: flex; flex-direction: column; gap: 24px;">
                                 ${atendimentos.map(a => {
@@ -2879,40 +2885,40 @@
                                             </div>
                                         </div>
                                     `;
-                                }).join('') || '<p style="text-align: center; color: #999;">Suas fotos de evolução aparecerão aqui conforme realizarmos os atendimentos.</p>'}
+                                }).join('') || '<p style="text-align: center; color: #999;">Your progress photos will appear here as appointments are completed.</p>'}
                             </div>
                         ` : ''}
                     </div>
-
+ 
                     <div style="padding: 20px; text-align: center;">
-                        <button class="btn btn-ghost" style="font-size: 12px;" onclick="window.location.hash=''">Sair do Portal</button>
+                        <button class="btn btn-ghost" style="font-size: 12px;" onclick="window.location.hash=''">Exit Portal</button>
                     </div>
                 </div>
             `;
         }
-
+ 
         let selectedSlot = null;
         function updateAvailableSlots() {
             const date = document.getElementById('self-date').value;
             const srvId = document.getElementById('self-srv').value;
             const container = document.getElementById('self-slots-container');
             const btnConfirm = document.getElementById('btn-self-confirm');
-
+ 
             if (!date || !srvId) return;
-
+ 
             const baseSlots = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30"];
             const bookedSlots = state.agendamentos.filter(a => a.data === date && a.status !== 'cancelado').map(a => a.hora);
             
             const freeSlots = baseSlots.filter(s => !bookedSlots.includes(s));
-
+ 
             container.innerHTML = freeSlots.map(s => `
                 <div class="slot-btn" onclick="selectSlot(this, '${s}')" style="padding: 10px; border: 1px solid #EEE; border-radius: 10px; text-align: center; font-size: 13px; cursor:pointer; background: white;">${s}</div>
-            `).join('') || '<p style="grid-column: span 3; text-align: center; color: var(--danger); font-size: 12px;">Nenhum horário disponível para este dia.</p>';
+            `).join('') || '<p style="grid-column: span 3; text-align: center; color: var(--danger); font-size: 12px;">No slots available for this day.</p>';
             
             selectedSlot = null;
             btnConfirm.style.display = 'none';
         }
-
+ 
         function selectSlot(el, slot) {
             document.querySelectorAll('.slot-btn').forEach(b => {
                 b.style.background = 'white';
@@ -2925,14 +2931,14 @@
             selectedSlot = slot;
             document.getElementById('btn-self-confirm').style.display = 'block';
         }
-
+ 
         function confirmSelfBooking(cliId) {
             const srvId = document.getElementById('self-srv').value;
             const date = document.getElementById('self-date').value;
             const s = state.servicos.find(ser => ser.id === srvId);
-
+ 
             if (!selectedSlot) return;
-
+ 
             const novo = {
                 id: 'a' + Date.now(),
                 clienteId: cliId,
@@ -2943,14 +2949,14 @@
                 profissionalId: 'p1',
                 fotos: []
             };
-
+ 
             state.agendamentos.push(novo);
             save();
             
-            alert(`Tudo certo! Seu agendamento de ${s.nome} foi marcado para o dia ${new Date(date).toLocaleDateString()} às ${selectedSlot}.✨`);
+            alert(`All set! Your appointment for ${s.nome} has been scheduled for ${new Date(date).toLocaleDateString('en-US')} at ${selectedSlot}.✨`);
             renderPortalCliente(state.clientes.find(cli => cli.id === cliId), 'historico');
         }
-
+ 
         let fichaData = { step: 1, currentClient: null };
         function renderFichaStep(step, client) {
             fichaData.currentClient = client || fichaData.currentClient;
@@ -2970,17 +2976,17 @@
                         <div class="step-indicator">
                             <div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div>
                         </div>
-                        <h2>Olá, ${fichaData.currentClient.nome.split(' ')[0]}! ✨</h2>
-                        <p style="color: var(--text-light); margin-bottom: 24px;">Complete sua ficha para um atendimento personalizado.</p>
+                        <h2>Hello, ${fichaData.currentClient.nome.split(' ')[0]}! ✨</h2>
+                        <p style="color: var(--text-light); margin-bottom: 24px;">Complete your profile for a personalized service.</p>
                         <div class="form-group" style="text-align: left;">
-                            <label>Data de Nascimento</label>
+                            <label>Date of Birth</label>
                             <input type="date" id="ficha-nasc" class="form-control" value="${fichaData.currentClient.nascimento || ''}">
                         </div>
                         <div class="form-group" style="text-align: left;">
-                            <label>Instagram (@usuario)</label>
+                            <label>Instagram (@username)</label>
                             <input type="text" id="ficha-insta" class="form-control" placeholder="@" value="${fichaData.currentClient.insta || ''}">
                         </div>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveFichaStep(1)">Continuar</button>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="saveFichaStep(1)">Continue</button>
                     </div>
                 `;
             } else if (step === 2) {
@@ -2989,10 +2995,10 @@
                         <div class="step-indicator">
                             <div class="step-dot"></div><div class="step-dot active"></div><div class="step-dot"></div>
                         </div>
-                        <h2>Alergias ou Condições?</h2>
-                        <p style="color: var(--text-light); margin-bottom: 24px;">Importante para sua segurança.</p>
-                        <textarea id="ficha-alergias" class="form-control" rows="4" placeholder="Ex: Alergia a iodo, gestante, pele sensível...">${fichaData.currentClient.alergias || ''}</textarea>
-                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="saveFichaStep(2)">Finalizar e Entrar no Portal</button>
+                        <h2>Allergies or Medical Conditions?</h2>
+                        <p style="color: var(--text-light); margin-bottom: 24px;">Important for your safety.</p>
+                        <textarea id="ficha-alergias" class="form-control" rows="4" placeholder="e.g. Allergy to iodine, pregnant, sensitive skin...">${fichaData.currentClient.alergias || ''}</textarea>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 32px;" onclick="saveFichaStep(2)">Finish and Enter Portal</button>
                     </div>
                 `;
             }
@@ -3212,32 +3218,32 @@
                             <path d="M 31 6 C 31 10.5 29.5 12 25 12 C 29.5 12 31 13.5 31 18 C 31 13.5 32.5 12 37 12 C 32.5 12 31 10.5 31 6 Z" fill="#FFFFFF" opacity="0.85" />
                         </svg>
                     </div>
-                    <h2>Sua Assinatura <span>Lumi Premium</span> Está Ativa! 🎉</h2>
+                    <h2>Your <span>Lumi Premium</span> Subscription is Active! 🎉</h2>
                     <p>
-                        Parabéns! Você acaba de desbloquear o acesso total e ilimitado ao sistema de gestão mais elegante e completo para o seu negócio de beleza. Prepare-se para decolar seu estúdio e encantar suas clientes!
+                        Congratulations! You have unlocked full and unlimited access to the most elegant and complete management system for your beauty business. Get ready to elevate your studio and delight your clients!
                     </p>
                     <div class="premium-feature-badge-list">
-                        <div class="premium-feature-tag"><i data-lucide="calendar"></i> Agenda Premium</div>
-                        <div class="premium-feature-tag"><i data-lucide="users"></i> Clientes Ilimitados</div>
-                        <div class="premium-feature-tag"><i data-lucide="wallet"></i> Caixa Completo</div>
-                        <div class="premium-feature-tag"><i data-lucide="refresh-cw"></i> Migração de Dados</div>
+                        <div class="premium-feature-tag"><i data-lucide="calendar"></i> Premium Schedule</div>
+                        <div class="premium-feature-tag"><i data-lucide="users"></i> Unlimited Clients</div>
+                        <div class="premium-feature-tag"><i data-lucide="wallet"></i> Full Finance</div>
+                        <div class="premium-feature-tag"><i data-lucide="refresh-cw"></i> Data Migration</div>
                     </div>
                     <button class="premium-btn-start" onclick="closePremiumWelcomeModal()">
-                        Começar a Usar Agora
+                        Start Using Now
                     </button>
                 </div>
             `;
             document.body.appendChild(overlay);
             lucide.createIcons();
-
+ 
             setTimeout(() => overlay.classList.add('active'), 100);
-
+ 
             // Generate particles/confetti
             for (let i = 0; i < 70; i++) {
                 createConfetti();
             }
         }
-
+ 
         function createConfetti() {
             const colors = ['#C9A84C', '#A68A3D', '#E5D5A4', '#FFFFFF', '#FFD700'];
             const confetti = document.createElement('div');
@@ -3260,7 +3266,7 @@
                 confetti.remove();
             }, (duration + delay) * 1000);
         }
-
+ 
         function closePremiumWelcomeModal() {
             const overlay = document.getElementById('premium-welcome-modal');
             if (overlay) {
@@ -3272,57 +3278,57 @@
                 }, 600);
             }
         }
-
+ 
         // --- DATA MIGRATION ENGINE (TRINKS / AVEC / GENERIC CSV) ---
         function updateMigrationGuide() {
             const src = document.getElementById('migration-source').value;
             const guide = document.getElementById('migration-guide-box');
             if (src === 'generic') {
-                guide.innerHTML = '<strong>Planilha Excel/CSV Genérica</strong>:<br>Certifique-se de que a primeira linha do seu arquivo contém cabeçalhos como "Nome", "WhatsApp" (ou Celular) e opcionalmente "Alergias" e "Nascimento".';
+                guide.innerHTML = '<strong>Generic Excel/CSV Spreadsheet</strong>:<br>Make sure the first line of your file contains headers like "Name", "WhatsApp" (or Phone), and optionally "Allergies" and "Date of Birth".';
             } else if (src === 'trinks') {
-                guide.innerHTML = '<strong>Instruções Trinks</strong>:<br>No painel do Trinks, vá em Relatórios > Clientes > Cadastros e clique em Exportar para Excel/CSV. Faça o upload do arquivo gerado aqui.';
+                guide.innerHTML = '<strong>Vagaro Instructions</strong>:<br>In the Vagaro dashboard, go to Reports > Clients > Directory and click Export to Excel/CSV. Upload the generated file here.';
             } else if (src === 'avec') {
-                guide.innerHTML = '<strong>Instruções Avec</strong>:<br>No menu Avec, acesse Clientes > Exportar Base Completa e selecione o formato CSV. Faça o upload do arquivo aqui.';
+                guide.innerHTML = '<strong>Mindbody Instructions</strong>:<br>In the Mindbody menu, access Clients > Export Full Database and select CSV format. Upload the file here.';
             } else if (src === 'simples') {
-                guide.innerHTML = '<strong>Instruções Simples Agenda</strong>:<br>Acesse Relatórios > Clientes > Exportar Completo em CSV. Faça o upload do arquivo obtido diretamente.';
+                guide.innerHTML = '<strong>Fresha Instructions</strong>:<br>Go to Reports > Clients > Export Full CSV. Upload the file directly.';
             }
         }
-
+ 
         function downloadSampleMigrationCSV() {
-            const headers = "Nome,WhatsApp,Nascimento,Alergias\nAna Silva,5511988887777,1995-04-23,Nenhuma\nBeatriz Costa,5511977776666,1990-10-12,Alergia a iodo\nCarlos Souza,5511966665555,1988-05-05,Gestante";
+            const headers = "Name,WhatsApp,Birthday,Allergies\nAna Silva,15551234567,1995-04-23,None\nBeatriz Costa,15552345678,1990-10-12,Iodine allergy\nCarlos Souza,15553456789,1988-05-05,None";
             const blob = new Blob([headers], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", "modelo_migracao_lumi.csv");
+            link.setAttribute("download", "lumi_migration_template.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            toast('Modelo de importação baixado!');
+            toast('Import template downloaded!');
         }
-
+ 
         function processDataMigration() {
             const fileInput = document.getElementById('migration-file-input');
             const source = document.getElementById('migration-source').value;
             
             if (!fileInput.files || fileInput.files.length === 0) {
-                toast('Erro: Selecione um arquivo CSV primeiro!');
+                toast('Error: Select a CSV file first!');
                 return;
             }
-
+ 
             const file = fileInput.files[0];
             const reader = new FileReader();
-
+ 
             reader.onload = function(e) {
                 try {
                     const text = e.target.result;
                     const lines = text.split(/\r?\n/);
                     if (lines.length < 2) {
-                        toast('Erro: Arquivo CSV vazio ou inválido!');
+                        toast('Error: Empty or invalid CSV file!');
                         return;
                     }
-
+ 
                     // Obter headers e normalizar
                     const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/["']/g, ''));
                     
@@ -3331,29 +3337,29 @@
                     let phoneIdx = -1;
                     let bdayIdx = -1;
                     let notesIdx = -1;
-
+ 
                     headers.forEach((h, idx) => {
                         if (h.includes('nome') || h.includes('cliente') || h.includes('name')) nameIdx = idx;
                         else if (h.includes('celular') || h.includes('telefone') || h.includes('whats') || h.includes('phone') || h.includes('contato')) phoneIdx = idx;
                         else if (h.includes('nascimento') || h.includes('nasc') || h.includes('bday') || h.includes('birth')) bdayIdx = idx;
                         else if (h.includes('alergia') || h.includes('observa') || h.includes('notes') || h.includes('obs')) notesIdx = idx;
                     });
-
+ 
                     // Quedas de segurança padrão
                     if (nameIdx === -1) nameIdx = 0;
                     if (phoneIdx === -1 && headers.length > 1) phoneIdx = 1;
-
+ 
                     let importCount = 0;
                     let duplicateCount = 0;
-
+ 
                     for (let i = 1; i < lines.length; i++) {
                         const line = lines[i].trim();
                         if (!line) continue;
-
+ 
                         const columns = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.trim().replace(/^["']|["']$/g, ''));
                         
                         if (columns.length < 2 || !columns[nameIdx]) continue;
-
+ 
                         const nome = columns[nameIdx];
                         let rawPhone = phoneIdx !== -1 && columns[phoneIdx] ? columns[phoneIdx] : '';
                         
@@ -3362,21 +3368,21 @@
                         if (whatsapp.length === 11 || whatsapp.length === 10) {
                             whatsapp = '55' + whatsapp;
                         }
-
+ 
                         const nascimento = bdayIdx !== -1 && columns[bdayIdx] ? columns[bdayIdx] : '';
-                        const alergias = notesIdx !== -1 && columns[notesIdx] ? columns[notesIdx] : 'Nenhuma';
-
+                        const alergias = notesIdx !== -1 && columns[notesIdx] ? columns[notesIdx] : 'None';
+ 
                         // Verificar se já existe duplicado
                         const exists = state.clientes.some(c => 
                             (whatsapp && c.whatsapp === whatsapp) || 
                             (c.nome.toLowerCase() === nome.toLowerCase())
                         );
-
+ 
                         if (exists) {
                             duplicateCount++;
                             continue;
                         }
-
+ 
                         state.clientes.push({
                             id: 'c_mig_' + Math.random().toString(36).substr(2, 9),
                             nome: nome,
@@ -3392,52 +3398,52 @@
                         
                         importCount++;
                     }
-
+ 
                     if (importCount > 0) {
                         save();
                         showMigrationSuccessModal(importCount, duplicateCount, source);
                     } else {
-                        toast(`Nenhum cliente novo importado. (${duplicateCount} contatos duplicados ignorados)`);
+                        toast(`No new clients imported. (${duplicateCount} duplicate contacts ignored)`);
                     }
-
+ 
                 } catch (err) {
                     console.error(err);
-                    toast('Erro ao processar o arquivo CSV.');
+                    toast('Error processing CSV file.');
                 }
             };
-
+ 
             reader.readAsText(file, 'UTF-8');
         }
-
+ 
         function showMigrationSuccessModal(imported, duplicates, source) {
-            const sourceName = source === 'trinks' ? 'Trinks' : source === 'avec' ? 'Avec' : source === 'simples' ? 'Simples Agenda' : 'Planilha';
+            const sourceName = source === 'trinks' ? 'Vagaro' : source === 'avec' ? 'Mindbody' : source === 'simples' ? 'Fresha' : 'Spreadsheet';
             
             const overlay = document.getElementById('modal-overlay');
             const content = document.getElementById('modal-content');
             overlay.classList.add('active');
-
+ 
             content.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
                     <div style="width: 60px; height: 60px; background: rgba(201, 168, 76, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: var(--primary);">
                         <i data-lucide="check-circle" style="width: 32px; height: 32px;"></i>
                     </div>
-                    <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #2D2D2D; margin-bottom: 12px;">Clientes Importados com Sucesso! 🚀</h2>
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; color: #2D2D2D; margin-bottom: 12px;">Clients Imported Successfully! 🚀</h2>
                     <p style="font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 24px;">
-                        A migração do <strong>${sourceName}</strong> foi concluída com êxito. Seus dados foram higienizados e unificados na base Lumi local.
+                        The migration from <strong>${sourceName}</strong> was completed successfully. Your data was cleaned and unified in the local Lumi database.
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 24px; font-size: 13px;">
                         <div style="background: rgba(40, 167, 69, 0.08); border: 1px solid rgba(40,167,69,0.2); border-radius: 8px; padding: 10px 20px; color: #28a745; font-weight: 700;">
-                            +${imported} Clientes
+                            +${imported} Clients
                         </div>
                         ${duplicates > 0 ? `
                         <div style="background: rgba(240, 173, 78, 0.08); border: 1px solid rgba(240,173,78,0.2); border-radius: 8px; padding: 10px 20px; color: #f0ad4e; font-weight: 700;">
-                            ${duplicates} Duplicados Ignorados
+                            ${duplicates} Duplicates Ignored
                         </div>
                         ` : ''}
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button class="btn btn-outline" onclick="closeModal()">Fechar</button>
-                        <button class="btn btn-primary" onclick="closeModal(); showView('clientes')">Ver Meus Clientes</button>
+                        <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                        <button class="btn btn-primary" onclick="closeModal(); showView('clientes')">View My Clients</button>
                     </div>
                 </div>
             `;
@@ -3482,15 +3488,15 @@
                 tabRegister.classList.remove('active');
                 formLogin.style.display = 'block';
                 formRegister.style.display = 'none';
-                title.textContent = 'Acesse sua Conta';
-                subtitle.textContent = 'Entre para gerenciar seu salão de forma inteligente';
+                title.textContent = 'Sign In to Your Account';
+                subtitle.textContent = 'Sign in to manage your studio intelligently';
             } else {
                 tabLogin.classList.remove('active');
                 tabRegister.classList.add('active');
                 formLogin.style.display = 'none';
                 formRegister.style.display = 'block';
-                title.textContent = 'Criar Conta Lumi';
-                subtitle.textContent = 'Comece agora a profissionalizar o seu negócio';
+                title.textContent = 'Create Your Lumi Account';
+                subtitle.textContent = 'Start professionalizing your business now';
             }
             if (window.lucide) lucide.createIcons();
         }
@@ -3503,7 +3509,7 @@
             // Procurar na base global
             const u = state.users.find(usr => usr.email === email);
             if (!u || u.password !== password) {
-                toast('Erro: E-mail ou senha incorretos!');
+                toast('Error: Incorrect email or password!');
                 return;
             }
 
@@ -3511,7 +3517,7 @@
             state.session = { loggedIn: true, currentEmail: email, isDemo: false };
             localStorage.setItem('lumi_data', JSON.stringify(state));
             
-            toast('Acesso autorizado! Carregando painel...');
+            toast('Access authorized! Loading panel...');
             
             // Reinicializar dados do usuário
             initData();
@@ -3525,14 +3531,14 @@
             const whatsapp = document.getElementById('reg-whatsapp').value.trim().replace(/\D/g, '');
 
             if (password.length < 6) {
-                toast('Erro: A senha precisa ter pelo menos 6 caracteres!');
+                toast('Error: The password must be at least 6 characters long!');
                 return;
             }
 
             // Verificar se já existe
             const exists = state.users.some(usr => usr.email === email);
             if (exists) {
-                toast('Erro: Este e-mail já está cadastrado!');
+                toast('Error: This email is already registered!');
                 return;
             }
 
@@ -3563,12 +3569,12 @@
             
             localStorage.setItem('lumi_data', JSON.stringify(state));
             
-            // Salvar estado inicial do usuário
+            // Save user's initial state
             localStorage.setItem('lumi_user_' + email, JSON.stringify(state));
 
-            toast('Conta criada com sucesso!');
+            toast('Account created successfully!');
             
-            // Avançar para o Paywall de Cobrança
+            // Proceed to the Billing Paywall
             showBillingGate();
         }
 
@@ -3584,7 +3590,7 @@
 
         function handleAuthLogout() {
             if (state.session && state.session.currentEmail && !state.session.isDemo) {
-                // Salvar dados atuais do usuário antes de deslogar
+                // Save user's current data before logging out
                 localStorage.setItem('lumi_user_' + state.session.currentEmail, JSON.stringify(state));
             }
             
@@ -3592,7 +3598,7 @@
             state.session = { loggedIn: false, currentEmail: '', isDemo: false };
             localStorage.setItem('lumi_data', JSON.stringify(state));
             
-            toast('Você saiu do sistema.');
+            toast('You have logged out.');
             showAuthWall();
         }
 
@@ -3600,7 +3606,7 @@
             state.session.isDemo = true;
             state.config.isSubscribed = false;
             
-            toast('Acessando no modo de demonstração restrito...');
+            toast('Accessing in restricted demo mode...');
             
             // Desbloquear painel
             document.getElementById('auth-wall').style.display = 'none';
@@ -3616,7 +3622,7 @@
         }
 
         async function handlePaywallCheckout() {
-            toast('Iniciando checkout seguro do Stripe...');
+            toast('Starting secure Stripe checkout...');
             
             try {
                 const response = await fetch('/api/checkout', {
@@ -3632,7 +3638,7 @@
                     }
                 }
             } catch (err) {
-                console.log('[Lumi] Servidor offline. Utilizando simulador offline nativo...');
+                console.log('[Lumi] Server offline. Using native offline simulator...');
             }
             
             openSimulatedCheckoutModal();
@@ -3688,40 +3694,40 @@
             modal.innerHTML = `
                 <div class="simulated-card" style="background: linear-gradient(135deg, #FFFFFF, #FAF6EE);">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px; border-bottom: 1px solid rgba(201,168,76,0.15); padding-bottom: 10px;">
-                        <span style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight:700; color:#2D2D2D;">Checkout Stripe (Simulador)</span>
+                        <span style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight:700; color:#2D2D2D;">Stripe Checkout (Simulator)</span>
                         <button onclick="closeSimulatedStripeModal()" style="background:none; border:none; color:#7A7A7A; cursor:pointer;"><i data-lucide="x" style="width:20px;"></i></button>
                     </div>
-                    <p style="font-size:13px; color:#666; margin-bottom: 20px;">Utilize o Pix para ativação instantânea ou simule com cartão de crédito.</p>
+                    <p style="font-size:13px; color:#666; margin-bottom: 20px;">Use Instant Transfer for immediate activation or simulate with a credit card.</p>
                     
                     <div style="background:#FFF; border: 1px solid rgba(201,168,76,0.25); border-radius:12px; padding:20px; margin-bottom: 20px; text-align:center;">
-                        <span style="font-size: 11px; text-transform:uppercase; color:#7A7A7A; font-weight:700; letter-spacing:0.5px;">Premium Mensal</span>
-                        <h3 style="font-family: 'Playfair Display', serif; font-size:28px; color:#2D2D2D; margin:5px 0;">R$ 47,00</h3>
-                        <span style="font-size:11px; color:#A68A3D; font-weight:600;">Renovação automática • Cancele quando quiser</span>
+                        <span style="font-size: 11px; text-transform:uppercase; color:#7A7A7A; font-weight:700; letter-spacing:0.5px;">Monthly Premium</span>
+                        <h3 style="font-family: 'Playfair Display', serif; font-size:28px; color:#2D2D2D; margin:5px 0;">$ 19.00</h3>
+                        <span style="font-size:11px; color:#A68A3D; font-weight:600;">Auto-renewal • Cancel anytime</span>
                     </div>
                     
                     <div style="display:flex; gap:10px; margin-bottom:20px;">
-                        <button id="btn-tab-sim-pix" onclick="switchSimTab('pix')" style="flex:1; padding:10px; border-radius:8px; border:1px solid #C9A84C; background:rgba(201,168,76,0.1); color:#A68A3D; font-weight:700; font-size:12px; cursor:pointer;">PIX Ativação</button>
-                        <button id="btn-tab-sim-card" onclick="switchSimTab('card')" style="flex:1; padding:10px; border-radius:8px; border:1px solid #CCC; background:#FFF; color:#666; font-weight:700; font-size:12px; cursor:pointer;">Cartão de Crédito</button>
+                        <button id="btn-tab-sim-pix" onclick="switchSimTab('pix')" style="flex:1; padding:10px; border-radius:8px; border:1px solid #C9A84C; background:rgba(201,168,76,0.1); color:#A68A3D; font-weight:700; font-size:12px; cursor:pointer;">Instant Transfer</button>
+                        <button id="btn-tab-sim-card" onclick="switchSimTab('card')" style="flex:1; padding:10px; border-radius:8px; border:1px solid #CCC; background:#FFF; color:#666; font-weight:700; font-size:12px; cursor:pointer;">Credit Card</button>
                     </div>
 
                     <!-- Pix Box -->
                     <div id="sim-pix-box" style="display:block; text-align:center;">
                         <div style="width:160px; height:160px; background:#FFF; border: 1px solid #EEE; border-radius:12px; margin: 0 auto 15px; display:flex; align-items:center; justify-content:center; padding:10px;">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=lumi-premium-stripe-pix-simulation-r47" style="width:100%; height:100%; border-radius:4px;" alt="QR Code Pix">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=lumi-premium-stripe-usd19-simulation" style="width:100%; height:100%; border-radius:4px;" alt="QR Code Instant Transfer">
                         </div>
-                        <p style="font-size:12px; color:#7A7A7A; line-height:1.4; margin-bottom:20px;">Escaneie o QR Code Pix acima para simular a compra. O sistema identificará o pagamento fictício em instantes.</p>
-                        <button class="auth-btn" style="margin:0;" onclick="confirmSimulatedPayment('Pix')">Confirmar Pagamento Simulado</button>
+                        <p style="font-size:12px; color:#7A7A7A; line-height:1.4; margin-bottom:20px;">Scan the QR Code above to simulate the purchase. The system will detect the simulated payment in a few moments.</p>
+                        <button class="auth-btn" style="margin:0;" onclick="confirmSimulatedPayment('Instant Transfer')">Confirm Simulated Payment</button>
                     </div>
 
                     <!-- Card Box -->
                     <div id="sim-card-box" style="display:none; text-align:left;">
                         <div class="auth-form-group">
-                            <label class="auth-label">Número do Cartão</label>
+                            <label class="auth-label">Card Number</label>
                             <input type="text" class="auth-input" style="padding-left:14px;" placeholder="4242 4242 4242 4242" value="4242 4242 4242 4242">
                         </div>
                         <div style="display:flex; gap:10px;">
                             <div class="auth-form-group" style="flex:1;">
-                                <label class="auth-label">Validade</label>
+                                <label class="auth-label">Expiry</label>
                                 <input type="text" class="auth-input" style="padding-left:14px;" placeholder="12/30" value="12/30">
                             </div>
                             <div class="auth-form-group" style="flex:1;">
@@ -3729,7 +3735,7 @@
                                 <input type="text" class="auth-input" style="padding-left:14px;" placeholder="123" value="123">
                             </div>
                         </div>
-                        <button class="auth-btn" style="margin-top:10px;" onclick="confirmSimulatedPayment('Cartão de Crédito')">Pagar R$ 47,00</button>
+                        <button class="auth-btn" style="margin-top:10px;" onclick="confirmSimulatedPayment('Credit Card')">Pay $19.00</button>
                     </div>
                 </div>
             `;
@@ -3775,7 +3781,7 @@
 
         function confirmSimulatedPayment(method) {
             closeSimulatedStripeModal();
-            toast('Processando simulação Stripe...');
+            toast('Processing Stripe simulation...');
             
             setTimeout(() => {
                 state.config.isSubscribed = true;
