@@ -289,9 +289,9 @@
         .dot-yellow { background: #FFBD2E; }
         .dot-green { background: #27C93F; }
 
-        .app-preview img {
+        .app-preview img, .app-preview video {
             width: 100%;
-            border-radius: 16px;
+            border-radius: 0 0 16px 16px;
             display: block;
             opacity: 0.95;
             filter: brightness(0.9);
@@ -1424,45 +1424,28 @@
                     <span class="dot dot-red"></span>
                     <span class="dot dot-yellow"></span>
                     <span class="dot dot-green"></span>
-                    <span style="font-size: 11px; opacity: 0.5; margin-left: auto;">lumi-app-preview.png</span>
+                    <span style="font-size: 11px; opacity: 0.5; margin-left: auto;">Lumi em Ação</span>
                 </div>
-                <!-- Criamos uma representação do design dourado/luxo do app Lumi -->
-                <div style="background: #FAFAFA; color: #2D2D2D; padding: 24px; text-align: left;">
-                    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
-                        <div style="flex:1; background: white; border: 1px solid #EEE; padding: 20px; border-radius: 12px; border-left: 4px solid #C9A84C;">
-                            <div style="font-size: 11px; color:#999; text-transform:uppercase; font-weight:600;">Faturamento Mensal</div>
-                            <div style="font-size: 24px; font-weight:700; color:#2D2D2D; margin-top:5px;">R$ 14.850,00</div>
+                <!-- Exibição de Vídeo/GIF real do Sistema -->
+                <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #16181F; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 0 0 16px 16px;">
+                    <!-- Se houver um arquivo mp4/gif gravado pelo usuário -->
+                    <video id="lumi-system-demo" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <source src="lumi-demo.mp4" type="video/mp4">
+                    </video>
+                    <img id="lumi-system-gif" src="lumi-demo.gif" alt="Demonstração Lumi SaaS" style="width: 100%; height: 100%; object-fit: cover; display: none;" onerror="this.style.display='none';">
+                    
+                    <!-- Fallback elegante e interativo caso o usuário ainda não tenha adicionado o arquivo lumi-demo.gif/mp4 -->
+                    <div id="lumi-demo-fallback" style="position: absolute; inset: 0; background: radial-gradient(circle at center, #1C1E26 0%, #0A0B0E 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; color: #FFF;">
+                        <div style="width: 64px; height: 64px; background: rgba(201, 168, 76, 0.1); border: 1px solid var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 0 25px rgba(201, 168, 76, 0.25);">
+                            <i data-lucide="play" style="color: var(--primary); width: 28px; height: 28px; fill: var(--primary); margin-left: 2px;"></i>
                         </div>
-                        <div style="flex:1; background: white; border: 1px solid #EEE; padding: 20px; border-radius: 12px; border-left: 4px solid #43A047;">
-                            <div style="font-size: 11px; color:#999; text-transform:uppercase; font-weight:600;">Agendamentos Ativos</div>
-                            <div style="font-size: 24px; font-weight:700; color:#2D2D2D; margin-top:5px;">142 consultas</div>
-                        </div>
-                    </div>
-                    <div style="background: white; border: 1px solid #EEE; border-radius: 12px; padding: 20px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid #EEE; padding-bottom:10px;">
-                            <h4 style="color:#2D2D2D; font-size:16px;">Agenda de Hoje</h4>
-                            <span style="font-size: 12px; color: #C9A84C; font-weight: 600;">21 de Maio</span>
-                        </div>
-                        <div style="display:flex; gap:15px; align-items:center; padding: 10px 0; border-bottom: 1px solid #F5F5F5;">
-                            <div style="font-weight: 700; font-size:14px; width: 50px;">09:00</div>
-                            <div style="background: #FDFBF7; border: 1px solid rgba(201,168,76,0.1); padding: 10px 15px; border-radius: 8px; flex:1; display:flex; justify-content:space-between; align-items:center;">
-                                <div>
-                                    <div style="font-weight:600; font-size:13px; color:#2D2D2D;">Ana Silva</div>
-                                    <div style="font-size:11px; color:#777;">Micropigmentação Cílios</div>
-                                </div>
-                                <span style="font-size:10px; padding: 4px 8px; border-radius:10px; background:#E8F5E9; color:#2E7D32; font-weight:700; text-transform:uppercase;">Realizado</span>
-                            </div>
-                        </div>
-                        <div style="display:flex; gap:15px; align-items:center; padding: 10px 0;">
-                            <div style="font-weight: 700; font-size:14px; width: 50px;">10:30</div>
-                            <div style="background: #FDFBF7; border: 1px solid rgba(201,168,76,0.1); padding: 10px 15px; border-radius: 8px; flex:1; display:flex; justify-content:space-between; align-items:center;">
-                                <div>
-                                    <div style="font-weight:600; font-size:13px; color:#2D2D2D;">Beatriz Costa</div>
-                                    <div style="font-size:11px; color:#777;">Design de Sobrancelha + Henna</div>
-                                </div>
-                                <span style="font-size:10px; padding: 4px 8px; border-radius:10px; background:#E3F2FD; color:#1565C0; font-weight:700; text-transform:uppercase;">Confirmado</span>
-                            </div>
-                        </div>
+                        <h4 style="font-size: 20px; font-weight: 600; color: #FFF; margin-bottom: 10px; font-family: 'Playfair Display', serif; letter-spacing: 0.5px;">Mostre seu sistema real funcionando aqui!</h4>
+                        <p style="font-size: 13.5px; color: var(--text-muted-dark); max-width: 520px; line-height: 1.6; margin-bottom: 20px; font-family: 'Inter', sans-serif;">
+                            Grave um vídeo ou GIF rápido (10 a 15 segundos) do painel real em <strong>app.html</strong>, salve-o na pasta raiz do projeto com o nome <strong>lumi-demo.mp4</strong> ou <strong>lumi-demo.gif</strong>, e ele aparecerá automaticamente e sem borrões aqui!
+                        </p>
+                        <span style="font-size: 11px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 6px 14px; border-radius: 20px; color: var(--primary-light); font-weight: 500;">
+                            <i data-lucide="info" style="width: 12px; height: 12px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> Pronto para detecção automática
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1879,6 +1862,33 @@
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
+
+        // Detect and load the real system demo video/gif if available
+        (function() {
+            const video = document.getElementById('lumi-system-demo');
+            const gif = document.getElementById('lumi-system-gif');
+            const fallback = document.getElementById('lumi-demo-fallback');
+            
+            if (video && gif && fallback) {
+                video.addEventListener('canplay', function() {
+                    video.style.display = 'block';
+                    fallback.style.display = 'none';
+                    gif.style.display = 'none';
+                });
+                
+                video.addEventListener('error', function() {
+                    gif.style.display = 'block';
+                });
+                
+                gif.addEventListener('load', function() {
+                    gif.style.display = 'block';
+                    fallback.style.display = 'none';
+                    video.style.display = 'none';
+                });
+                
+                video.load();
+            }
+        })();
 
         // ROI Calculator Lógica
         let activeCompetitor = 'Trinks';
